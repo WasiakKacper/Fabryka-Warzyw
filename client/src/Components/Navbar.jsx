@@ -6,7 +6,7 @@ const Navbar = () => {
   const [show, setShow] = useState(false);
 
   return (
-    <header className="fixed w-full h-auto bg-(--black)">
+    <header className="fixed block w-full h-auto bg-(--black) ">
       <nav className="realtive flex w-[90%] h-auto justify-between mx-auto">
         {/* Logo */}
         <img
@@ -27,7 +27,7 @@ const Navbar = () => {
         {/* For desktops */}
 
         <ul
-          className={`absolute w-[60%] h-[100vh] lg:w-auto lg:h-auto bg-(--darkBackgorund) lg:bg-transparent text-center items-center  lg:static right-0 top-[100%] flex flex-col lg:flex-row list-none text-(--white) text-[4vw] lg:text-[1.2vw] lg:gap-6 lg:items-center *:cursor-pointer *:hover:text-(--background) z-10 ${
+          className={`absolute w-[60%] *:w-[85%] lg:*:w-auto  h-[100vh] lg:w-auto lg:h-auto bg-(--darkBackgorund) lg:bg-transparent text-center items-center  lg:static right-0 top-[100%] flex flex-col lg:flex-row list-none text-(--white) text-[4vw] lg:text-[1.2vw] lg:gap-6 lg:items-center *:cursor-pointer *:hover:text-(--background) z-10 ${
             show ? "translate-x-0" : "translate-x-full"
           }
           transform transition-transform duration-300 ease-in-out
@@ -36,53 +36,83 @@ const Navbar = () => {
           <h1 className="lg:hidden text-[8vw] mt-5 mb-10 text-(--accent)">
             Menu
           </h1>
-          <li onClick={() => setName("Home")}>
+          <li
+            onClick={() => {
+              setName("Home"), setShow(false);
+            }}
+          >
             Strona główna
             {name === "Home" ? (
-              <hr className="hidden lg:block border-2 rounded-lg" rounded-lg />
+              <hr className="hidden lg:block border-2 rounded-2xl" rounded-lg />
             ) : (
               ""
             )}
+            <hr className="block border-(--accent) border-2 lg:hidden" />
           </li>
-          <li onClick={() => setName("Gastronomy")}>
+          <li
+            onClick={() => {
+              setName("Gastronomy"), setShow(false);
+            }}
+          >
             Gastronomia
             {name === "Gastronomy" ? (
-              <hr className="hidden lg:block border-2 rounded-lg" />
+              <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
               ""
             )}
+            <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li onClick={() => setName("Cart")}>
+          <li
+            onClick={() => {
+              setName("Cart"), setShow(false);
+            }}
+          >
             Koszyk
             {name === "Cart" ? (
-              <hr className="hidden lg:block border-2 rounded-lg" />
+              <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
               ""
             )}
+            <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li onClick={() => setName("Login")}>
+          <li
+            onClick={() => {
+              setName("Login"), setShow(false);
+            }}
+          >
             Logowanie
             {name === "Login" ? (
-              <hr className="hidden lg:block border-2 rounded-lg" />
+              <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
               ""
             )}
+            <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li onClick={() => setName("About")}>
+          <li
+            onClick={() => {
+              setName("About"), setShow(false);
+            }}
+          >
             O nas
             {name === "About" ? (
-              <hr className="hidden lg:block border-2 rounded-lg" />
+              <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
               ""
             )}
+            <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li onClick={() => setName("Contact")}>
+          <li
+            onClick={() => {
+              setName("Contact"), setShow(false);
+            }}
+          >
             Kontakt
             {name === "Contact" ? (
-              <hr className="hidden lg:block border-2 rounded-lg" />
+              <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
               ""
             )}
+            <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
         </ul>
         {show ? (
