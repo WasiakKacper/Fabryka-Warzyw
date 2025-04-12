@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <article>
       <Gallery />
-      <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer">
+      <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
         <li onClick={() => setIsClicked(1)}>
           Warzywa
           {isClicked == 1 ? (
@@ -20,7 +20,7 @@ const Home = () => {
         </li>
         <li className="text-(--background)">|</li>
         <li onClick={() => setIsClicked(2)}>
-          Owoce{" "}
+          Owoce
           {isClicked == 2 ? (
             <hr className="border-(--background) border-2 rounded-2xl" />
           ) : (

@@ -1,29 +1,10 @@
 import React from "react";
-
-const Card = () => {
-  return (
-    <div className="flex flex-col lg:flex-row bg-(--background)">
-      <img src="" alt="product name" />
-      <div>
-        <h1>Name</h1>
-        <h3>Price</h3>
-        <div>
-          <div className="flex flex-row">
-            <button>-</button>
-            <h4>0</h4>
-            <button>+</button>
-          </div>
-          <button>Do koszyka</button>
-        </div>
-      </div>
-    </div>
-  );
-};
+import Card from "../Card.jsx";
 
 const Vegetables = () => {
   return (
-    <div className="flex justify-center w-[100%]">
-      <div className="flex flex-wrap w-auto">
+    <div className="flex justify-center w-[full] mt-5 mx-auto">
+      <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
         <Card />
         <Card />
         <Card />
