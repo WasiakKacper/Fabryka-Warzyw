@@ -1,7 +1,12 @@
 import React from "react";
+import Navbar from "../Components/Navbar.jsx";
 
 const Gastronomy = () => {
-  return <div>Gastronomy</div>;
+  return (
+    <article>
+      <Navbar name="Gastronomy" />
+    </article>
+  );
 };
 
 export default Gastronomy;

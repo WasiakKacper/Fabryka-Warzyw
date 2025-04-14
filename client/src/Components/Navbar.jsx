@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
+
 import logo from "/Images/logo.png";
 
-const Navbar = () => {
-  const [name, setName] = useState("Home");
+const Navbar = (props) => {
   const [show, setShow] = useState(false);
+  const name = props.name;
 
   return (
     <header className="fixed block w-full h-auto bg-(--black) ">
@@ -36,12 +38,8 @@ const Navbar = () => {
           <h1 className="lg:hidden text-[8vw] mt-5 mb-10 text-(--accent)">
             Menu
           </h1>
-          <li
-            onClick={() => {
-              setName("Home"), setShow(false);
-            }}
-          >
-            Strona główna
+          <li>
+            <Link to="/">Strona główna</Link>
             {name === "Home" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" rounded-lg />
             ) : (
@@ -49,12 +47,9 @@ const Navbar = () => {
             )}
             <hr className="block border-(--accent) border-2 lg:hidden" />
           </li>
-          <li
-            onClick={() => {
-              setName("Gastronomy"), setShow(false);
-            }}
-          >
-            Gastronomia
+          <li>
+            <Link to="/gastronomy">Gastronomia</Link>
+
             {name === "Gastronomy" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
@@ -62,12 +57,9 @@ const Navbar = () => {
             )}
             <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li
-            onClick={() => {
-              setName("Cart"), setShow(false);
-            }}
-          >
-            Koszyk
+          <li>
+            <Link to="/cart">Koszyk</Link>
+
             {name === "Cart" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
@@ -75,12 +67,9 @@ const Navbar = () => {
             )}
             <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li
-            onClick={() => {
-              setName("Login"), setShow(false);
-            }}
-          >
-            Logowanie
+          <li>
+            <Link to="/login">Logowanie</Link>
+
             {name === "Login" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
@@ -88,12 +77,9 @@ const Navbar = () => {
             )}
             <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li
-            onClick={() => {
-              setName("About"), setShow(false);
-            }}
-          >
-            O nas
+          <li>
+            <Link to="/about">O nas</Link>
+
             {name === "About" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
@@ -101,12 +87,9 @@ const Navbar = () => {
             )}
             <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
-          <li
-            onClick={() => {
-              setName("Contact"), setShow(false);
-            }}
-          >
-            Kontakt
+          <li>
+            <Link to="/contact">Kontakt</Link>
+
             {name === "Contact" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
