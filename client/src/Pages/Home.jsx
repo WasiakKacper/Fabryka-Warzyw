@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Gallery from "../Components/Gallery.jsx";
 import Vegetables from "../Components/Products/Vegetables.jsx";
 import Fruits from "../Components/Products/Fruits.jsx";
+import Footer from "../Components/Footer.jsx";
 
 const Home = () => {
   const [isClicked, setIsClicked] = useState(1);
@@ -29,6 +30,7 @@ const Home = () => {
         </li>
       </ul>
       <section>{isClicked == 1 ? <Vegetables /> : <Fruits />}</section>
+      <Footer />
     </article>
   );
 };

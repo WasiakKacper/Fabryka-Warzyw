@@ -1,5 +1,6 @@
 import Navbar from "./Components/Navbar.jsx";
 import Home from "./Pages/Home.jsx";
+import Gastronomy from "./Pages/Gastronomy.jsx";
 import { motion } from "motion/react";
 import "./App.css";
 
@@ -16,6 +17,7 @@ function App() {
       </motion.section>
       <Navbar />
       <Home />
+      <Gastronomy />
     </main>
   );
 }
