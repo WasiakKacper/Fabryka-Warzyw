@@ -8,7 +8,7 @@ const Navbar = (props) => {
   const name = props.name;
 
   return (
-    <header className="fixed block w-full h-auto bg-(--black) ">
+    <header className="fixed block w-full h-auto bg-(--black) z-10000">
       <nav className="realtive flex w-[90%] h-auto justify-between mx-auto">
         {/* Logo */}
         <img
