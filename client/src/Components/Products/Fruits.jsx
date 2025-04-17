@@ -9,7 +9,6 @@ const Fruits = () => {
         <Card />
         <Card />
         <Card />
-        <Card />
       </div>
     </div>
   );

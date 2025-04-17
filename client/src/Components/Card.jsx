@@ -22,9 +22,9 @@ const Card = () => {
           className="rounded-2xl w-full h-full object-cover"
         />
       </div>
-      <div className="flex flex-col justify-between w-[45%] lg:w-full p-2">
+      <div className="flex flex-col justify-between w-[55%] lg:w-full p-2">
         <div>
-          <h1 className="text-[4vw] md:text-[4vw] lg:text-[3vw] font-medium w-full mb-5">
+          <h1 className="text-[4vw] md:text-[4w] lg:text-[2vw] font-medium w-full mb-5">
             Kapusta biała
           </h1>
           <h3 className="text-[3vw] md:text-[2.5vw] lg:text-[1.6vw] mb-10">
@@ -41,7 +41,7 @@ const Card = () => {
               +
             </button>
           </div>
-          <button className="w-[55%] h-auto bg-(--accent) text-(--white) text-[2vw] lg:text-[2vw] rounded-4xl">
+          <button className="w-[55%] h-auto bg-(--accent) text-(--white) text-[3vw] lg:text-[2vw] rounded-4xl">
             Do koszyka
           </button>
         </div>
