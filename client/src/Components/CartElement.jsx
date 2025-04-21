@@ -35,7 +35,7 @@ const CartElement = () => {
             <button className="cursor-pointer" onClick={handleSubtraction}>
               -
             </button>
-            <h4>{howMany}</h4>
+            <h4 className="w-[40px] text-center">{howMany}</h4>
             <button className="cursor-pointer" onClick={handleAddition}>
               +
             </button>
