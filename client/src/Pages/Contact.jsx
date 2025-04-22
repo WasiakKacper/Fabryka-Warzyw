@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../Components/Navbar.jsx";
+import Footer from "../Components/Footer.jsx";
 
 const Contact = () => {
   return (
@@ -8,7 +9,7 @@ const Contact = () => {
       <h1 className="pt-45 text-[10vw] md:text-[8vw] lg:text-[6vw] font-medium text-center">
         Kontakt
       </h1>
-      <section className="flex flex-col w-[90%] h-[100%] lg:h-[32vw] mx-auto lg:flex-row justify-center items-center gap-10 *:flex *:flex-col *:justify-evenly *:items-center *:bg-(--background) *:w-[100%] *:h-[100%] lg:*:w-[30%] *:text-center *:p-5 *:rounded-3xl">
+      <section className="flex flex-col w-[90%] h-[100%] lg:h-[32vw] mx-auto py-10 lg:flex-row justify-center items-center gap-10 *:flex *:flex-col *:justify-evenly *:items-center *:bg-(--background) *:w-[100%] *:h-[100%] lg:*:w-[30%] *:text-center *:p-5 *:rounded-3xl">
         <div>
           <i className="icon-phone text-[8vw] md:text-[7vw] lg:text-[4vw]"></i>
           <p className="text-[6vw] md:text-[5vw] lg:text-[2.5vw]">
@@ -42,6 +43,7 @@ const Contact = () => {
           </p>
         </div>
       </section>
+      <Footer />
     </article>
   );
 };

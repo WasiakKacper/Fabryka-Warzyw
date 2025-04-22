@@ -1,11 +1,12 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer.jsx";
 
 const About = () => {
   return (
     <>
       <Navbar name="About" />
-      <main className="w-full">
+      <main className="flex flex-col w-full justify-evenly">
         <h1 className="pt-45 text-[10vw] md:text-[8vw] lg:text-[6vw] font-medium text-center">
           O nas
         </h1>
@@ -19,6 +20,7 @@ const About = () => {
           voluptatem similique nobis expedita! Voluptatibus excepturi iure eum
           corporis dolor maiores, doloremque non.
         </p>
+        <Footer />
       </main>
     </>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
 import CartElement from "../Components/CartElement.jsx";
+import Footer from "../Components/Footer.jsx";
 
 const Cart = () => {
   return (
@@ -20,6 +21,7 @@ const Cart = () => {
           Zamów
         </button>
       </section>
+      <Footer />
     </article>
   );
 };

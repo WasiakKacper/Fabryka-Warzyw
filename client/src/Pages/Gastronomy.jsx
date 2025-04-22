@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../Components/Navbar.jsx";
 import FilterBtn from "../Components/FilterBtn.jsx";
+import Footer from "../Components/Footer.jsx";
 
 import { Link } from "react-router";
 import "../App.css";
@@ -69,6 +70,7 @@ const Gastronomy = () => {
         <FilterBtn />
         <div></div>
       </section>
+      <Footer />
     </article>
   );
 };
