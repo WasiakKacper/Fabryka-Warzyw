@@ -41,7 +41,7 @@ const Card = () => {
               +
             </button>
           </div>
-          <button className="w-[55%] h-auto bg-(--accent) text-(--white) text-[3vw] lg:text-[2vw] rounded-4xl">
+          <button className="flex items-center justify-centerw-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[3vw] lg:text-[2vw] rounded-4xl">
             Do koszyka
           </button>
         </div>
