@@ -2,7 +2,7 @@ import React from "react";
 
 const FilterBtn = () => {
   return (
-    <button className="flex bg-(--accent) px-2 gap-1 rounded-3xl text-(--white) text-[4vw] md:text-[3vw] lg:text-[2vw]">
+    <button className="flex bg-(--accent) px-2 gap-1 rounded-3xl text-(--white) text-[4vw] md:text-[3vw] lg:text-[2vw] cursor-pointer">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

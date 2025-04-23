@@ -9,7 +9,7 @@ const Login = () => {
   return (
     <article>
       <Navbar name="Login" />
-      <section className="pt-45 h-[90vh]">
+      <section className="pt-45 h-[90vh] mb-20">
         <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
           <li onClick={() => setIsClicked(1)}>
             Logowanie

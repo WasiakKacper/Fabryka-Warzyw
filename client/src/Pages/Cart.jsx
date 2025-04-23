@@ -3,6 +3,8 @@ import Navbar from "../Components/Navbar";
 import CartElement from "../Components/CartElement.jsx";
 import Footer from "../Components/Footer.jsx";
 
+import { Link } from "react-router";
+
 const Cart = () => {
   return (
     <article>
@@ -17,9 +19,11 @@ const Cart = () => {
         <h1 className="text-center text-[5vw] md:text-[4vw] lg:text-[3vw] font-medium my-10">
           Suma: 00,00zł
         </h1>
-        <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[30%] mx-auto rounded-4xl text-(--white)">
-          Zamów
-        </button>
+        <Link to="/order" className="mx-auto w-[30%]">
+          <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer">
+            Zamów
+          </button>
+        </Link>
       </section>
       <Footer />
     </article>

@@ -40,7 +40,7 @@ const RegisterSection = () => {
       </label>
       <input type="password" name="passwordAgain" className={style.input} />
       <button
-        className="bg-(--accent) text-(--white) p-2 rounded-4xl w-[60%] mx-auto mt-4 text-[5vw] md:text-[4vw] lg:text-[2vw] cursor-pointer"
+        className="bg-(--accent) text-(--white) p-2 rounded-4xl w-[60%] mx-auto mt-4 text-[4.5vw] md:text-[3.5vw] lg:text-[2vw] cursor-pointer"
         onClick={(e) => e.preventDefault()}
       >
         Zarejetruj się

@@ -6,7 +6,7 @@ const About = () => {
   return (
     <>
       <Navbar name="About" />
-      <main className="flex flex-col w-full justify-evenly">
+      <main className="flex flex-col w-full h-[100vh] justify-between">
         <h1 className="pt-45 text-[10vw] md:text-[8vw] lg:text-[6vw] font-medium text-center">
           O nas
         </h1>
