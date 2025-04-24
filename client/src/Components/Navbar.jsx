@@ -41,7 +41,7 @@ const Navbar = (props) => {
           <li>
             <Link to="/">Strona główna</Link>
             {name === "Home" ? (
-              <hr className="hidden lg:block border-2 rounded-2xl" rounded-lg />
+              <hr className="hidden lg:block border-2 rounded-2xl" />
             ) : (
               ""
             )}
