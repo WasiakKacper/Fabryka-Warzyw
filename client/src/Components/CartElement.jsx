@@ -31,7 +31,7 @@ const CartElement = () => {
       {/* BUTTONS */}
       <div className="w-[40%]">
         <div className="flex h-full *:h-[30%] gap-2 items-end">
-          <div className="flex gap-2 px-3 bg-(--accent) rounded-4xl text-(--white) text-[4vw] md:text-[3vw] lg:text-[2vw]">
+          <div className="flex items-center justify-center gap-2 px-3 bg-(--accent) rounded-4xl text-(--white) text-[4vw] md:text-[3vw] lg:text-[2vw]">
             <button className="cursor-pointer" onClick={handleSubtraction}>
               -
             </button>
