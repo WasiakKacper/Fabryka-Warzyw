@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const PickupDelivery = () => {
   return (
-    <main className="h-[100vh]">
+    <main className="h-[100vh] lg:h-auto">
       <section className="w-[90%] lg:w-[60%] mx-auto pt-45">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[4vw] font-medium mb-10">
           Zamówienie
