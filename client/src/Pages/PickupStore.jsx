@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import Navbar from "../Components/Navbar.jsx";
-import Footer from "../Components/Footer.jsx";
 
 const PickupStore = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -46,7 +44,6 @@ const PickupStore = () => {
       ) : (
         <></>
       )}
-      <Navbar name="Cart" />
       <section className="w-[90%] lg:w-[60%] mx-auto pt-45">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[4vw] font-medium mb-10">
           Zamówienie
@@ -97,7 +94,6 @@ const PickupStore = () => {
           </button>
         </div>
       </section>
-      <Footer />
     </main>
   );
 };

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 
-import Navbar from "../Components/Navbar.jsx";
 import Gallery from "../Components/Gallery.jsx";
 import Vegetables from "../Components/Products/Vegetables.jsx";
 import Fruits from "../Components/Products/Fruits.jsx";
-import Footer from "../Components/Footer.jsx";
 import FilterBtn from "../Components/FilterBtn.jsx";
 
 const Home = () => {
@@ -21,7 +19,6 @@ const Home = () => {
       >
         <img src="/Images/loading.png" alt="Fabryka warzyw" />
       </motion.section>
-      <Navbar name="Home" />
       <Gallery />
       <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
         <li onClick={() => setIsClicked(1)}>
@@ -46,7 +43,6 @@ const Home = () => {
         <FilterBtn />
       </div>
       <section>{isClicked == 1 ? <Vegetables /> : <Fruits />}</section>
-      <Footer />
     </article>
   );
 };

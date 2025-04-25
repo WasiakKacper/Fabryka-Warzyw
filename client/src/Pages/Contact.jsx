@@ -1,11 +1,8 @@
 import React from "react";
-import Navbar from "../Components/Navbar.jsx";
-import Footer from "../Components/Footer.jsx";
 
 const Contact = () => {
   return (
     <article>
-      <Navbar name="Contact" />
       <h1 className="pt-45 text-[10vw] md:text-[8vw] lg:text-[6vw] font-medium text-center">
         Kontakt
       </h1>
@@ -43,7 +40,6 @@ const Contact = () => {
           </p>
         </div>
       </section>
-      <Footer />
     </article>
   );
 };

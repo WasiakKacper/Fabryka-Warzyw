@@ -1,14 +1,11 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
 import CartElement from "../Components/CartElement.jsx";
-import Footer from "../Components/Footer.jsx";
 
 import { Link } from "react-router";
 
 const Cart = () => {
   return (
     <article>
-      <Navbar name="Cart" />
       <section className=" flex flex-col pt-45 justify-center">
         <h1 className="text-center text-[10vw] lg:text-[5.5vw] font-medium mb-10">
           Koszyk
@@ -25,7 +22,6 @@ const Cart = () => {
           </button>
         </Link>
       </section>
-      <Footer />
     </article>
   );
 };

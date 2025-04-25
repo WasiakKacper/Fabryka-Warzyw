@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../Components/Navbar.jsx";
 import FilterBtn from "../Components/FilterBtn.jsx";
-import Footer from "../Components/Footer.jsx";
 
 import { Link } from "react-router";
 import "../App.css";
@@ -23,7 +21,6 @@ const Gastronomy = () => {
 
   return (
     <article>
-      <Navbar name="Gastronomy" />
       {!isLogged ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
@@ -70,7 +67,6 @@ const Gastronomy = () => {
         <FilterBtn />
         <div></div>
       </section>
-      <Footer />
     </article>
   );
 };

@@ -1,3 +1,6 @@
+import Navbar from "./Components/Navbar.jsx";
+import Footer from "./Components/Footer.jsx";
+
 import Home from "./Pages/Home.jsx";
 import Gastronomy from "./Pages/Gastronomy.jsx";
 import Cart from "./Pages/Cart.jsx";
@@ -7,6 +10,7 @@ import Contact from "./Pages/Contact.jsx";
 
 import Order from "./Pages/Order.jsx";
 import PickupStore from "./Pages/PickupStore.jsx";
+import PickupDelivery from "./Pages/PickupDelivery.jsx";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import "./App.css";
@@ -15,6 +19,7 @@ function App() {
   return (
     <main>
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gastronomy" element={<Gastronomy />} />
@@ -24,7 +29,9 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
           <Route path="/pickupstore" element={<PickupStore />} />
+          <Route path="/pickupdelivery" element={<PickupDelivery />} />
         </Routes>
+        <Footer />
       </Router>
     </main>
   );

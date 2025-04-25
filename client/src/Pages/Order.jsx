@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
-import Navbar from "../Components/Navbar.jsx";
-import Footer from "../Components/Footer.jsx";
 
 const Order = () => {
   const [isActive, setIsActive] = useState(false);
@@ -19,8 +17,7 @@ const Order = () => {
   }, []);
 
   return (
-    <main className="h-[100%]">
-      <Navbar name="Cart" />
+    <main className="w-[90%] lg:w-[60%] h-[100%]">
       <section className="pt-45  mx-auto flex flex-col w-[90%]">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[3vw] font-medium mb-10">
           Zamówienie
@@ -82,13 +79,12 @@ const Order = () => {
                   name="collection"
                   className="scale-200 mt-2 cursor-pointer"
                   onChange={() => setOption("store")}
-                  checked
                 />
               </div>
             </section>
           </div>
           <Link
-            to={option === "store" ? "/pickupstore" : "pickupdelivery"}
+            to={option === "store" ? "/pickupstore" : "/pickupdelivery"}
             className="mx-auto w-[60%] flex items-center justify-center"
           >
             <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer">
@@ -97,7 +93,6 @@ const Order = () => {
           </Link>
         </section>
       </section>
-      <Footer />
     </main>
   );
 };
