@@ -17,7 +17,7 @@ const Order = () => {
   }, []);
 
   return (
-    <main className="w-[90%] lg:w-[60%] h-[100%]">
+    <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto">
       <section className="pt-45  mx-auto flex flex-col w-[90%]">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[3vw] font-medium mb-10">
           Zamówienie

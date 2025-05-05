@@ -1,23 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import FilterBtn from "../Components/FilterBtn.jsx";
+import ShopContext from "../Context/ShopContext.jsx";
+import axios from "axios";
+import Card from "../Components/Card.jsx";
 
 import { Link } from "react-router";
 import "../App.css";
 
 const categories = [
-  "Miody",
-  "Konfitury",
-  "Mąki",
-  "Suszone owoce",
-  "Makarony",
-  "Soki",
-  "Przyprawy",
+  { pl: "Miody", en: "Honey" },
+  { pl: "Konfitury", en: "Jam" },
+  { pl: "Mąki", en: "Flour" },
+  { pl: "Suszone owoce", en: "Dried fruits" },
+  { pl: "Makarony", en: "Pasta" },
+  { pl: "Soki", en: "Juice" },
+  { pl: "Przyprawy", en: "Spices" },
 ];
 
 const Gastronomy = () => {
   const [isClicked, setIsClicked] = useState(0);
+  const { isLogged } = useContext(ShopContext);
 
-  const [isLogged, setIsLogged] = useState(false);
+  const [whatCategory, setWhatCategory] = useState("Honey");
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/products")
+      .then((products) => {
+        setProducts(products.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Błąd połączenia z bazą danych");
+      });
+  }, []);
+
+  const filteredProducts = products.filter(
+    (product) => product.category === whatCategory
+  );
 
   return (
     <article>
@@ -28,7 +50,7 @@ const Gastronomy = () => {
               Treść tylko dla zalogowanych klientów!
             </h3>
             <button className="mt-20 py-1 w-[30%] rounded-4xl mx-auto text-[4vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer">
-              <Link path="/login">Zaloguj się</Link>
+              <Link to="/login">Zaloguj się</Link>
             </button>
           </section>
         </div>
@@ -38,18 +60,19 @@ const Gastronomy = () => {
       <nav className="w-[90%] lg:w-full overflow-x-auto lg:overflow-hidden pt-45 mx-auto">
         <ul className="flex lg:justify-center w-full text-[4vw] md:text-[3vw] lg:text-[1.6vw] *:px-1">
           {categories.map((item, index) => (
-            <React.Fragment key={item}>
+            <React.Fragment key={item.en}>
               <li
                 onClick={() => {
                   setIsClicked(index);
+                  setWhatCategory(item.en);
                 }}
                 className={
-                  item === "Suszone owoce"
+                  item.pl === "Suszone owoce"
                     ? "whitespace-nowrap cursor-pointer"
                     : "cursor-pointer"
                 }
               >
-                {item}
+                {item.pl}
                 {isClicked == index ? (
                   <hr className="border-(--background) border-2 rounded-2xl" />
                 ) : (
@@ -63,9 +86,17 @@ const Gastronomy = () => {
           ))}
         </ul>
       </nav>
-      <section className="flex flex-row w-[90%] mx-auto mt-15">
+      <div className="w-[90%] mx-auto">
         <FilterBtn />
-        <div></div>
+      </div>
+      <section>
+        <div className="flex justify-center w-[full] mt-5 mx-auto">
+          <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
+            {filteredProducts.map((product, index) => (
+              <Card key={index} data={product} />
+            ))}
+          </div>
+        </div>
       </section>
     </article>
   );

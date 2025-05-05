@@ -26,7 +26,11 @@ const Login = () => {
             )}
           </li>
         </ul>
-        {isClicked == 1 ? <LoginSection /> : <RegisterSection />}
+        {isClicked == 1 ? (
+          <LoginSection />
+        ) : (
+          <RegisterSection setIsClicked={setIsClicked} />
+        )}
       </section>
     </article>
   );
