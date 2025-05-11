@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import CartElement from "../Components/CartElement.jsx";
 import ShopContext from "../Context/ShopContext.jsx";
 
@@ -9,6 +9,10 @@ const Cart = () => {
   const total = cart
     .reduce((acc, item) => acc + item.price * item.quantity, 0)
     .toFixed(2);
+
+  useEffect(() => {
+    localStorage.setItem("total", JSON.stringify(total));
+  }, [total]);
 
   return (
     <article>

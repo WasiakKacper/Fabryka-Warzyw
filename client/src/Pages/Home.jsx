@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { motion } from "motion/react";
+import ShopContext from "../Context/ShopContext.jsx";
 
 import Card from "../Components/Card.jsx";
 import Gallery from "../Components/Gallery.jsx";
@@ -13,6 +14,7 @@ const Home = () => {
   const [whatCategory, setWhatCategory] = useState("Vegetables");
 
   const [products, setProducts] = useState([]);
+  const { firstEnter } = useContext(ShopContext);
 
   useEffect(() => {
     axios
@@ -32,14 +34,18 @@ const Home = () => {
 
   return (
     <article>
-      <motion.section
-        className="fixed flex justify-center items-center w-[100vw] h-[100vh] bg-(--white) z-10000"
-        initial={{ translateY: 0 }}
-        animate={{ translateY: -1000 }}
-        transition={{ duration: 0.7, delay: 0.6 }}
-      >
-        <img src="/Images/loading.png" alt="Fabryka warzyw" />
-      </motion.section>
+      {firstEnter ? (
+        <motion.section
+          className="fixed flex justify-center items-center w-[100vw] h-[100vh] bg-(--white) z-10000"
+          initial={{ translateY: 0 }}
+          animate={{ translateY: -1000 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+        >
+          <img src="/Images/loading.png" alt="Fabryka warzyw" />
+        </motion.section>
+      ) : (
+        <></>
+      )}
       <Gallery />
       <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
         <li

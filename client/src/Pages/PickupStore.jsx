@@ -1,14 +1,44 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
+import axios from "axios";
+
+const submitOrder = async (orderData) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/orders",
+      orderData
+    );
+    alert(response.data.message);
+  } catch (err) {
+    alert("Błąd przy składaniu zamówienia" + err.message);
+  }
+};
 
 const PickupStore = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showError, setShowError] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
 
-  const handleSubmit = () => {
-    if (phoneNumber === "") setShowError(true);
-    else setOrderComplete(true);
+  const handleStoreSubmit = async (e) => {
+    e.preventDefault();
+    if (!phoneNumber) {
+      setShowError(true);
+      return;
+    }
+
+    const orderData = {
+      email: localStorage.getItem("email"),
+      surname: localStorage.getItem("surname"),
+      totalPrice: JSON.parse(localStorage.getItem("total")),
+      pickupMethod: "Sklep",
+      phoneNumber: phoneNumber,
+      products: JSON.parse(localStorage.getItem("cart")),
+    };
+
+    await submitOrder(orderData);
+    localStorage.setItem("cart", "[]");
+    localStorage.setItem("total", "00.00");
+    setOrderComplete(true);
   };
 
   return (
@@ -59,7 +89,7 @@ const PickupStore = () => {
             * - wymagane
           </p>
         </div>
-        <div className="flex flex-col mt-5">
+        <form className="flex flex-col mt-5" onSubmit={handleStoreSubmit}>
           <label
             htmlFor="number"
             className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]"
@@ -75,24 +105,25 @@ const PickupStore = () => {
               console.log(e.target.value);
             }}
           />
-        </div>
-        <p className="text-[4vw] md:text-[3vw] lg:text-[2vw] py-20">
-          Płatność tylko gotówka lub blik
-        </p>
-        <div className="flex items-center justify-center gap-10 w-full mb-10">
-          <Link
-            to="/order"
-            className="flex items-center justify-center text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
-          >
-            Wróć
-          </Link>
-          <button
-            className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
-            onClick={handleSubmit}
-          >
-            Zamów
-          </button>
-        </div>
+
+          <p className="text-[4vw] md:text-[3vw] lg:text-[2vw] py-20">
+            Płatność tylko gotówka lub blik
+          </p>
+          <div className="flex items-center justify-center gap-10 w-full mb-10">
+            <Link
+              to="/order"
+              className="flex items-center justify-center text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
+            >
+              Wróć
+            </Link>
+            <button
+              type="submit"
+              className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
+            >
+              Zamów
+            </button>
+          </div>
+        </form>
       </section>
     </main>
   );

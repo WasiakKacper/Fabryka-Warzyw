@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router";
 import ShopContext from "../Context/ShopContext";
+import "../App.css";
 
 import logo from "/Images/logo.png";
 
@@ -8,7 +9,7 @@ const Navbar = (props) => {
   const [show, setShow] = useState(false);
   const name = props.name;
 
-  const { isLogged } = useContext(ShopContext);
+  const { isLogged, howManyInCart } = useContext(ShopContext);
 
   return (
     <header className="fixed block w-full h-auto bg-(--black) z-10000">
@@ -73,7 +74,12 @@ const Navbar = (props) => {
               setShow(!show);
             }}
           >
-            <Link to="/cart">Koszyk</Link>
+            <Link to="/cart" className="relative inline-flex items-center px-2">
+              Koszyk
+              <span className="absolute -top-2 -right-3 bg-(--accent) text-white text-xs font-bold rounded-full min-w-[1.5vw] min-h-[1.5vw] w-[1vw] h-[1vw] flex items-center justify-center">
+                <p>{howManyInCart}</p>
+              </span>
+            </Link>
 
             {name === "Cart" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />

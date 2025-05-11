@@ -5,6 +5,9 @@ const Order = () => {
   const [isActive, setIsActive] = useState(false);
   const [option, setOption] = useState("store");
 
+  const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState("00.00");
+
   useEffect(() => {
     const date = new Date();
     const day = date.getDay();
@@ -14,6 +17,11 @@ const Order = () => {
     } else {
       setIsActive(false);
     }
+  }, []);
+
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("cart")));
+    setTotal(JSON.parse(localStorage.getItem("total")));
   }, []);
 
   return (
@@ -27,13 +35,17 @@ const Order = () => {
             Produkty
           </h3>
           <ul className="text-[4vw] md:text-[3vw] lg:text-[2vw] text-(--alternativeBackground) mb-5 *:flex *:justify-between *:w-full">
-            <li>
-              <p>Kapusta biała</p>
-              <p>00,00zł</p>
-            </li>
+            {cart.map((item, index) => (
+              <li key={index}>
+                <p>{item.name}</p>
+                <p>
+                  {item.price}zł x{item.quantity}
+                </p>
+              </li>
+            ))}
           </ul>
           <h3 className="flex text-[5vw] md:text-[4vw] lg:text-[2vw] font-medium mb-5 w-full justify-end">
-            Suma: 00,00zł
+            Suma: {total}zł
           </h3>
         </section>
         <section>
@@ -58,7 +70,9 @@ const Order = () => {
                     type="checkbox"
                     name="delivery"
                     className="scale-200 mt-2 cursor-pointer"
-                    onChange={() => setOption("deliver")}
+                    onChange={() => {
+                      setOption("delivery");
+                    }}
                   />
                 )}
               </div>
@@ -78,7 +92,9 @@ const Order = () => {
                   type="checkbox"
                   name="collection"
                   className="scale-200 mt-2 cursor-pointer"
-                  onChange={() => setOption("store")}
+                  onChange={() => {
+                    setOption("store");
+                  }}
                 />
               </div>
             </section>

@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import ShopContext from "./ShopContext.jsx";
 
 export const ShopProvider = ({ children }) => {
+  const [howManyInCart, setHowManyInCart] = useState(0);
   const [isLogged, setIsLogged] = useState(false);
+  const [username, setUsername] = useState(
+    () => localStorage.getItem("username") || ""
+  );
+  const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
+  const [surname, setSurname] = useState(
+    () => localStorage.getItem("surname") || ""
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -13,13 +21,30 @@ export const ShopProvider = ({ children }) => {
     }
   }, []);
 
-  const handleLogin = () => {
+  useEffect(() => {
+    localStorage.setItem("username", username);
+    localStorage.setItem("email", email);
+  }, [username, email]);
+
+  const handleLogin = (nameValue, surnameValue, emailValue) => {
     localStorage.setItem("token", "true");
+    localStorage.setItem("username", nameValue);
+    localStorage.setItem("surname", surnameValue);
+    localStorage.setItem("email", emailValue);
+    setUsername(nameValue);
+    setSurname(surnameValue);
+    setEmail(emailValue);
     setIsLogged(true);
   };
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("surname");
+    localStorage.removeItem("email");
+    setUsername("");
+    setSurname("");
+    setEmail("");
     setIsLogged(false);
   };
 
@@ -30,6 +55,7 @@ export const ShopProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
+    setHowManyInCart(cart.length);
   }, [cart]);
 
   const addToCart = (item, quantity) => {
@@ -73,6 +99,17 @@ export const ShopProvider = ({ children }) => {
     );
   };
 
+  const [firstEnter, setFirstEnter] = useState(true);
+
+  useEffect(() => {
+    const enter = localStorage.getItem("firstEnter");
+    if (enter === "false") setFirstEnter(false);
+    else {
+      localStorage.setItem("firstEnter", "false");
+      setFirstEnter(true);
+    }
+  }, []);
+
   return (
     <ShopContext.Provider
       value={{
@@ -82,8 +119,16 @@ export const ShopProvider = ({ children }) => {
         cart,
         addToCart,
         removeFromCart,
+        howManyInCart,
         increaseQuantity,
         decreaseQuantity,
+        username,
+        surname,
+        email,
+        setUsername,
+        setSurname,
+        setEmail,
+        firstEnter,
       }}
     >
       {children}

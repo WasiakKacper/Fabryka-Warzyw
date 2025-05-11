@@ -15,11 +15,19 @@ const LoginSection = () => {
     e.preventDefault();
     axios
       .post("http://localhost:3001/login", { email, password })
-      .then((result) => {
+      /*       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
           navigate("/account");
-          handleLogin();
+          handleLogin(email, password);
+        }
+      }) */
+      .then((result) => {
+        if (result.data.message === "Success") {
+          handleLogin(result.data.name, result.data.surname, result.data.email);
+          navigate("/account");
+        } else {
+          alert(result.data.message);
         }
       })
       .catch((err) => alert("Błąd komunikacji z bazą danych: ", err));
