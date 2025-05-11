@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 const UserModel = require("./models/User.js");
 const ProductModel = require("./models/Products.js");
@@ -34,38 +35,103 @@ mongoose.connect(
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  UserModel.findOne({ email: email }).then((user) => {
-    if (user) {
-      if (user.password === password) {
-        res.json({
-          message: "Success",
-          name: user.name,
-          surname: user.surname,
-          email: user.email,
-        });
+
+  UserModel.findOne({ email: email })
+    .then((user) => {
+      if (user) {
+        // Porównanie hasła z hashem w bazie
+        bcrypt
+          .compare(password, user.password)
+          .then((isMatch) => {
+            if (isMatch) {
+              res.json({
+                message: "Success",
+                name: user.name,
+                surname: user.surname,
+                email: user.email,
+              });
+            } else {
+              res.json({ message: "Password is incorrect" });
+            }
+          })
+          .catch((err) =>
+            res
+              .status(500)
+              .json({ message: "Error comparing password", error: err.message })
+          );
       } else {
-        res.json({ message: "Password is incorrect" });
+        res.json({ message: "User not exists" });
       }
-    } else {
-      res.json({ message: "User not exists" });
-    }
-  });
+    })
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ message: "Error finding user", error: err.message })
+    );
 });
 
 //Endpoint for register users
 app.post("/register", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name, surname } = req.body;
+
   UserModel.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        UserModel.create(req.body)
-          .then((users) => res.json(users))
-          .catch((err) => res.json(err));
+        // Generowanie soli
+        bcrypt
+          .genSalt(10)
+          .then((salt) => {
+            // Haszowanie hasła
+            bcrypt
+              .hash(password, salt)
+              .then((hashedPassword) => {
+                // Tworzenie nowego użytkownika z zaszyfrowanym hasłem
+                UserModel.create({
+                  email,
+                  password: hashedPassword,
+                  name,
+                  surname,
+                })
+                  .then((newUser) =>
+                    res.status(201).json({
+                      message: "Użytkownik zarejestrowany",
+                      user: {
+                        email: newUser.email,
+                        name: newUser.name,
+                        surname: newUser.surname,
+                      },
+                    })
+                  )
+                  .catch((err) =>
+                    res.status(500).json({
+                      error: "Błąd przy tworzeniu użytkownika",
+                      details: err.message,
+                    })
+                  );
+              })
+              .catch((err) =>
+                res.status(500).json({
+                  error: "Błąd podczas haszowania",
+                  details: err.message,
+                })
+              );
+          })
+          .catch((err) =>
+            res.status(500).json({
+              error: "Błąd przy generowaniu soli",
+              details: err.message,
+            })
+          );
       } else {
         res.status(400).json({ message: "Użytkownik już istnieje" });
       }
     })
-    .catch((err) => res.json(err));
+    .catch((err) =>
+      res.status(500).json({
+        error: "Błąd podczas wyszukiwania użytkownika",
+        details: err.message,
+      })
+    );
 });
 
 // Endpoint for getting all products
