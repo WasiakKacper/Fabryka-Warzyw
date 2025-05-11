@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router";
 import axios from "axios";
+import ShopContext from "../Context/ShopContext";
 
 const submitOrder = async (orderData) => {
   try {
@@ -21,6 +22,8 @@ const PickupDelivery = () => {
   const [apartmentNumber, setApartmentNumber] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [place, setPlace] = useState("");
+
+  const { setCart } = useContext(ShopContext);
 
   const [showError, setShowError] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
@@ -47,6 +50,7 @@ const PickupDelivery = () => {
     await submitOrder(orderData);
     localStorage.setItem("cart", "[]");
     localStorage.setItem("total", "00.00");
+    setCart(JSON.parse(localStorage.getItem("cart")));
     setOrderComplete(true);
   };
 

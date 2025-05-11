@@ -117,6 +117,7 @@ export const ShopProvider = ({ children }) => {
         handleLogin,
         handleLogOut,
         cart,
+        setCart,
         addToCart,
         removeFromCart,
         howManyInCart,

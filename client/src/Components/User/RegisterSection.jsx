@@ -24,9 +24,8 @@ const RegisterSection = ({ setIsClicked }) => {
           email,
           password,
         })
-        .then((restult) => {
+        .then(() => {
           alert("Zarejestrowno!");
-          console.log(restult);
           setIsClicked(1);
         })
         .catch((err) => {

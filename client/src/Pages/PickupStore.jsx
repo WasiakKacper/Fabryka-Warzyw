@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router";
 import axios from "axios";
+import ShopContext from "../Context/ShopContext";
 
 const submitOrder = async (orderData) => {
   try {
@@ -8,7 +9,7 @@ const submitOrder = async (orderData) => {
       "http://localhost:3001/orders",
       orderData
     );
-    alert(response.data.message);
+    console.log(response);
   } catch (err) {
     alert("Błąd przy składaniu zamówienia" + err.message);
   }
@@ -18,6 +19,8 @@ const PickupStore = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showError, setShowError] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
+
+  const { setCart } = useContext(ShopContext);
 
   const handleStoreSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +41,7 @@ const PickupStore = () => {
     await submitOrder(orderData);
     localStorage.setItem("cart", "[]");
     localStorage.setItem("total", "00.00");
+    setCart(JSON.parse(localStorage.getItem("cart")));
     setOrderComplete(true);
   };
 
@@ -102,7 +106,6 @@ const PickupStore = () => {
             className="bg-(--background) px-4 p-1 border-0 outline-0 text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw] rounded-4xl"
             onChange={(e) => {
               setPhoneNumber(e.target.value);
-              console.log(e.target.value);
             }}
           />
 
