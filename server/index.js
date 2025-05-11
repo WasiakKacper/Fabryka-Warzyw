@@ -9,13 +9,12 @@ const UserModel = require("./models/User.js");
 const ProductModel = require("./models/Products.js");
 const OrderModel = require("./models/Order.js");
 
+require("dotenv").config();
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://admin:admin@cluster0.1q7xftm.mongodb.net/FabrykaWarzyw?retryWrites=true&w=majority&appName=Cluster0"
-);
+mongoose.connect(process.env.MONGODB_URI);
 
 //Endpoint for login users
 /* app.post("/login", (req, res) => {
