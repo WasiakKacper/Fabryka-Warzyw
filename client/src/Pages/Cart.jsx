@@ -5,7 +5,7 @@ import ShopContext from "../Context/ShopContext.jsx";
 import { Link } from "react-router";
 
 const Cart = () => {
-  const { cart } = useContext(ShopContext);
+  const { cart, howManyInCart } = useContext(ShopContext);
   const total = cart
     .reduce((acc, item) => acc + item.price * item.quantity, 0)
     .toFixed(2);
@@ -15,15 +15,23 @@ const Cart = () => {
   }, [total]);
 
   return (
-    <article>
+    <article className="min-h-[100vh] h-[100%]">
       <section className=" flex flex-col pt-45 justify-center">
         <h1 className="text-center text-[10vw] lg:text-[5.5vw] font-medium mb-10">
           Koszyk
         </h1>
         <div className="w-[90%] mx-auto">
-          {cart.map((item) => (
-            <CartElement key={item._id} data={item} />
-          ))}
+          {howManyInCart > 0 ? (
+            <div>
+              {cart.map((item) => (
+                <CartElement key={item._id} data={item} />
+              ))}
+            </div>
+          ) : (
+            <h1 className="text-center text-(--darkBackground) text-[3vw] lg:text-[2vw]">
+              Twój koszyk jest pusty.
+            </h1>
+          )}
         </div>
         <h1 className="text-center text-[5vw] md:text-[4vw] lg:text-[3vw] font-medium my-10">
           Suma: {total}zł

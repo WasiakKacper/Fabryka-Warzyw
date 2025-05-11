@@ -7,7 +7,7 @@ import Card from "../Components/Card.jsx";
 import Gallery from "../Components/Gallery.jsx";
 /* import Vegetables from "../Components/Products/Vegetables.jsx";
   import Fruits from "../Components/Products/Fruits.jsx"; */
-import FilterBtn from "../Components/FilterBtn.jsx";
+/* import FilterBtn from "../Components/FilterBtn.jsx"; */
 
 const Home = () => {
   const [isClicked, setIsClicked] = useState(1);
@@ -76,9 +76,7 @@ const Home = () => {
           )}
         </li>
       </ul>
-      <div className="w-[90%] mx-auto">
-        <FilterBtn />
-      </div>
+      <div className="w-[90%] mx-auto"></div>
       <section>
         <div className="flex justify-center w-[full] mt-5 mx-auto">
           <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">

@@ -76,7 +76,7 @@ const Navbar = (props) => {
           >
             <Link to="/cart" className="relative inline-flex items-center px-2">
               Koszyk
-              <span className="absolute -top-2 -right-3 bg-(--accent) text-white text-xs font-bold rounded-full min-w-[1.5vw] min-h-[1.5vw] w-[1vw] h-[1vw] flex items-center justify-center">
+              <span className="absolute -top-2 -right-3 bg-(--accent) text-white text-xs font-bold rounded-full min-w-[1.5vw] min-h-[1.5vw] w-[1vw] h-[1vw] hidden lg:flex items-center justify-center">
                 <p>{howManyInCart}</p>
               </span>
             </Link>

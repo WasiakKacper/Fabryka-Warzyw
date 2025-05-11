@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import FilterBtn from "../Components/FilterBtn.jsx";
+/* import FilterBtn from "../Components/FilterBtn.jsx"; */
 import ShopContext from "../Context/ShopContext.jsx";
 import axios from "axios";
 import Card from "../Components/Card.jsx";
@@ -42,7 +42,7 @@ const Gastronomy = () => {
   );
 
   return (
-    <article>
+    <article className="min-h-[100vh] h-[100%]">
       {!isLogged ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
@@ -86,9 +86,7 @@ const Gastronomy = () => {
           ))}
         </ul>
       </nav>
-      <div className="w-[90%] mx-auto">
-        <FilterBtn />
-      </div>
+      <div className="w-[90%] mx-auto"></div>
       <section>
         <div className="flex justify-center w-[full] mt-5 mx-auto">
           <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
