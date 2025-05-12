@@ -3,7 +3,7 @@ import ShopContext from "../Context/ShopContext.jsx";
 
 const Card = (props) => {
   const [howMany, setHowMany] = useState(1);
-  const { name, price, image } = props.data;
+  const { name, price, image, pricePer } = props.data;
   const { addToCart } = useContext(ShopContext);
 
   const handleSubtraction = () => {
@@ -30,7 +30,7 @@ const Card = (props) => {
             {name}
           </h1>
           <h3 className="text-[3vw] md:text-[2.5vw] lg:text-[1.6vw] mb-10">
-            {price}zł
+            {price}zł{pricePer}
           </h3>
         </div>
         <div className="flex justify-between w-full h-[20%]">

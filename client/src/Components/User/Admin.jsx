@@ -50,6 +50,7 @@ const Admin = () => {
     name: "",
     price: "",
     category: "Vegetables",
+    pricePer: "/szt",
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -76,32 +77,44 @@ const Admin = () => {
   };
 
   const handleSumbit = async () => {
-    try {
-      let uploadedImage = "";
+    if (imageFile && formData.name !== "" && formData.price !== "") {
+      try {
+        let uploadedImage = "";
 
-      if (imageFile) {
-        uploadedImage = await uploadImage();
-        setImage(uploadedImage);
+        if (imageFile) {
+          uploadedImage = await uploadImage();
+          setImage(uploadedImage);
+        }
+
+        const productData = {
+          ...formData,
+          price: parseFloat(formData.price),
+          available: true,
+          image: uploadedImage, // Dodajemy URL obrazu
+        };
+
+        // Wysyłamy dane produktu na backend
+        const res = await axios.post(
+          "http://localhost:3001/products",
+          productData
+        );
+        setProducts((prevProducts) => [...prevProducts, res.data]);
+        setFormData({
+          name: "",
+          price: "",
+          category: "Vegetables",
+          pricePer: "/szt",
+        });
+        setImageFile(null);
+        setImage("");
+        alert("Produkt dodany!");
+        console.log(res.data);
+      } catch (err) {
+        console.error(err);
+        alert("Błąd przy dodawaniu produktu.");
       }
-
-      const productData = {
-        ...formData,
-        price: parseFloat(formData.price),
-        available: true,
-        image: uploadedImage, // Dodajemy URL obrazu
-      };
-
-      // Wysyłamy dane produktu na backend
-      const res = await axios.post(
-        "http://localhost:3001/products",
-        productData
-      );
-      setProducts((prevProducts) => [...prevProducts, res.data]);
-      alert("Produkt dodany!");
-      console.log(res.data);
-    } catch (err) {
-      console.error(err);
-      alert("Błąd przy dodawaniu produktu.");
+    } else {
+      alert("Pola nie mogą pozostać puste!");
     }
   };
 
@@ -205,19 +218,24 @@ const Admin = () => {
               <section>
                 {" "}
                 <form
-                  className="*:border-1"
+                  className="flex gap-2 justify-center *:border-1 mb-10"
                   onSubmit={(e) => {
                     e.preventDefault();
                     handleSumbit();
                   }}
                 >
-                  <input type="file" onChange={handleImageChange} />
+                  <input
+                    type="file"
+                    onChange={handleImageChange}
+                    className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition"
+                  />
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Nazwa produktu"
+                    className="p-2 w-[20%] rounded-4xl"
                   />
                   <input
                     type="number"
@@ -225,11 +243,22 @@ const Admin = () => {
                     value={formData.price}
                     onChange={handleChange}
                     placeholder="Cena produktu (bez zł)"
+                    className="p-2 w-[10%] rounded-4xl"
                   />
+                  <select
+                    name="pricePer"
+                    value={formData.pricePer}
+                    onChange={handleChange}
+                    className="p-2 w-[8%] rounded-4xl"
+                  >
+                    <option value="/szt">za sztuke</option>
+                    <option value="/kg">za kilogram</option>
+                  </select>
                   <select
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
+                    className="p-2 w-[8%] rounded-4xl"
                   >
                     <option value="Vegetables">Warzywa</option>
                     <option value="Fruits">Owoce</option>
@@ -241,7 +270,9 @@ const Admin = () => {
                     <option value="Spices">Przyprawy</option>
                     <option value="Flour">Mąki</option>
                   </select>
-                  <button>Dodaj produkt</button>
+                  <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
+                    Dodaj produkt
+                  </button>
                 </form>
                 <ul>
                   {products.map((product, index) => (
@@ -250,8 +281,8 @@ const Admin = () => {
                       className="flex justify-center gap-3 *:text-[4vw] *:md:text-[3vw] *:lg:text-[2vw]"
                     >
                       <p>
-                        {product.name}--{product.price}zł--{product.category}--
-                        Dostępny:
+                        {product.name}--{product.price}zł{product.pricePer}--
+                        {product.category}--Dostępny:
                         <input
                           type="checkbox"
                           checked={product.available}
