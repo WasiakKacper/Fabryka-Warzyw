@@ -5,11 +5,7 @@ import ShopContext from "../Context/ShopContext";
 
 const submitOrder = async (orderData) => {
   try {
-    const response = await axios.post(
-      "http://localhost:3001/orders",
-      orderData
-    );
-    alert(response.data.message);
+    await axios.post("http://localhost:3001/orders", orderData);
   } catch (err) {
     alert("Błąd przy składaniu zamówienia" + err.message);
   }

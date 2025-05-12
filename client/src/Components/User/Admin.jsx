@@ -124,7 +124,7 @@ const Admin = () => {
   const handleAvailabilityToggle = async (id, newAvailability) => {
     console.log(`Zmiana dostępności produktu ${id}: ${newAvailability}`);
     try {
-      const res = await axios.put(`http://localhost:3001/products/${id}`, {
+      await axios.put(`http://localhost:3001/products/${id}`, {
         available: newAvailability,
       });
       setProducts((prevProducts) =>
