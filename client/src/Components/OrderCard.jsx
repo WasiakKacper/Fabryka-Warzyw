@@ -39,7 +39,7 @@ const OrderCard = ({ order, onStatusUpdate }) => {
 
   return (
     <div
-      className="w-[30%] text-(--white) p-4 rounded-4xl mb-10"
+      className="md:w-[50%] lg:w-[30%] text-(--white) p-4 rounded-4xl mb-10"
       style={
         orderStatus !== "completed"
           ? { backgroundColor: "var(--accent)" }

@@ -179,6 +179,12 @@ const Admin = () => {
     );
   };
 
+  const activeOrders = orders.filter((order) => order.status !== "completed");
+
+  const completedOrders = orders.filter(
+    (order) => order.status === "completed"
+  );
+
   return (
     <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5">
       <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium text-center">
@@ -305,36 +311,39 @@ const Admin = () => {
                 </ul>
               </section>
             ) : (
-              <section>
+              <section className="h-[50vh] overflow-y-scroll">
                 <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
                   Aktywne:
                 </h1>
                 <ul className="flex flex-row flex-wrap justify-evenly text-left">
-                  {orders
-                    .filter((order) => order.status !== "completed")
-                    .map((order, index) => (
+                  {activeOrders.length > 0 ? (
+                    activeOrders.map((order, index) => (
                       <OrderCard
                         key={index}
                         order={order}
-                        products={order.products}
                         onStatusUpdate={updateOrderStatus}
                       />
-                    ))}
+                    ))
+                  ) : (
+                    <p>Brak aktywnych zamówień</p>
+                  )}
                 </ul>
 
                 <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
                   Zakończone:
                 </h1>
                 <ul className="flex flex-row flex-wrap justify-evenly text-left">
-                  {orders
-                    .filter((order) => order.status === "completed")
-                    .map((order, index) => (
+                  {completedOrders.length > 0 ? (
+                    completedOrders.map((order, index) => (
                       <OrderCard
                         key={index}
                         order={order}
                         onStatusUpdate={updateOrderStatus}
                       />
-                    ))}
+                    ))
+                  ) : (
+                    <p>Brak aktywnych zamówień</p>
+                  )}
                 </ul>
               </section>
             )}
