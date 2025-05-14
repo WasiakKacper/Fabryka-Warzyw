@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ShopContext from "../Context/ShopContext.jsx";
 
 const Card = (props) => {
   const [howMany, setHowMany] = useState(1);
-  const { name, price, image, pricePer } = props.data;
+  const [isAvailable, setIsAvailable] = useState(true);
+  const { name, price, image, pricePer, available } = props.data;
   const { addToCart } = useContext(ShopContext);
 
   const handleSubtraction = () => {
@@ -14,6 +15,14 @@ const Card = (props) => {
   const handleAddition = () => {
     setHowMany(howMany + 1);
   };
+
+  useEffect(() => {
+    if (!available) {
+      setIsAvailable(false);
+    } else {
+      setIsAvailable(true);
+    }
+  }, [available]);
 
   return (
     <div className="flex lg:flex-col w-[100%] lg:w-[30%] bg-(--background) rounded-3xl p-2">
@@ -33,25 +42,31 @@ const Card = (props) => {
             {price}zł{pricePer}
           </h3>
         </div>
-        <div className="flex justify-between w-full h-[20%]">
-          <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[3vw] *:lg:text-[2vw] items-center">
-            <button className="cursor-pointer" onClick={handleSubtraction}>
-              -
-            </button>
-            <h4>{howMany}</h4>
-            <button className="cursor-pointer" onClick={handleAddition}>
-              +
+        {isAvailable ? (
+          <div className="flex justify-between w-full h-[20%]">
+            <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[3vw] *:lg:text-[2vw] items-center">
+              <button className="cursor-pointer" onClick={handleSubtraction}>
+                -
+              </button>
+              <h4>{howMany}</h4>
+              <button className="cursor-pointer" onClick={handleAddition}>
+                +
+              </button>
+            </div>
+            <button
+              className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[3vw] lg:text-[1.5vw] rounded-4xl cursor-pointer"
+              onClick={() => {
+                addToCart(props.data, howMany);
+              }}
+            >
+              Do koszyka
             </button>
           </div>
-          <button
-            className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[3vw] lg:text-[1.5vw] rounded-4xl cursor-pointer"
-            onClick={() => {
-              addToCart(props.data, howMany);
-            }}
-          >
-            Do koszyka
-          </button>
-        </div>
+        ) : (
+          <h3 className="text-right text-[4vw] md:text-[3vw] lg:text-[2vw]">
+            Produkt nie dostępny
+          </h3>
+        )}
       </div>
     </div>
   );

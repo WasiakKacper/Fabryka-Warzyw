@@ -22,32 +22,44 @@ const PickupDelivery = () => {
   const { setCart } = useContext(ShopContext);
 
   const [showError, setShowError] = useState(false);
+  const [errosMessage, setErrorMessage] = useState("");
   const [orderComplete, setOrderComplete] = useState(false);
+
+  const checkPostalCode = (code) => {
+    const prefix = code.slice(0, 2);
+    return ["90", "91", "92", "93", "94"].includes(prefix);
+  };
 
   const handleStoreSubmit = async (e) => {
     e.preventDefault();
     if (!phoneNumber || !street || !homeNumber || !place || !postalCode) {
+      setErrorMessage("Żadne wymagane pole nie może pozostać puste!");
       setShowError(true);
       return;
+    } else {
+      if (place === "Łódź" && checkPostalCode(postalCode)) {
+        const orderData = {
+          email: localStorage.getItem("email"),
+          surname: localStorage.getItem("surname"),
+          totalPrice: JSON.parse(localStorage.getItem("total")),
+          pickupMethod: "Dostawa",
+          street: street,
+          homeNumber: homeNumber,
+          apartmentNumber: apartmentNumber,
+          phoneNumber: phoneNumber,
+          products: JSON.parse(localStorage.getItem("cart")),
+        };
+
+        await submitOrder(orderData);
+        localStorage.setItem("cart", "[]");
+        localStorage.setItem("total", "00.00");
+        setCart(JSON.parse(localStorage.getItem("cart")));
+        setOrderComplete(true);
+      } else {
+        setShowError(true);
+        setErrorMessage("Dostawa możliwa tylko na terenie Łodzi!");
+      }
     }
-
-    const orderData = {
-      email: localStorage.getItem("email"),
-      surname: localStorage.getItem("surname"),
-      totalPrice: JSON.parse(localStorage.getItem("total")),
-      pickupMethod: "Dostawa",
-      street: street,
-      homeNumber: homeNumber,
-      apartmentNumber: apartmentNumber,
-      phoneNumber: phoneNumber,
-      products: JSON.parse(localStorage.getItem("cart")),
-    };
-
-    await submitOrder(orderData);
-    localStorage.setItem("cart", "[]");
-    localStorage.setItem("total", "00.00");
-    setCart(JSON.parse(localStorage.getItem("cart")));
-    setOrderComplete(true);
   };
 
   return (
@@ -56,7 +68,7 @@ const PickupDelivery = () => {
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
-              Pole nie może pozostać puste
+              {errosMessage}
             </h3>
             <button
               className="mt-20 py-1 w-[30%] rounded-4xl mx-auto text-[4vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer"

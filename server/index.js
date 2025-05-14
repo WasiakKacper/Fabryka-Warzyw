@@ -50,16 +50,16 @@ app.post("/login", (req, res) => {
                 email: user.email,
               });
             } else {
-              res.json({ message: "Password is incorrect" });
+              res.json({ message: "Nie prawidłowe hasło!" });
             }
           })
           .catch((err) =>
             res
               .status(500)
-              .json({ message: "Error comparing password", error: err.message })
+              .json({ message: "Błąd porównywania haseł!", error: err.message })
           );
       } else {
-        res.json({ message: "User not exists" });
+        res.json({ message: "Użytkownik nie istnieje!" });
       }
     })
     .catch((err) =>
@@ -142,7 +142,7 @@ app.get("/products", (req, res) => {
 
 //Endpoint for adding product
 app.post("/products", (req, res) => {
-  const { name, price, category, image } = req.body;
+  const { name, price, category, image, pricePer } = req.body;
 
   const newProduct = new ProductModel({
     name,
@@ -150,6 +150,7 @@ app.post("/products", (req, res) => {
     category,
     image,
     available: true,
+    pricePer,
   });
 
   newProduct
