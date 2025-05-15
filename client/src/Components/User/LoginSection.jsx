@@ -10,40 +10,50 @@ const LoginSection = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const { handleLogin } = useContext(ShopContext);
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const adminName = import.meta.env.VITE_ADMIN_NAME;
+  const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email !== "" && password !== "") {
-      axios
-        .post("http://localhost:3001/login", { email, password })
-        /*       .then((result) => {
+      if (email === adminName && password === adminPassword) {
+        handleLogin("Admin", "Admin", email, true);
+        navigate("/admin");
+      } else {
+        axios
+          .post(`${apiUrl}/login`, { email, password })
+          /*       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
           navigate("/account");
           handleLogin(email, password);
         }
       }) */
-        .then((result) => {
-          if (result.data.message === "Success") {
-            handleLogin(
-              result.data.name,
-              result.data.surname,
-              result.data.email
-            );
-            navigate("/account");
-          } else {
-            setError(true);
-            setErrorMessage(result.data.message);
-          }
-        })
-        .catch((err) => alert("Błąd komunikacji z bazą danych: ", err));
+          .then((result) => {
+            if (result.data.message === "Success") {
+              handleLogin(
+                result.data.name,
+                result.data.surname,
+                result.data.email,
+                false
+              );
+              navigate("/account");
+            } else {
+              setError(true);
+              setErrorMessage(result.data.message);
+            }
+          })
+          .catch((err) => alert("Błąd komunikacji z bazą danych: ", err));
+      }
     } else {
       setError(true);
       setErrorMessage("Żadne pole nie może pozostać puste!");
     }
   };
+
   return (
     <section>
       {error ? (

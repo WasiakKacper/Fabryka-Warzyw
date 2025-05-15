@@ -5,6 +5,7 @@ const OrderCard = ({ order, onStatusUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const adminToken = localStorage.getItem("admin");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleMarkAsCompleted = async (orderId) => {
     if (!orderId) {
@@ -16,10 +17,9 @@ const OrderCard = ({ order, onStatusUpdate }) => {
     setError(null);
 
     try {
-      const response = await axios.put(
-        `http://localhost:3001/orders/${orderId}`,
-        { status: "completed" }
-      );
+      const response = await axios.put(`${apiUrl}/orders/${orderId}`, {
+        status: "completed",
+      });
 
       if (response.status === 200) {
         console.log("Zamówienie zaktualizowane:", response.data);

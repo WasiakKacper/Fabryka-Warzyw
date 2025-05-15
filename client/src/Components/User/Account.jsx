@@ -7,10 +7,11 @@ import OrderCard from "../OrderCard";
 const Account = () => {
   const [orders, setOrders] = useState([]);
   const email = localStorage.getItem("email");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchOrders = () => {
     axios
-      .get("http://localhost:3001/orders")
+      .get(`${apiUrl}/orders`)
       .then((res) => {
         setOrders(res.data);
       })
@@ -42,7 +43,7 @@ const Account = () => {
 
   return (
     <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5">
-      <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw} font-medium">
+      <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium">
         Witaj <span className="text-(--accent)">{username}</span>.
       </h1>
       <section className="flex flex-col *:text-center *:my-3">

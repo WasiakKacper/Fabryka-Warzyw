@@ -9,7 +9,7 @@ const Navbar = (props) => {
   const [show, setShow] = useState(false);
   const name = props.name;
 
-  const { isLogged, howManyInCart } = useContext(ShopContext);
+  const { isLogged, howManyInCart, isAdmin } = useContext(ShopContext);
 
   return (
     <header className="fixed block w-full h-auto bg-(--black) z-10000">
@@ -93,8 +93,8 @@ const Navbar = (props) => {
               setShow(!show);
             }}
           >
-            <Link to={!isLogged ? "/login" : "/account"}>
-              {!isLogged ? "Logowanie" : "Konto"}
+            <Link to={!isLogged ? "/login" : isAdmin ? "/admin" : "/acconut"}>
+              {!isLogged ? "Logowanie" : isAdmin ? "Panel" : "Konto"}
             </Link>
 
             {name === "Login" ? (

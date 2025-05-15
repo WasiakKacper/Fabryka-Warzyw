@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Gallery = () => {
-  const [isActive, setIsActive] = useState(1);
-
   return (
     <div className="block justify-center w-[90%] mx-auto">
       <div className="w-full pt-45 ">
@@ -16,38 +14,6 @@ const Gallery = () => {
             <li>Piątek 12-20</li>
           </ul>
         </div>
-      </div>
-      <div className="flex w-[100%] h-8 justify-center gap-2 *:w-[12px] *:h-[12px] *:rounded-4xl ">
-        <button
-          className={`${
-            isActive === 1
-              ? "bg-(--alternativeBackground)"
-              : "bg-(--background)"
-          }`}
-          onClick={() => {
-            setIsActive(1);
-          }}
-        ></button>
-        <button
-          className={`${
-            isActive === 2
-              ? "bg-(--alternativeBackground)"
-              : "bg-(--background)"
-          }`}
-          onClick={() => {
-            setIsActive(2);
-          }}
-        ></button>
-        <button
-          className={`${
-            isActive === 3
-              ? "bg-(--alternativeBackground)"
-              : "bg-(--background)"
-          }`}
-          onClick={() => {
-            setIsActive(3);
-          }}
-        ></button>
       </div>
     </div>
   );

@@ -26,22 +26,48 @@ export const ShopProvider = ({ children }) => {
     localStorage.setItem("email", email);
   }, [username, email]);
 
-  const handleLogin = (nameValue, surnameValue, emailValue) => {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const handleLogin = (
+    nameValue,
+    surnameValue,
+    emailValue,
+    isAdminUser = false
+  ) => {
     localStorage.setItem("token", "true");
     localStorage.setItem("username", nameValue);
     localStorage.setItem("surname", surnameValue);
     localStorage.setItem("email", emailValue);
+
+    if (isAdminUser) {
+      localStorage.setItem("admin", "true");
+      setIsAdmin(true);
+    } else {
+      localStorage.removeItem("admin");
+      setIsAdmin(false);
+    }
+
     setUsername(nameValue);
     setSurname(surnameValue);
     setEmail(emailValue);
     setIsLogged(true);
   };
 
+  useEffect(() => {
+    const admin = localStorage.getItem("admin");
+    if (admin === "true") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, []);
+
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("surname");
     localStorage.removeItem("email");
+
     setUsername("");
     setSurname("");
     setEmail("");
@@ -130,6 +156,8 @@ export const ShopProvider = ({ children }) => {
         setSurname,
         setEmail,
         firstEnter,
+        isAdmin,
+        setIsAdmin,
       }}
     >
       {children}

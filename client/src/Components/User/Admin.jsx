@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import OrderCard from "../OrderCard";
+import { useNavigate } from "react-router";
+import ShopContext from "../../Context/ShopContext.jsx";
 
 const Admin = () => {
   const [isClicked, setIsClicked] = useState(1);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [adminName, setAdminName] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
+  /*const [adminName, setAdminName] = useState("");
+  const [adminPassword, setAdminPassword] = useState(""); */
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    category: "Vegetables",
+    pricePer: "/szt",
+  });
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const { setIsAdmin } = useContext(ShopContext);
 
-  const handleAdminLogin = (e) => {
+  const navigate = useNavigate();
+
+  const [imageFile, setImageFile] = useState(null);
+
+  /*   const handleAdminLogin = (e) => {
     e.preventDefault();
     const name = import.meta.env.VITE_ADMIN_NAME;
     const password = import.meta.env.VITE_ADMIN_PASSWORD;
@@ -18,25 +31,26 @@ const Admin = () => {
     } else {
       alert("Błędne dane!");
     }
-  };
+  }; */
 
   const handleAdminLogOut = () => {
     localStorage.removeItem("admin");
     setIsAdmin(false);
+    navigate("/login");
   };
 
   const [products, setProducts] = useState([]);
-
+  /* 
   useEffect(() => {
     const token = localStorage.getItem("admin");
     if (token === "true") {
       setIsAdmin(true);
     }
-  }, []);
+  }, []); */
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/products")
+      .get(`${apiUrl}/products`)
       .then((products) => {
         setProducts(products.data);
       })
@@ -45,16 +59,6 @@ const Admin = () => {
         alert("Błąd połączenia z bazą danych");
       });
   }, []);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    category: "Vegetables",
-    pricePer: "/szt",
-  });
-
-  const [imageFile, setImageFile] = useState(null);
-  const [image, setImage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,7 +76,7 @@ const Admin = () => {
     const data = new FormData();
     data.append("image", imageFile);
 
-    const res = await axios.post("http://localhost:3001/upload", data);
+    const res = await axios.post(`${apiUrl}/upload`, data);
     return res.data.image;
   };
 
@@ -83,7 +87,6 @@ const Admin = () => {
 
         if (imageFile) {
           uploadedImage = await uploadImage();
-          setImage(uploadedImage);
         }
 
         const productData = {
@@ -94,10 +97,7 @@ const Admin = () => {
         };
 
         // Wysyłamy dane produktu na backend
-        const res = await axios.post(
-          "http://localhost:3001/products",
-          productData
-        );
+        const res = await axios.post(`${apiUrl}/products`, productData);
         setProducts((prevProducts) => [...prevProducts, res.data]);
         setFormData({
           name: "",
@@ -106,7 +106,6 @@ const Admin = () => {
           pricePer: "/szt",
         });
         setImageFile(null);
-        setImage("");
         alert("Produkt dodany!");
         console.log(res.data);
       } catch (err) {
@@ -122,7 +121,7 @@ const Admin = () => {
     const confirmed = window.confirm("Czy napewno chcesz usunąć produkt?");
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/products/${id}`);
+        await axios.delete(`${apiUrl}/products/${id}`);
         setProducts((prevProducts) => prevProducts.filter((p) => p._id !== id));
         alert("Produkt usunięty");
       } catch (err) {
@@ -137,7 +136,7 @@ const Admin = () => {
   const handleAvailabilityToggle = async (id, newAvailability) => {
     console.log(`Zmiana dostępności produktu ${id}: ${newAvailability}`);
     try {
-      await axios.put(`http://localhost:3001/products/${id}`, {
+      await axios.put(`${apiUrl}/products/${id}`, {
         available: newAvailability,
       });
       setProducts((prevProducts) =>
@@ -157,7 +156,7 @@ const Admin = () => {
 
   const fetchOrders = () => {
     axios
-      .get("http://localhost:3001/orders")
+      .get(`${apiUrl}/orders`)
       .then((res) => {
         setOrders(res.data);
       })
@@ -190,209 +189,175 @@ const Admin = () => {
       <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium text-center">
         Panel administracyjny
       </h1>
-      {isAdmin ? (
-        <section className="flex flex-col *:text-center *:my-3">
-          <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
-            <li
-              onClick={() => {
-                setIsClicked(1);
-              }}
-            >
-              Produkty
-              {isClicked == 1 ? (
-                <hr className="border-(--background) border-2 rounded-2xl" />
-              ) : (
-                <></>
-              )}
-            </li>
-            <li className="text-(--background)">|</li>
-            <li
-              onClick={() => {
-                setIsClicked(2);
-              }}
-            >
-              Zamówienia
-              {isClicked == 2 ? (
-                <hr className="border-(--background) border-2 rounded-2xl" />
-              ) : (
-                <></>
-              )}
-            </li>
-          </ul>
-          <article>
-            {isClicked === 1 ? (
-              <section>
-                {" "}
-                <form
-                  className="flex gap-2 justify-center *:border-1 mb-10"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSumbit();
-                  }}
-                >
-                  <input
-                    type="file"
-                    onChange={handleImageChange}
-                    className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition"
-                  />
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Nazwa produktu"
-                    className="p-2 w-[20%] rounded-4xl"
-                  />
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    placeholder="Cena produktu (bez zł)"
-                    className="p-2 w-[10%] rounded-4xl"
-                  />
-                  <select
-                    name="pricePer"
-                    value={formData.pricePer}
-                    onChange={handleChange}
-                    className="p-2 w-[8%] rounded-4xl"
-                  >
-                    <option value="/szt">za sztuke</option>
-                    <option value="/kg">za kilogram</option>
-                  </select>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    className="p-2 w-[8%] rounded-4xl"
-                  >
-                    <option value="Vegetables">Warzywa</option>
-                    <option value="Fruits">Owoce</option>
-                    <option value="Honey">Miód</option>
-                    <option value="Jam">Konfitury</option>
-                    <option value="Dried fruits">Suszone owoce</option>
-                    <option value="Pasta">Makarony</option>
-                    <option value="Juice">Soki</option>
-                    <option value="Spices">Przyprawy</option>
-                    <option value="Flour">Mąki</option>
-                  </select>
-                  <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
-                    Dodaj produkt
-                  </button>
-                </form>
-                <ul>
-                  {products.map((product, index) => (
-                    <li
-                      key={index}
-                      className="flex justify-center gap-3 *:text-[4vw] *:md:text-[3vw] *:lg:text-[2vw]"
-                    >
-                      <p>
-                        {product.name}--{product.price}zł{product.pricePer}--
-                        {product.category}--Dostępny:
-                        <input
-                          type="checkbox"
-                          checked={product.available}
-                          onChange={() =>
-                            handleAvailabilityToggle(
-                              product._id,
-                              !product.available
-                            )
-                          }
-                        />
-                      </p>
-                      <button
-                        className="text-(--alternativeAccent) hover:text-(--hoverAlternativeAccent) font-medium cursor-pointer"
-                        onClick={() => handleDelete(product._id)}
-                      >
-                        Usuń
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+      <section className="flex flex-col *:text-center *:my-3">
+        <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
+          <li
+            onClick={() => {
+              setIsClicked(1);
+            }}
+          >
+            Produkty
+            {isClicked == 1 ? (
+              <hr className="border-(--background) border-2 rounded-2xl" />
             ) : (
-              <section className="h-[50vh] overflow-y-scroll">
-                <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
-                  Aktywne:
-                </h1>
-                <ul className="flex flex-row flex-wrap justify-evenly text-left">
-                  {activeOrders.length > 0 ? (
-                    activeOrders.map((order, index) => (
-                      <OrderCard
-                        key={index}
-                        order={order}
-                        onStatusUpdate={updateOrderStatus}
-                      />
-                    ))
-                  ) : (
-                    <p>Brak aktywnych zamówień</p>
-                  )}
-                </ul>
-
-                <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
-                  Zakończone:
-                </h1>
-                <ul className="flex flex-row flex-wrap justify-evenly text-left">
-                  {completedOrders.length > 0 ? (
-                    completedOrders.map((order, index) => (
-                      <OrderCard
-                        key={index}
-                        order={order}
-                        onStatusUpdate={updateOrderStatus}
-                      />
-                    ))
-                  ) : (
-                    <p>Brak aktywnych zamówień</p>
-                  )}
-                </ul>
-              </section>
+              <></>
             )}
-          </article>
-          <button
-            onClick={handleAdminLogOut}
-            className="w-[50%] md:w-[40%] lg:w-[30%] py-2 px-4 bg-(--alternativeAccent) text-(--white) mx-auto rounded-3xl cursor-pointer hover:bg-(--hoverAlternativeAccent) transition-all text-[5vw] md:text-[4vw] lg:text-[2vw]"
+          </li>
+          <li className="text-(--background)">|</li>
+          <li
+            onClick={() => {
+              setIsClicked(2);
+            }}
           >
-            Wyloguj się
-          </button>
-        </section>
-      ) : (
-        <form
-          className="flex flex-col w-[100%] md:w-[60%] lg:w-[40%] p-20 mx-auto *:mb-2"
-          onSubmit={handleAdminLogin}
+            Zamówienia
+            {isClicked == 2 ? (
+              <hr className="border-(--background) border-2 rounded-2xl" />
+            ) : (
+              <></>
+            )}
+          </li>
+        </ul>
+        <article>
+          {isClicked === 1 ? (
+            <section>
+              <form
+                className="flex gap-2 justify-center *:border-1 mb-10"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSumbit();
+                }}
+              >
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition"
+                />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Nazwa produktu"
+                  className="p-2 w-[20%] rounded-4xl"
+                />
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="Cena produktu (bez zł)"
+                  className="p-2 w-[10%] rounded-4xl"
+                />
+                <select
+                  name="pricePer"
+                  value={formData.pricePer}
+                  onChange={handleChange}
+                  className="p-2 w-[8%] rounded-4xl"
+                >
+                  <option value="/szt">za sztuke</option>
+                  <option value="/kg">za kilogram</option>
+                </select>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="p-2 w-[8%] rounded-4xl"
+                >
+                  <option value="Vegetables">Warzywa</option>
+                  <option value="Fruits">Owoce</option>
+                  <option value="Honey">Miód</option>
+                  <option value="Jam">Konfitury</option>
+                  <option value="Dried fruits">Suszone owoce</option>
+                  <option value="Pasta">Makarony</option>
+                  <option value="Juice">Soki</option>
+                  <option value="Spices">Przyprawy</option>
+                  <option value="Flour">Mąki</option>
+                </select>
+                <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
+                  Dodaj produkt
+                </button>
+              </form>
+              <ul className="h-[50vh] overflow-y-scroll">
+                {products.map((product, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between gap-3 *:text-[4vw] *:md:text-[3vw] *:lg:text-[2vw] bg-(--background) rounded-2xl py-3 px-5 mb-5"
+                  >
+                    <img
+                      src={product.image}
+                      alt="Zdjęcie produktu"
+                      className="w-10"
+                    />
+                    <p className="text-[3vw] md:text-[4vw] lg:text-[3vw]">
+                      {product.name}--{product.price}zł{product.pricePer}--
+                      {product.category}--Dostępny:
+                      <input
+                        type="checkbox"
+                        checked={product.available}
+                        className="w-10"
+                        onChange={() =>
+                          handleAvailabilityToggle(
+                            product._id,
+                            !product.available
+                          )
+                        }
+                      />
+                    </p>
+                    <button
+                      className="text-(--alternativeAccent) hover:text-(--hoverAlternativeAccent) font-medium cursor-pointer"
+                      onClick={() => handleDelete(product._id)}
+                    >
+                      Usuń
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : (
+            <section className="h-[50vh] overflow-y-scroll">
+              <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
+                Aktywne:
+              </h1>
+              <ul className="flex flex-row flex-wrap justify-evenly text-left">
+                {activeOrders.length > 0 ? (
+                  activeOrders.map((order, index) => (
+                    <OrderCard
+                      key={index}
+                      order={order}
+                      onStatusUpdate={updateOrderStatus}
+                    />
+                  ))
+                ) : (
+                  <p>Brak aktywnych zamówień</p>
+                )}
+              </ul>
+
+              <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
+                Zakończone:
+              </h1>
+              <ul className="flex flex-row flex-wrap justify-evenly text-left">
+                {completedOrders.length > 0 ? (
+                  completedOrders.map((order, index) => (
+                    <OrderCard
+                      key={index}
+                      order={order}
+                      onStatusUpdate={updateOrderStatus}
+                    />
+                  ))
+                ) : (
+                  <p>Brak aktywnych zamówień</p>
+                )}
+              </ul>
+            </section>
+          )}
+        </article>
+        <button
+          onClick={handleAdminLogOut}
+          className="w-[50%] md:w-[40%] lg:w-[30%] py-2 px-4 bg-(--alternativeAccent) text-(--white) mx-auto rounded-3xl cursor-pointer hover:bg-(--hoverAlternativeAccent) transition-all text-[5vw] md:text-[4vw] lg:text-[2vw]"
         >
-          <label
-            htmlFor="email"
-            className="text-[4vw] md:text-[3vw] lg:text-[1.5vw]"
-          >
-            Nazwa użytkownika:
-          </label>
-          <input
-            type="text"
-            name="adminName"
-            className="bg-(--background) p-2 rounded-4xl text-[4vw] md:text-[3vw] lg:text-[1.5vw]"
-            onChange={(e) => {
-              setAdminName(e.target.value);
-            }}
-          />
-          <label
-            htmlFor="password"
-            className="text-[4vw] md:text-[3vw] lg:text-[1.5vw]"
-          >
-            Hasło:
-          </label>
-          <input
-            type="password"
-            name="password"
-            className="bg-(--background) p-2 rounded-4xl text-[4vw] md:text-[3vw] lg:text-[1.5vw]"
-            onChange={(e) => {
-              setAdminPassword(e.target.value);
-            }}
-          />
-          <button className="bg-(--accent) text-(--white) p-2 rounded-4xl w-[60%] mx-auto mt-4 text-[5vw] md:text-[4vw] lg:text-[2vw] cursor-pointer">
-            Zaloguj się
-          </button>
-        </form>
-      )}
+          Wyloguj się
+        </button>
+      </section>
     </article>
   );
 };

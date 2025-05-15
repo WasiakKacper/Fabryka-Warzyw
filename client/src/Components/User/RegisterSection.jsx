@@ -15,6 +15,7 @@ const RegisterSection = ({ setIsClicked }) => {
   const [passwordAgain, setPasswordAgain] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ const RegisterSection = ({ setIsClicked }) => {
       if (password === passwordAgain) {
         if (password.length >= 8) {
           axios
-            .post("http://localhost:3001/register", {
+            .post(`${apiUrl}/register`, {
               name,
               surname,
               email,

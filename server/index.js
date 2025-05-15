@@ -4,6 +4,14 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const UserModel = require("./models/User.js");
 const ProductModel = require("./models/Products.js");
@@ -12,7 +20,7 @@ const OrderModel = require("./models/Order.js");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "https://dulcet-daffodil-bbc936.netlify.app" }));
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -160,35 +168,59 @@ app.post("/products", (req, res) => {
 });
 
 //Adding images
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Endpoint for uploading images
-app.post("/upload", upload.single("image"), (req, res) => {
-  if (req.file) {
-    res.json({ image: `http://localhost:3001/uploads/${req.file.filename}` });
-  } else {
-    res.status(400).json({ message: "Błąd przy przesyłaniu pliku." });
+app.post("/upload", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Brak pliku do przesłania." });
+    }
+
+    const streamUpload = (req) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "fabryka-warzyw",
+          },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          }
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+
+    const result = await streamUpload(req);
+    res.json({ image: result.secure_url });
+  } catch (error) {
+    console.error("Błąd przesyłania do Cloudinary:", error);
+    res.status(500).json({ message: "Błąd przesyłania obrazu", error });
   }
 });
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //Endpoint for deleting products
 app.delete("/products/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
+
+    // Znajdź produkt w bazie danych
+    const product = await ProductModel.findById(_id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Produkt nie istnieje" });
+    }
+
+    // Usuń produkt z bazy danych
     await ProductModel.findByIdAndDelete(_id);
     res.status(200).json({ message: "Produkt usunięty" });
   } catch (err) {
-    console.error(err); // dodaj log błędu do konsoli
+    console.error("Błąd podczas usuwania produktu:", err);
     res
       .status(500)
       .json({ message: "Błąd podczas usuwania produktu", error: err });
@@ -289,5 +321,11 @@ app.put("/orders/:id", async (req, res) => {
     res.status(500).json({ message: "Błąd aktualizacji statusu", error: err });
   }
 });
+const PORT = process.env.PORT || 3001;
 
-app.listen(3001, () => console.log("Connect succesful!"));
+//Pinging
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
+app.listen(PORT, () => console.log("Connect succesful!"));

@@ -3,9 +3,11 @@ import { Link } from "react-router";
 import axios from "axios";
 import ShopContext from "../Context/ShopContext";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const submitOrder = async (orderData) => {
   try {
-    await axios.post("http://localhost:3001/orders", orderData);
+    await axios.post(`${apiUrl}}/orders`, orderData);
   } catch (err) {
     alert("Błąd przy składaniu zamówienia" + err.message);
   }

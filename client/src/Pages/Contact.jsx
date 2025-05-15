@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Contact = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <article>
       <h1 className="pt-45 text-[10vw] md:text-[8vw] lg:text-[6vw] font-medium text-center">
@@ -21,6 +23,7 @@ const Contact = () => {
         </div>
         <div>
           <i className="icon-location text-[8vw] md:text-[7vw] lg:text-[4vw]"></i>
+          {!isLoaded && <p className="text-gray-600">Ładowanie mapy...</p>}
           <iframe
             width="400"
             height="200"
@@ -30,6 +33,8 @@ const Contact = () => {
             marginwidth="0"
             className="mx-auto w-[100%] rounded-2xl"
             src="https://maps.google.com/maps?width=400&amp;height=200&amp;hl=en&amp;q=Cedry%204,%2091-129%20%C5%81%C3%B3d%C5%BA+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+            loading="lazy"
+            onLoad={() => setIsLoaded(true)}
           >
             <a href="https://www.gps.ie/collections/personal-trackers/">
               real-time gps tracker,

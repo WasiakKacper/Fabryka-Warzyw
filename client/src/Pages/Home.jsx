@@ -15,10 +15,11 @@ const Home = () => {
 
   const [products, setProducts] = useState([]);
   const { firstEnter } = useContext(ShopContext);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/products")
+      .get(`${apiUrl}/products`)
       .then((products) => {
         setProducts(products.data);
       })
@@ -33,7 +34,7 @@ const Home = () => {
   );
 
   return (
-    <article>
+    <article className="min-h-[100vh] h-[100%]">
       {firstEnter ? (
         <motion.section
           className="fixed flex justify-center items-center w-[100vw] h-[100vh] bg-(--white) z-10000"

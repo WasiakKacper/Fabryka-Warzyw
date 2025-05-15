@@ -24,10 +24,11 @@ const Gastronomy = () => {
   const [whatCategory, setWhatCategory] = useState("Honey");
 
   const [products, setProducts] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/products")
+      .get(`${apiUrl}/products`)
       .then((products) => {
         setProducts(products.data);
       })
