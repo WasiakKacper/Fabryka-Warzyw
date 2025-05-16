@@ -6,6 +6,14 @@ const Card = (props) => {
   const [isAvailable, setIsAvailable] = useState(true);
   const { name, price, image, pricePer, available } = props.data;
   const { addToCart } = useContext(ShopContext);
+  const [add, setAdd] = useState(false);
+
+  const addAnimation = () => {
+    setAdd(true);
+    setTimeout(() => {
+      setAdd(false);
+    }, 500);
+  };
 
   const handleSubtraction = () => {
     if (howMany - 1 < 1) setHowMany(1);
@@ -57,9 +65,10 @@ const Card = (props) => {
               className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[3vw] lg:text-[1.5vw] rounded-4xl cursor-pointer"
               onClick={() => {
                 addToCart(props.data, howMany);
+                addAnimation();
               }}
             >
-              Do koszyka
+              {add ? "Dodano!" : "Do koszyka"}
             </button>
           </div>
         ) : (

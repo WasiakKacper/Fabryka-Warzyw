@@ -33,13 +33,13 @@ const Navbar = (props) => {
         {/* For desktops */}
 
         <ul
-          className={`absolute w-[60%] *:w-[85%] lg:*:w-auto  h-[100vh] lg:w-auto lg:h-auto bg-(--darkBackgorund) lg:bg-transparent text-center items-center  lg:static right-0 top-[100%] flex flex-col lg:flex-row list-none text-(--white) text-[4vw] lg:text-[1.2vw] lg:gap-6 lg:items-center *:cursor-pointer *:hover:text-(--background) z-10 ${
+          className={`absolute w-[60%] *:w-[85%] lg:*:w-auto  h-[100vh] lg:w-auto lg:h-auto bg-(--darkBackgorund) lg:bg-transparent text-center items-center  lg:static right-0 top-[100%] flex flex-col lg:flex-row list-none text-(--white) text-[5vw] md:text-[4vw] lg:text-[1.2vw] lg:gap-6 lg:items-center *:cursor-pointer *:hover:text-(--background) z-10 ${
             show ? "translate-x-0" : "translate-x-full"
           }
           transform transition-transform duration-300 ease-in-out
-          lg:transition-none lg:transform-none lg:translate-x-0 `}
+          lg:transition-none lg:transform-none lg:translate-x-0 *:my-4 lg:*:my-0`}
         >
-          <h1 className="lg:hidden text-[8vw] mt-5 mb-10 text-(--accent)">
+          <h1 className="  lg:hidden text-[8vw] mt-5 mb-10 text-(--accent)">
             Menu
           </h1>
           <li
@@ -93,7 +93,7 @@ const Navbar = (props) => {
               setShow(!show);
             }}
           >
-            <Link to={!isLogged ? "/login" : isAdmin ? "/admin" : "/acconut"}>
+            <Link to={!isLogged ? "/login" : isAdmin ? "/admin" : "/account"}>
               {!isLogged ? "Logowanie" : isAdmin ? "Panel" : "Konto"}
             </Link>
 

@@ -60,7 +60,7 @@ export const ShopProvider = ({ children }) => {
     } else {
       setIsAdmin(false);
     }
-  }, []);
+  }, [isAdmin]);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
@@ -140,6 +140,7 @@ export const ShopProvider = ({ children }) => {
     <ShopContext.Provider
       value={{
         isLogged,
+        setIsLogged,
         handleLogin,
         handleLogOut,
         cart,

@@ -15,10 +15,9 @@ const Admin = () => {
     pricePer: "/szt",
   });
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { setIsAdmin } = useContext(ShopContext);
+  const { setIsAdmin, isAdmin, setIsLogged } = useContext(ShopContext);
 
   const navigate = useNavigate();
-
   const [imageFile, setImageFile] = useState(null);
 
   /*   const handleAdminLogin = (e) => {
@@ -35,7 +34,12 @@ const Admin = () => {
 
   const handleAdminLogOut = () => {
     localStorage.removeItem("admin");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("surname");
+    localStorage.removeItem("username");
     setIsAdmin(false);
+    setIsLogged(false);
     navigate("/login");
   };
 
@@ -184,7 +188,7 @@ const Admin = () => {
     (order) => order.status === "completed"
   );
 
-  return (
+  return isAdmin ? (
     <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5">
       <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium text-center">
         Panel administracyjny
@@ -359,6 +363,8 @@ const Admin = () => {
         </button>
       </section>
     </article>
+  ) : (
+    <h2>Zaloguj się!</h2>
   );
 };
 
