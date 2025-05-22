@@ -15,41 +15,56 @@ const submitOrder = async (orderData) => {
 
 const PickupStore = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [store, setStore] = useState("Łęczyca");
   const [showError, setShowError] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { setCart } = useContext(ShopContext);
+
+  function isValidPhoneNumber(phone) {
+    const polishPhoneRegex = /^(\+48)?\d{9}$/;
+    return polishPhoneRegex.test(phone);
+  }
 
   const handleStoreSubmit = async (e) => {
     e.preventDefault();
     if (!phoneNumber) {
+      setErrorMessage("Pole nie może być puste!");
       setShowError(true);
       return;
     }
 
-    const orderData = {
-      email: localStorage.getItem("email"),
-      surname: localStorage.getItem("surname"),
-      totalPrice: JSON.parse(localStorage.getItem("total")),
-      pickupMethod: "Sklep",
-      phoneNumber: phoneNumber,
-      products: JSON.parse(localStorage.getItem("cart")),
-    };
+    if (isValidPhoneNumber(phoneNumber)) {
+      const orderData = {
+        email: localStorage.getItem("email"),
+        surname: localStorage.getItem("surname"),
+        totalPrice: JSON.parse(localStorage.getItem("total")),
+        pickupMethod: "Sklep",
+        phoneNumber: phoneNumber,
+        store: store,
+        products: JSON.parse(localStorage.getItem("cart")),
+      };
 
-    await submitOrder(orderData);
-    localStorage.setItem("cart", "[]");
-    localStorage.setItem("total", "00.00");
-    setCart(JSON.parse(localStorage.getItem("cart")));
-    setOrderComplete(true);
+      console.log("Order data:", orderData); // Sprawdzenie przed wysłaniem
+      await submitOrder(orderData);
+      localStorage.setItem("cart", "[]");
+      localStorage.setItem("total", "00.00");
+      setCart(JSON.parse(localStorage.getItem("cart")));
+      setOrderComplete(true);
+    } else {
+      setErrorMessage("Błędny numer telefonu!");
+      setShowError(true);
+    }
   };
 
   return (
-    <main>
+    <main className="text-(--white)">
       {showError ? (
-        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
+        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl text-(--white)">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
-              Pole nie może pozostać puste
+              {errorMessage}
             </h3>
             <button
               className="mt-20 py-1 w-[30%] rounded-4xl mx-auto text-[4vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer"
@@ -85,7 +100,7 @@ const PickupStore = () => {
             Odbiór w sklepie
           </h3>
           <p className="text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw]">
-            (Cedry 4, 91-129 Łódź)
+            (Cedry 4, 91-129 Łódź | Belwederska 42, 99-100 Łęczyca)
           </p>
           <p className="text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw] text-(--alternativeBackground) py-3">
             * - wymagane
@@ -106,6 +121,23 @@ const PickupStore = () => {
               setPhoneNumber(e.target.value);
             }}
           />
+          <label
+            htmlFor="place"
+            className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]"
+          >
+            Wybierz sklep*
+          </label>
+          <select
+            name="place"
+            className="bg-(--background) px-4 p-1 border-0 outline-0 text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw] rounded-4xl"
+            value={store}
+            onChange={(e) => {
+              setStore(e.target.value);
+            }}
+          >
+            <option value="Łęczyca">Łęczyca</option>
+            <option value="Łódź">Łódź</option>
+          </select>
 
           <p className="text-[4vw] md:text-[3vw] lg:text-[2vw] py-20">
             Płatność tylko gotówka lub blik

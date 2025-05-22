@@ -7,6 +7,7 @@ const ProductSchema = new mongoose.Schema({
   available: Boolean,
   category: String,
   pricePer: String,
+  store: String,
 });
 
 const ProductModel = mongoose.model("products", ProductSchema);

@@ -1,39 +1,143 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const Gallery = () => {
+  const [images, setImages] = useState([]);
+
   const [isLoaded, setIsLoaded] = useState(false);
+  const [loadedCount, setLoadedCount] = useState(0);
+
+  const handleImageLoad = () => {
+    setLoadedCount((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    if (loadedCount === images.length && images.length > 0) {
+      setIsLoaded(true);
+    }
+  }, [loadedCount, images]);
+
+  useEffect(() => {
+    setLoadedCount(0);
+    setIsLoaded(false);
+
+    let loaded = 0;
+    images.forEach((img) => {
+      const image = new Image();
+      image.src = img.url;
+      if (image.complete) {
+        loaded++;
+      } else {
+        image.onload = () => {
+          loaded++;
+          if (loaded === images.length) {
+            setIsLoaded(true);
+          }
+        };
+      }
+    });
+
+    if (loaded === images.length && images.length > 0) {
+      setIsLoaded(true);
+    }
+  }, [images]);
+
+  const previewImages = [
+    { _id: "local1", url: "/Images/image.svg" },
+    { _id: "local2", url: "/Images/image1.jpg" },
+    { _id: "local3", url: "/Images/warzywa.jpg" },
+  ];
+  //Getting images to gallery
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  const fetchImages = () => {
+    setIsLoaded(false);
+    axios
+      .get(`${apiUrl}/images`)
+      .then((res) => {
+        const data = res.data;
+        if (Array.isArray(data) && data.length > 0) {
+          setImages(data); // ← dane z backendu
+        } else {
+          setImages(previewImages); // ← domyślne zdjęcia
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setImages(previewImages); // ← w razie błędu też pokaż domyślne
+      });
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const intervalRef = useRef(null);
+  const [current, setCurrent] = useState(0);
+
+  const startInterval = () => {
+    intervalRef.current = setInterval(() => {
+      setCurrent((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000);
+  };
+
+  const resetInterval = () => {
+    clearInterval(intervalRef.current);
+    startInterval();
+  };
+
+  useEffect(() => {
+    if (images.length > 0) {
+      startInterval();
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [images]);
 
   return (
     <div className="block justify-center w-[90%] mx-auto">
-      <div className="w-full pt-45 ">
-        <img
-          src="/Images/image.svg"
-          alt="background"
-          onLoad={() => setIsLoaded(true)}
-          className="hidden"
-        />
-        {isLoaded ? (
-          <div className="bg-[url(/Images/image.svg)] bg-cover w-[80vw] h-[35vw] md:h-[35vh] lg:h-[40vh] mx-auto rounded-3xl mb-5 text-(--white) px-5 pt-2 z-0">
-            <h3 className="text-[5vw] md:text-[2.5vw] ">Godziny otwarcia</h3>
-            <div className="flex ">
-              <ul className="*:text-[3vw] md:*:text-[2vw] lg:*:text-[24px] mr-10">
-                <li>Poniedziałek 10-18</li>
-                <li>Wtorek 9-18</li>
-                <li>Środa 9-18</li>
-                <li>Czwartek 9-18</li>
-                <li>Piątek 9-18</li>
-              </ul>
-              <ul className="*:text-[3vw] md:*:text-[2vw] lg:*:text-[24px]">
-                <li>Sobota 9-18</li>
-                <li>Niedziela 9-18</li>
-              </ul>
-            </div>
-          </div>
-        ) : (
-          <div className=" bg-(--background) w-[80vw] h-[35vw] md:h-[35vh] lg:h-[40vh] mx-auto rounded-3xl mb-5 text-(--white) px-5 pt-2 z-0 flex justify-center items-center">
+      <div className="w-[90%] lg:w-full h-[100%] lg:h-[40vw] pt-45 overflow-hidden rounded-3xl mx-auto">
+        {!isLoaded && (
+          <div className="bg-[var(--background)] w-full h-full flex justify-center items-center rounded-3xl">
             <div className="loader"></div>
           </div>
         )}
+        <div
+          className="flex transition-transform duration-500 ease-in-out rounded-3xl"
+          style={{
+            width: `${images.length * 100}%`,
+            transform: `translateX(-${(100 / images.length) * current}%)`,
+            height: "100%",
+            opacity: isLoaded ? 1 : 0,
+            position: "relative",
+          }}
+        >
+          {images.map((src, idx) => (
+            <img
+              key={idx}
+              src={src.url}
+              alt={`slide ${idx}`}
+              onLoad={handleImageLoad}
+              className="flex-shrink-0 object-cover rounded-3xl"
+              style={{ width: `${100 / images.length}%`, height: "100%" }}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-center mt-5 gap-5">
+        {images.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              setCurrent(idx);
+              resetInterval();
+            }}
+            className={`w-[12px] h-[12px] rounded-full ${
+              current === idx
+                ? "bg-[var(--alternativeBackground)]"
+                : "bg-[var(--background)]"
+            }`}
+          ></button>
+        ))}
       </div>
     </div>
   );

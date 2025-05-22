@@ -6,7 +6,8 @@ const Order = () => {
   const [option, setOption] = useState("store");
 
   const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState("00.00");
+  const [baseTotal, setBaseTotal] = useState(0);
+  const [finalTotal, setFinalTotal] = useState(0);
 
   useEffect(() => {
     const date = new Date();
@@ -20,12 +21,43 @@ const Order = () => {
   }, []);
 
   useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("cart")));
-    setTotal(JSON.parse(localStorage.getItem("total")));
+    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(savedCart);
+    const sum = savedCart.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    setBaseTotal(sum);
   }, []);
 
+  useEffect(() => {
+    let total = baseTotal;
+
+    if (option === "delivery") {
+      if (baseTotal < 99) {
+        total += 5;
+      }
+    }
+
+    setFinalTotal(total);
+    localStorage.setItem("total", JSON.stringify(total));
+  }, [option, baseTotal]);
+
+  const handleDeliveryChange = (e) => {
+    if (e.target.checked) {
+      setOption("delivery");
+    } else {
+      setOption("store");
+    }
+  };
+
+  useEffect(() => {
+    localStorage.setItem("total", JSON.stringify(finalTotal));
+  }, [finalTotal]);
+
   return (
-    <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto">
+    <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto text-(--white)">
       <section className="pt-45  mx-auto flex flex-col w-[90%]">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[3vw] font-medium mb-10">
           Zamówienie
@@ -44,9 +76,11 @@ const Order = () => {
               </li>
             ))}
           </ul>
-          <h3 className="flex text-[5vw] md:text-[4vw] lg:text-[2vw] font-medium mb-5 w-full justify-end">
-            Suma: {total}zł
-          </h3>
+          <div>
+            <h3 className="flex text-[5vw] md:text-[4vw] lg:text-[2vw] font-medium mb-5 w-full justify-end">
+              Suma: {finalTotal}zł
+            </h3>
+          </div>
         </section>
         <section>
           <h3 className="flex text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw] font-medium mb-5">
@@ -62,19 +96,21 @@ const Order = () => {
                   (Dostępna tylko wtorek i piątek na terenie Łodzi)
                 </p>
               </div>
-              <div>
+              <div className="flex flex-col items-end">
                 {!isActive ? (
-                  "niedostępna"
+                  <p className="mb-4">niedostępna</p>
                 ) : (
                   <input
                     type="checkbox"
                     name="delivery"
                     className="scale-200 mt-2 cursor-pointer"
-                    onChange={() => {
+                    onChange={(e) => {
                       setOption("delivery");
+                      handleDeliveryChange(e);
                     }}
                   />
                 )}
+                <p>(5zł, dla zamówień {<br />} powyżej 99zł darmowa.)</p>
               </div>
             </section>
             <hr className="my-2 border-(--alternativeBackgroud)" />
@@ -84,7 +120,7 @@ const Order = () => {
                   Odbiór w sklepie
                 </h3>
                 <p className="flex text-[3vw] md:text-[2vw] lg:text-[1vw]  w-[50%]">
-                  (Cedry 4, 91-129 Łódź)
+                  (Cedry 4, 91-129 Łódź | Belwederska 42, 99-100 Łęczyca)
                 </p>
               </div>
               <div>

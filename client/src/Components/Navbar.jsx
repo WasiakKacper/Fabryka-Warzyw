@@ -12,7 +12,7 @@ const Navbar = (props) => {
   const { isLogged, howManyInCart, isAdmin } = useContext(ShopContext);
 
   return (
-    <header className="fixed block w-full h-auto bg-(--black) z-10000">
+    <header className="fixed block w-full h-auto bg-(--darkBackgorund) z-10000">
       <nav className="realtive flex w-[90%] h-auto justify-between mx-auto">
         {/* Logo */}
         <img
@@ -33,7 +33,7 @@ const Navbar = (props) => {
         {/* For desktops */}
 
         <ul
-          className={`absolute w-[60%] *:w-[85%] lg:*:w-auto  h-[100vh] lg:w-auto lg:h-auto bg-(--darkBackgorund) lg:bg-transparent text-center items-center  lg:static right-0 top-[100%] flex flex-col lg:flex-row list-none text-(--white) text-[5vw] md:text-[4vw] lg:text-[1.2vw] lg:gap-6 lg:items-center *:cursor-pointer *:hover:text-(--background) z-10 ${
+          className={`absolute w-[60%] *:w-[85%] lg:*:w-auto  h-[100vh] lg:w-auto lg:h-auto bg-(--darkBackgorund) lg:bg-transparent text-center items-center  lg:static right-0 top-[100%] flex flex-col lg:flex-row list-none text-(--white) text-[5vw] md:text-[4vw] lg:text-[1.2vw] lg:gap-6 lg:items-center *:cursor-pointer *:hover:text-(--alternativeBackground) z-10 ${
             show ? "translate-x-0" : "translate-x-full"
           }
           transform transition-transform duration-300 ease-in-out
@@ -60,7 +60,7 @@ const Navbar = (props) => {
               setShow(!show);
             }}
           >
-            <Link to="/gastronomy">Gastronomia</Link>
+            <Link to="/gastronomy">HoReCe</Link>
 
             {name === "Gastronomy" ? (
               <hr className="hidden lg:block border-2 rounded-2xl" />

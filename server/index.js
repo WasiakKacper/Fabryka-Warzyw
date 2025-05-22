@@ -16,11 +16,21 @@ cloudinary.config({
 const UserModel = require("./models/User.js");
 const ProductModel = require("./models/Products.js");
 const OrderModel = require("./models/Order.js");
+const ImageModel = require("./models/Image.js");
 
 require("dotenv").config();
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "https://dulcet-daffodil-bbc936.netlify.app" }));
+app.use(
+  cors({
+    origin: [
+      "https://fabrykawarzyw.pl",
+      "https://fabrykawarzyw.netlify.app",
+      "http://localhost:4173",
+      "http://localhost:5173",
+    ],
+  })
+);
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -39,14 +49,13 @@ mongoose.connect(process.env.MONGODB_URI);
     }
   });
 }); */
-
+//Endpoint for login user
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   UserModel.findOne({ email: email })
     .then((user) => {
       if (user) {
-        // Porównanie hasła z hashem w bazie
         bcrypt
           .compare(password, user.password)
           .then((isMatch) => {
@@ -84,15 +93,12 @@ app.post("/register", (req, res) => {
   UserModel.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        // Generowanie soli
         bcrypt
           .genSalt(10)
           .then((salt) => {
-            // Haszowanie hasła
             bcrypt
               .hash(password, salt)
               .then((hashedPassword) => {
-                // Tworzenie nowego użytkownika z zaszyfrowanym hasłem
                 UserModel.create({
                   email,
                   password: hashedPassword,
@@ -150,7 +156,7 @@ app.get("/products", (req, res) => {
 
 //Endpoint for adding product
 app.post("/products", (req, res) => {
-  const { name, price, category, image, pricePer } = req.body;
+  const { name, price, category, image, pricePer, store } = req.body;
 
   const newProduct = new ProductModel({
     name,
@@ -159,6 +165,7 @@ app.post("/products", (req, res) => {
     image,
     available: true,
     pricePer,
+    store,
   });
 
   newProduct
@@ -171,36 +178,92 @@ app.post("/products", (req, res) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Endpoint for uploading images
-app.post("/upload", upload.single("image"), async (req, res) => {
+// Endpoint for uploading images for products
+app.post("/images", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "Brak pliku do przesłania." });
-    }
-
-    const streamUpload = (req) => {
+    const streamUpload = (buffer) => {
       return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
-          {
-            folder: "fabryka-warzyw",
-          },
+          { folder: "my-gallery" },
           (error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
+            if (result) resolve(result);
+            else reject(error);
           }
         );
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
+        streamifier.createReadStream(buffer).pipe(stream);
       });
     };
 
-    const result = await streamUpload(req);
-    res.json({ image: result.secure_url });
-  } catch (error) {
-    console.error("Błąd przesyłania do Cloudinary:", error);
-    res.status(500).json({ message: "Błąd przesyłania obrazu", error });
+    const result = await streamUpload(req.file.buffer);
+
+    const newImage = new ImageModel({
+      url: result.secure_url,
+      public_id: result.public_id,
+    });
+
+    await newImage.save();
+    res.status(200).json(newImage);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Upload nie powiódł się" });
+  }
+});
+
+app.get("/images", async (req, res) => {
+  try {
+    const images = await ImageModel.find();
+    res.json(images);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/images/:id", upload.single("image"), async (req, res) => {
+  try {
+    const image = await ImageModel.findById(req.params.id);
+    if (!image)
+      return res.status(404).json({ message: "Zdjęcie nie znalezione" });
+
+    await cloudinary.uploader.destroy(image.public_id);
+
+    const streamUpload = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "my-gallery" },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(buffer).pipe(stream);
+      });
+    };
+
+    const result = await streamUpload(req.file.buffer);
+
+    image.url = result.secure_url;
+    image.public_id = result.public_id;
+    await image.save();
+
+    res.json({ success: true, image });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.delete("/images/:id", async (req, res) => {
+  try {
+    const image = await ImageModel.findById(req.params.id);
+    if (!image)
+      return res.status(404).json({ message: "Zdjęcie nie znalezione" });
+
+    await cloudinary.uploader.destroy(image.public_id);
+
+    await image.deleteOne();
+
+    res.json({ success: true, message: "Zdjęcie usunięte" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 
@@ -209,14 +272,12 @@ app.delete("/products/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
 
-    // Znajdź produkt w bazie danych
     const product = await ProductModel.findById(_id);
 
     if (!product) {
       return res.status(404).json({ message: "Produkt nie istnieje" });
     }
 
-    // Usuń produkt z bazy danych
     await ProductModel.findByIdAndDelete(_id);
     res.status(200).json({ message: "Produkt usunięty" });
   } catch (err) {
@@ -243,7 +304,6 @@ app.put("/products/:id", async (req, res) => {
     res.status(500).json({ message: "Błąd aktualizacji", error: err });
   }
 });
-
 const today = new Date().toLocaleDateString();
 
 // Endpoint for creating orders (pickup)
@@ -260,6 +320,7 @@ app.post("/orders", (req, res) => {
     street,
     homeNumber,
     apartmentNumber,
+    store,
   } = req.body;
 
   const newOrder = new OrderModel({
@@ -271,6 +332,7 @@ app.post("/orders", (req, res) => {
     street,
     homeNumber,
     apartmentNumber,
+    store,
     phoneNumber,
     status: "active",
     date: today,

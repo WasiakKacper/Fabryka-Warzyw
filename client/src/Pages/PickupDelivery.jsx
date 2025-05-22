@@ -7,7 +7,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 const submitOrder = async (orderData) => {
   try {
-    await axios.post(`${apiUrl}}/orders`, orderData);
+    await axios.post(`${apiUrl}/orders`, orderData);
   } catch (err) {
     alert("Błąd przy składaniu zamówienia" + err.message);
   }
@@ -24,13 +24,18 @@ const PickupDelivery = () => {
   const { setCart } = useContext(ShopContext);
 
   const [showError, setShowError] = useState(false);
-  const [errosMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [orderComplete, setOrderComplete] = useState(false);
 
   const checkPostalCode = (code) => {
     const prefix = code.slice(0, 2);
     return ["90", "91", "92", "93", "94"].includes(prefix);
   };
+
+  function isValidPhoneNumber(phone) {
+    const polishPhoneRegex = /^(\+48)?\d{9}$/;
+    return polishPhoneRegex.test(phone);
+  }
 
   const handleStoreSubmit = async (e) => {
     e.preventDefault();
@@ -39,38 +44,44 @@ const PickupDelivery = () => {
       setShowError(true);
       return;
     } else {
-      if (place === "Łódź" && checkPostalCode(postalCode)) {
-        const orderData = {
-          email: localStorage.getItem("email"),
-          surname: localStorage.getItem("surname"),
-          totalPrice: JSON.parse(localStorage.getItem("total")),
-          pickupMethod: "Dostawa",
-          street: street,
-          homeNumber: homeNumber,
-          apartmentNumber: apartmentNumber,
-          phoneNumber: phoneNumber,
-          products: JSON.parse(localStorage.getItem("cart")),
-        };
+      if (isValidPhoneNumber(phoneNumber)) {
+        if (place === "Łódź" && checkPostalCode(postalCode)) {
+          const orderData = {
+            email: localStorage.getItem("email"),
+            surname: localStorage.getItem("surname"),
+            totalPrice: JSON.parse(localStorage.getItem("total")),
+            pickupMethod: "Dostawa",
+            street: street,
+            homeNumber: homeNumber,
+            apartmentNumber: apartmentNumber,
+            phoneNumber: phoneNumber,
+            store: "Łódź",
+            products: JSON.parse(localStorage.getItem("cart")),
+          };
 
-        await submitOrder(orderData);
-        localStorage.setItem("cart", "[]");
-        localStorage.setItem("total", "00.00");
-        setCart(JSON.parse(localStorage.getItem("cart")));
-        setOrderComplete(true);
+          await submitOrder(orderData);
+          localStorage.setItem("cart", "[]");
+          localStorage.setItem("total", "00.00");
+          setCart(JSON.parse(localStorage.getItem("cart")));
+          setOrderComplete(true);
+        } else {
+          setShowError(true);
+          setErrorMessage("Dostawa możliwa tylko na terenie Łodzi!");
+        }
       } else {
+        setErrorMessage("Błędny numer telefonu!");
         setShowError(true);
-        setErrorMessage("Dostawa możliwa tylko na terenie Łodzi!");
       }
     }
   };
 
   return (
-    <main className="min-h-[100vh] h-[100%] lg:h-auto">
+    <main className="min-h-[100vh] h-[100%] lg:h-auto text-(--white)">
       {showError ? (
-        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
+        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl text-(--white)">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
-              {errosMessage}
+              {errorMessage}
             </h3>
             <button
               className="mt-20 py-1 w-[30%] rounded-4xl mx-auto text-[4vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer"
@@ -85,8 +96,8 @@ const PickupDelivery = () => {
       )}
       {orderComplete ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
-          <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
-            <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
+          <section className="bg-(--background) w-[90%] lg:w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
+            <h3 className="text-[3.5vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
               Dziękujemy za złożenie zamówienia!
             </h3>
             <button className="mt-20 py-1 w-[30%] rounded-4xl mx-auto text-[4vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer">

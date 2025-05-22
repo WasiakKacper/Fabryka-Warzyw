@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --black: #000;
+  --black: #121212;
   --white: #fff;
-  --background: #dfebe9;
-  --alternativeBackground: #a3a3a3;
+  --background: #2f3135;
+  --alternativeBackground: #d2d2d2;
   --darkBackgorund: #1b1b1b;
   --accent: #00c9a9;
   --hoverAccent: #05b597;
@@ -17,6 +17,14 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* .material-symbols-outlined {
   font-size: 2.5vw;
 } */
@@ -24,6 +32,7 @@
 .loader {
   width: 50px;
   aspect-ratio: 1;
+  z-index: 0;
   border-radius: 50%;
   padding: 6px;
   background: conic-gradient(from 135deg at top, currentColor 90deg, #0000 0) 0

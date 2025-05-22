@@ -42,7 +42,7 @@ const Account = () => {
   );
 
   return (
-    <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5">
+    <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5 text-(--white)">
       <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium">
         Witaj <span className="text-(--accent)">{username}</span>.
       </h1>
@@ -55,7 +55,7 @@ const Account = () => {
 
         <article className="overflow-y-scroll h-[50vh]">
           <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">Aktywne:</h1>
-          <ul className="flex flex-col md:flex-row flex-wrap justify-evenly text-left">
+          <ul className="flex flex-col md:flex-row flex-wrap justify-evenly text-center">
             {activeOrders.length > 0 ? (
               activeOrders.map((order, index) => (
                 <OrderCard key={index} order={order} />
@@ -68,7 +68,7 @@ const Account = () => {
           <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
             Zakończone:
           </h1>
-          <ul className="flex flex-col md:flex-row flex-wrap justify-evenly text-left">
+          <ul className="flex flex-col md:flex-row flex-wrap justify-evenly text-center">
             {completedOrders.length > 0 ? (
               completedOrders.map((order, index) => (
                 <OrderCard key={index} order={order} />

@@ -6,6 +6,7 @@ import ShopContext from "../../Context/ShopContext.jsx";
 
 const Admin = () => {
   const [isClicked, setIsClicked] = useState(1);
+  const [whatStore, setWhatStore] = useState(1);
   /*const [adminName, setAdminName] = useState("");
   const [adminPassword, setAdminPassword] = useState(""); */
   const [formData, setFormData] = useState({
@@ -13,9 +14,13 @@ const Admin = () => {
     price: "",
     category: "Vegetables",
     pricePer: "/szt",
+    store: "Łęczyca",
   });
+
   const apiUrl = import.meta.env.VITE_API_URL;
+
   const { setIsAdmin, isAdmin, setIsLogged } = useContext(ShopContext);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
@@ -97,10 +102,9 @@ const Admin = () => {
           ...formData,
           price: parseFloat(formData.price),
           available: true,
-          image: uploadedImage, // Dodajemy URL obrazu
+          image: uploadedImage,
         };
 
-        // Wysyłamy dane produktu na backend
         const res = await axios.post(`${apiUrl}/products`, productData);
         setProducts((prevProducts) => [...prevProducts, res.data]);
         setFormData({
@@ -108,6 +112,7 @@ const Admin = () => {
           price: "",
           category: "Vegetables",
           pricePer: "/szt",
+          store: "Łęczyca",
         });
         setImageFile(null);
         alert("Produkt dodany!");
@@ -182,14 +187,141 @@ const Admin = () => {
     );
   };
 
-  const activeOrders = orders.filter((order) => order.status !== "completed");
+  const filteredOrders = orders.filter((order) => {
+    if (whatStore === 1) return order.store === "Łódź";
+    if (whatStore === 2) return order.store === "Łęczyca";
+    return false;
+  });
 
-  const completedOrders = orders.filter(
+  const activeOrders = filteredOrders.filter(
+    (order) => order.status !== "completed"
+  );
+  const completedOrders = filteredOrders.filter(
     (order) => order.status === "completed"
   );
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  //Adding image to gallery
+  const [images, setImages] = useState([]);
+
+  const previewImages = [
+    { _id: "local1", url: "/Images/image.svg" },
+    { _id: "local2", url: "/Images/image1.jpg" },
+    { _id: "local3", url: "/Images/warzywa.jpg" },
+  ];
+
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [uploadedUrl, setUploadedUrl] = useState("");
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const handleUpload = async () => {
+    if (!image) {
+      alert("Wybierz zdjęcie do przesłania");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", image);
+
+    try {
+      const res = await axios.post(`${apiUrl}/images`, formData);
+
+      // Załóżmy, że w res.data masz nowy obiekt ze zdjęciem, np.:
+      // { _id: "xyz123", url: "https://..." }
+      const newImage = res.data;
+
+      // Dodajemy nowe zdjęcie do stanu images, aby od razu było widoczne w galerii
+      setImages((prevImages) => [...prevImages, newImage]);
+
+      setUploadedUrl(newImage.url);
+      setImage(null);
+      setPreview(null);
+
+      alert("Zdjęcie zostało dodane do galerii!");
+    } catch (err) {
+      console.error(err);
+      alert("Błąd podczas dodawania zdjęcia");
+    }
+  };
+
+  //Getting images from db
+  const fetchImages = () => {
+    axios
+      .get(`${apiUrl}/images`)
+      .then((res) => {
+        const data = res.data;
+        if (Array.isArray(data) && data.length > 0) {
+          setImages(data); // ← dane z backendu
+        } else {
+          setImages(previewImages); // ← domyślne zdjęcia
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setImages(previewImages); // ← w razie błędu też pokaż domyślne
+      });
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  //Replacing images
+  const handleReplaceImage = async (id) => {
+    if (!image) {
+      alert("Najpierw wybierz nowe zdjęcie do podmiany");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", image);
+
+    try {
+      const res = await axios.put(`${apiUrl}/images/${id}`, formData);
+      setImages((prevImages) =>
+        prevImages.map((img) =>
+          img._id === id ? { ...img, url: res.data.image.url } : img
+        )
+      );
+      alert("Zdjęcie zaktualizowane");
+    } catch (err) {
+      console.error(err);
+      alert("Błąd podczas aktualizacji zdjęcia");
+    }
+  };
+
+  //Deleting image
+  const handleDeleteImage = async (id) => {
+    const confirmed = window.confirm(
+      "Czy napewno chcesz usunąć zdjęcie z galerii?"
+    );
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`${apiUrl}/images/${id}`);
+      setImages((prevImages) => prevImages.filter((img) => img._id !== id));
+      alert("Zdjęcie usunięte");
+    } catch (err) {
+      console.error(err);
+      alert("Błąd podczas usuwania zdjęcia");
+    }
+  };
+
   return isAdmin ? (
-    <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5">
+    <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5 text-(--white)">
       <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium text-center">
         Panel administracyjny
       </h1>
@@ -220,9 +352,22 @@ const Admin = () => {
               <></>
             )}
           </li>
+          <li className="text-(--background)">|</li>
+          <li
+            onClick={() => {
+              setIsClicked(3);
+            }}
+          >
+            Galeria
+            {isClicked == 3 ? (
+              <hr className="border-(--background) border-2 rounded-2xl" />
+            ) : (
+              <></>
+            )}
+          </li>
         </ul>
         <article>
-          {isClicked === 1 ? (
+          {isClicked === 1 && (
             <section>
               <form
                 className="flex gap-2 justify-center *:border-1 mb-10"
@@ -265,7 +410,7 @@ const Admin = () => {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="p-2 w-[8%] rounded-4xl"
+                  className="p-2 w-[12%] rounded-4xl *:text-black"
                 >
                   <option value="Vegetables">Warzywa</option>
                   <option value="Fruits">Owoce</option>
@@ -276,13 +421,35 @@ const Admin = () => {
                   <option value="Juice">Soki</option>
                   <option value="Spices">Przyprawy</option>
                   <option value="Flour">Mąki</option>
+                  <option value="VegetablesHoReCa">Warzywa HoReCa</option>
+                  <option value="FruitsHoReCa">Owoce HoReCa</option>
+                  <option value="Peeled vegetablesHoReCa">
+                    Warzywa obierane HoReCa
+                  </option>
+                </select>
+                <select
+                  name="store"
+                  value={formData.store}
+                  onChange={handleChange}
+                  className="p-2 w-[10%] rounded-4xl *:text-black"
+                >
+                  <option value="Łęczyca">Łęczyca</option>
+                  <option value="Łódź">Łódź</option>
                 </select>
                 <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
                   Dodaj produkt
                 </button>
               </form>
+              {/* Search */}
+              <input
+                type="text"
+                placeholder="Wyszukaj produkt"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="p-2 w-[70%] rounded-4xl mb-3 border-1 outline-0"
+              />
               <ul className="h-[50vh] overflow-y-scroll">
-                {products.map((product, index) => (
+                {filteredProducts.map((product, index) => (
                   <li
                     key={index}
                     className="flex justify-between gap-3 *:text-[4vw] *:md:text-[3vw] *:lg:text-[2vw] bg-(--background) rounded-2xl py-3 px-5 mb-5"
@@ -307,6 +474,7 @@ const Admin = () => {
                         }
                       />
                     </p>
+                    <p>{product.store}</p>
                     <button
                       className="text-(--alternativeAccent) hover:text-(--hoverAlternativeAccent) font-medium cursor-pointer"
                       onClick={() => handleDelete(product._id)}
@@ -317,8 +485,30 @@ const Admin = () => {
                 ))}
               </ul>
             </section>
-          ) : (
+          )}
+          {isClicked === 2 && (
             <section className="h-[50vh] overflow-y-scroll">
+              <nav className="mb-5">
+                <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
+                  <li onClick={() => setWhatStore(1)}>
+                    Łódź
+                    {whatStore === 1 ? (
+                      <hr className="border-(--background) border-2 rounded-2xl" />
+                    ) : (
+                      <></>
+                    )}
+                  </li>
+                  <li className="text-(--background)"> | </li>
+                  <li onClick={() => setWhatStore(2)}>
+                    Łęczyca
+                    {whatStore === 2 ? (
+                      <hr className="border-(--background) border-2 rounded-2xl" />
+                    ) : (
+                      <></>
+                    )}
+                  </li>
+                </ul>
+              </nav>
               <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">
                 Aktywne:
               </h1>
@@ -352,6 +542,58 @@ const Admin = () => {
                   <p>Brak aktywnych zamówień</p>
                 )}
               </ul>
+            </section>
+          )}
+          {isClicked === 3 && (
+            <section className="flex flex-col items-center">
+              <h2 className="text-[5vw] md:text-[4vw] lg:text-[3vw] mb-5">
+                Galeria zdjęć
+              </h2>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {images.map((img, index) => (
+                  <div key={img._id} className="relative">
+                    <img
+                      src={img.url}
+                      alt={`Zdjęcie ${index}`}
+                      className="rounded-2xl w-[100%] h-[300px]"
+                    />
+                    <button
+                      className="absolute top-1 right-1 bg-(--alternativeAccent) hover:bg-(--hoverAlternativeAccent) cursor-pointer transition text-white px-2 py-1 rounded"
+                      onClick={() => handleDeleteImage(img._id)}
+                    >
+                      Usuń
+                    </button>
+                    <button
+                      className="absolute bottom-1 right-1 bg-(--accent) hover:bg-(--hoverAccent) cursor-pointer transition text-white px-2 py-1 rounded"
+                      onClick={() => handleReplaceImage(img._id)}
+                    >
+                      Zastąp
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5">
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="w-[30%] mt-3 mr-5 text-white px-4 py-2 rounded bg-(--accent) hover:bg-(--hoverAccent) cursor-pointer transition"
+                />
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="Podgląd"
+                    className="mt-3 w-40 h-auto"
+                  />
+                )}
+                <button
+                  onClick={handleUpload}
+                  className="mt-3 text-white px-4 py-2 rounded bg-(--accent) hover:bg-(--hoverAccent) cursor-pointer transition"
+                >
+                  Dodaj do galerii
+                </button>
+              </div>
             </section>
           )}
         </article>

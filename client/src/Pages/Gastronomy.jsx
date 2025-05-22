@@ -8,20 +8,16 @@ import { Link } from "react-router";
 import "../App.css";
 
 const categories = [
-  { pl: "Miody", en: "Honey" },
-  { pl: "Konfitury", en: "Jam" },
-  { pl: "Mąki", en: "Flour" },
-  { pl: "Suszone owoce", en: "Dried fruits" },
-  { pl: "Makarony", en: "Pasta" },
-  { pl: "Soki", en: "Juice" },
-  { pl: "Przyprawy", en: "Spices" },
+  { pl: "Warzywa", en: "VegetablesHoReCa" },
+  { pl: "Owoce", en: "FruitsHoReCa" },
+  { pl: "Warzywa obierane", en: "Peeled vegetablesHoReCa" },
 ];
 
 const Gastronomy = () => {
   const [isClicked, setIsClicked] = useState(0);
   const { isLogged } = useContext(ShopContext);
 
-  const [whatCategory, setWhatCategory] = useState("Honey");
+  const [whatCategory, setWhatCategory] = useState("VegetablesHoReCa");
 
   const [products, setProducts] = useState([]);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -43,14 +39,14 @@ const Gastronomy = () => {
   );
 
   return (
-    <article className="min-h-[100vh] h-[100%]">
+    <article className="min-h-[100vh] h-[100%] text-(--white)">
       {!isLogged ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
-          <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
+          <section className="bg-(--background) w-[90%] lg:w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
               Treść tylko dla zalogowanych klientów!
             </h3>
-            <button className="mt-20 py-1 w-[30%] rounded-4xl mx-auto text-[4vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer">
+            <button className="mt-20 py-2 px-2 w-[40%] rounded-4xl mx-auto text-[3.6vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer">
               <Link to="/login">Zaloguj się</Link>
             </button>
           </section>
@@ -58,8 +54,8 @@ const Gastronomy = () => {
       ) : (
         <></>
       )}
-      <nav className="w-[90%] lg:w-full overflow-x-auto lg:overflow-hidden pt-45 mx-auto">
-        <ul className="flex lg:justify-center w-full text-[4vw] md:text-[3vw] lg:text-[1.6vw] *:px-1">
+      <nav className="w-full overflow-x-auto lg:overflow-hidden pt-45 mx-auto">
+        <ul className="flex justify-center mx-auto w-[100%] text-[4vw] md:text-[3vw] lg:text-[1.6vw] *:px-1">
           {categories.map((item, index) => (
             <React.Fragment key={item.en}>
               <li
@@ -68,7 +64,7 @@ const Gastronomy = () => {
                   setWhatCategory(item.en);
                 }}
                 className={
-                  item.pl === "Suszone owoce"
+                  item.pl === "Warzywa obierane"
                     ? "whitespace-nowrap cursor-pointer"
                     : "cursor-pointer"
                 }

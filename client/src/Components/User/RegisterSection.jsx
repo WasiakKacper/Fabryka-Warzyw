@@ -59,7 +59,7 @@ const RegisterSection = ({ setIsClicked }) => {
   };
 
   return (
-    <section>
+    <section className="text-(--white)">
       {error ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
