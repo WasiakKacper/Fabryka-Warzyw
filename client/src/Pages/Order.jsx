@@ -8,6 +8,7 @@ const Order = () => {
   const [cart, setCart] = useState([]);
   const [baseTotal, setBaseTotal] = useState(0);
   const [finalTotal, setFinalTotal] = useState(0);
+  const [terms, setTerms] = useState(false);
 
   useEffect(() => {
     const date = new Date();
@@ -134,15 +135,42 @@ const Order = () => {
                 />
               </div>
             </section>
+            <div className="flex items-start space-x-2 mt-10">
+              <input
+                type="checkbox"
+                id="terms"
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setTerms(true);
+                  } else {
+                    setTerms(false);
+                  }
+                }}
+                className="mt-1"
+              />
+              <label htmlFor="terms" className="text-sm text-(--white)">
+                Akceptuję
+                <Link to="/terms" className="underline text-blue-600 ml-2">
+                  regulamin sklepu
+                </Link>
+                .
+              </label>
+            </div>
           </div>
-          <Link
-            to={option === "store" ? "/pickupstore" : "/pickupdelivery"}
-            className="mx-auto w-[60%] flex items-center justify-center"
-          >
-            <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer">
+          {terms ? (
+            <Link
+              to={option === "store" ? "/pickupstore" : "/pickupdelivery"}
+              className="mx-auto w-[60%] flex items-center justify-center"
+            >
+              <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer">
+                Dalej
+              </button>
+            </Link>
+          ) : (
+            <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--background) mx-auto w-[60%] flex justify-center rounded-4xl text-(--white)">
               Dalej
             </button>
-          </Link>
+          )}
         </section>
       </section>
     </main>

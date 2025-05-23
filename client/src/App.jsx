@@ -14,6 +14,7 @@ import PickupStore from "./Pages/PickupStore.jsx";
 import PickupDelivery from "./Pages/PickupDelivery.jsx";
 import Account from "./Components/User/Account.jsx";
 import Admin from "./Components/User/Admin.jsx";
+import Terms from "./Pages/Terms.jsx";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import "./App.css";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
+          <Route paht="/terms" element={<Terms />} />
           <Route path="/pickupstore" element={<PickupStore />} />
           <Route path="/pickupdelivery" element={<PickupDelivery />} />
         </Routes>

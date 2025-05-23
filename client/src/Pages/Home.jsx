@@ -67,12 +67,6 @@ const Home = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log("whatCategory:", whatCategory);
-    console.log("whichStore:", whichStore);
-    console.log("products:", products);
-  }, []);
-
   const filteredProducts = products.filter((product) => {
     return product.category === whatCategory && product.store === whichStore;
   });
