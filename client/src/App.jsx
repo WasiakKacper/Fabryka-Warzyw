@@ -35,7 +35,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
-          <Route paht="/terms" element={<Terms />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/pickupstore" element={<PickupStore />} />
           <Route path="/pickupdelivery" element={<PickupDelivery />} />
         </Routes>
