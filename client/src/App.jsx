@@ -1,5 +1,6 @@
 import Navbar from "./Components/Navbar.jsx";
 import Footer from "./Components/Footer.jsx";
+import RODOmodal from "./Components/RODOmodal.jsx";
 
 import Home from "./Pages/Home.jsx";
 import Gastronomy from "./Pages/Gastronomy.jsx";
@@ -21,6 +22,7 @@ function App() {
   return (
     <main>
       <Router>
+        <RODOmodal />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

@@ -238,12 +238,8 @@ const Admin = () => {
 
     try {
       const res = await axios.post(`${apiUrl}/images`, formData);
-
-      // Załóżmy, że w res.data masz nowy obiekt ze zdjęciem, np.:
-      // { _id: "xyz123", url: "https://..." }
       const newImage = res.data;
 
-      // Dodajemy nowe zdjęcie do stanu images, aby od razu było widoczne w galerii
       setImages((prevImages) => [...prevImages, newImage]);
 
       setUploadedUrl(newImage.url);
@@ -264,14 +260,14 @@ const Admin = () => {
       .then((res) => {
         const data = res.data;
         if (Array.isArray(data) && data.length > 0) {
-          setImages(data); // ← dane z backendu
+          setImages(data);
         } else {
-          setImages(previewImages); // ← domyślne zdjęcia
+          setImages(previewImages);
         }
       })
       .catch((err) => {
         console.error(err);
-        setImages(previewImages); // ← w razie błędu też pokaż domyślne
+        setImages(previewImages);
       });
   };
 

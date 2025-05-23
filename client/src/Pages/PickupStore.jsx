@@ -46,7 +46,6 @@ const PickupStore = () => {
         products: JSON.parse(localStorage.getItem("cart")),
       };
 
-      console.log("Order data:", orderData); // Sprawdzenie przed wysłaniem
       await submitOrder(orderData);
       localStorage.setItem("cart", "[]");
       localStorage.setItem("total", "00.00");

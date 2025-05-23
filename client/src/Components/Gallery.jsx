@@ -57,14 +57,14 @@ const Gallery = () => {
       .then((res) => {
         const data = res.data;
         if (Array.isArray(data) && data.length > 0) {
-          setImages(data); // ← dane z backendu
+          setImages(data);
         } else {
-          setImages(previewImages); // ← domyślne zdjęcia
+          setImages(previewImages);
         }
       })
       .catch((err) => {
         console.error(err);
-        setImages(previewImages); // ← w razie błędu też pokaż domyślne
+        setImages(previewImages);
       });
   };
 
