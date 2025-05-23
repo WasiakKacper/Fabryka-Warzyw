@@ -37,7 +37,7 @@ const Navbar = (props) => {
   return (
     <header
       ref={headerRef}
-      className="fixed block w-full h-auto bg-(--darkBackgorund) z-10000"
+      className="fixed block w-full h-auto bg-(--darkBackgorund) z-1000"
     >
       <nav className="relative flex w-[90%] h-auto justify-between mx-auto">
         {/* Logo */}

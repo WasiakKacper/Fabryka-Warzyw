@@ -86,8 +86,8 @@ const Home = () => {
         <></>
       )}
       {whichStore === "" ? (
-        <section className="fixed flex flex-col lg:flex-row w-[100%] min-h-[100vh] h-[100%] z-100 text-(--white)">
-          <h1 className="absolute w-[100%] text-center top-10 left-1/2 -translate-x-1/2 text-[8vw] lg:text-[6vw] z-100">
+        <section className="fixed flex flex-col lg:flex-row w-[100%] min-h-[100vh] h-[100%] z-10000 text-(--white)">
+          <h1 className="absolute w-[100%] text-center top-10 left-1/2 -translate-x-1/2 text-[8vw] lg:text-[6vw] z-10000 tracking-[10px]">
             Wybierz sklep
           </h1>
           <div
@@ -100,7 +100,7 @@ const Home = () => {
               className="absolute inset-0 bg-center bg-cover transition-all duration-500 ease-in-out group-hover:scale-110"
               style={{ backgroundImage: "url(/Images/lodz.png)" }}
             />
-            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110">
+            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110 tracking-[5px]">
               Łódź
             </span>
           </div>
@@ -114,7 +114,7 @@ const Home = () => {
               className="absolute inset-0 bg-center bg-cover transition-all duration-500 ease-in-out group-hover:scale-110"
               style={{ backgroundImage: "url(/Images/leczyca.jpg)" }}
             />
-            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110">
+            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110 tracking-[5px]">
               Łęczyca
             </span>
           </div>
