@@ -18,11 +18,13 @@ import Terms from "./Pages/Terms.jsx";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import "./App.css";
+import SelectStore from "./SelectStore.jsx";
 
 function App() {
   return (
     <main>
       <Router>
+        <SelectStore />
         <RODOmodal />
         <Navbar />
         <Routes>
@@ -35,7 +37,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
-          <Route pat="/terms" element={<Terms />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/pickupstore" element={<PickupStore />} />
           <Route path="/pickupdelivery" element={<PickupDelivery />} />
         </Routes>

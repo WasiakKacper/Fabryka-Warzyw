@@ -135,12 +135,15 @@ export const ShopProvider = ({ children }) => {
   }, []);
 
   const [isLoaded, setIsLoaded] = useState(false);
+  const [whichStore, setWhichStore] = useState("");
 
   return (
     <ShopContext.Provider
       value={{
         isLogged,
         setIsLogged,
+        whichStore,
+        setWhichStore,
         isLoaded,
         setIsLoaded,
         handleLogin,

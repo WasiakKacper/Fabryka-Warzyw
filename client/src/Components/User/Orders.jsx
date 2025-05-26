@@ -70,7 +70,7 @@ const Orders = () => {
         </ul>
       </nav>
       <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">Aktywne:</h1>
-      <ul className="flex flex-row flex-wrap justify-evenly text-left">
+      <ul className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
         {activeOrders.length > 0 ? (
           activeOrders.map((order, index) => (
             <OrderCard
@@ -85,7 +85,7 @@ const Orders = () => {
       </ul>
 
       <h1 className="text-[5vw] md:text-[4vw] lg:text-[3vw]">Zakończone:</h1>
-      <ul className="flex flex-row flex-wrap justify-evenly text-left">
+      <ul className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
         {completedOrders.length > 0 ? (
           completedOrders.map((order, index) => (
             <OrderCard
