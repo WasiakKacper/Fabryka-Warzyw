@@ -21,15 +21,38 @@ const Order = () => {
     }
   }, []);
 
+  const calculateItemPrice = (item) => {
+    // item.price - cena za pricePer jednostek
+    // item.pricePer - np "/1kg", "/250g", "/szt"
+    const quantity = item.quantity;
+    const price = item.price;
+    const pricePer = item.pricePer || "/1kg"; // załóżmy domyślnie 1kg
+
+    if (pricePer.includes("kg")) {
+      // Cena za kilogram
+      return price * quantity; // quantity w kg, więc bez zmian
+    } else if (pricePer.includes("g")) {
+      // Cena za X gramów
+      const grams = parseFloat(pricePer.replace(/[^\d]/g, "")); // np 250
+      // quantity w kg, więc przelicz na ilość jednostek bazowych
+      const quantityInGrams = quantity * 1000;
+      return price * (quantityInGrams / grams);
+    } else if (pricePer.includes("szt")) {
+      // cena za sztukę
+      return price * quantity;
+    }
+    // fallback
+    return price * quantity;
+  };
+
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(savedCart);
     const sum = savedCart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + calculateItemPrice(item),
       0
     );
-
-    setBaseTotal(sum);
+    setBaseTotal(Number(sum.toFixed(2)));
   }, []);
 
   useEffect(() => {
@@ -41,7 +64,7 @@ const Order = () => {
       }
     }
 
-    setFinalTotal(total);
+    setFinalTotal(Number(total.toFixed(2)));
     localStorage.setItem("total", JSON.stringify(total));
   }, [option, baseTotal]);
 
@@ -72,7 +95,7 @@ const Order = () => {
               <li key={index}>
                 <p>{item.name}</p>
                 <p>
-                  {item.price}zł x{item.quantity}
+                  {item.price}zł x{Number(item.quantity).toFixed(2)}
                 </p>
               </li>
             ))}

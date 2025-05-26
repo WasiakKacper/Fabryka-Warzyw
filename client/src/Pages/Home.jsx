@@ -100,7 +100,7 @@ const Home = () => {
               className="absolute inset-0 bg-center bg-cover transition-all duration-500 ease-in-out group-hover:scale-110"
               style={{ backgroundImage: "url(/Images/lodz.png)" }}
             />
-            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110 tracking-[5px]">
+            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110">
               Łódź
             </span>
           </div>
@@ -114,7 +114,7 @@ const Home = () => {
               className="absolute inset-0 bg-center bg-cover transition-all duration-500 ease-in-out group-hover:scale-110"
               style={{ backgroundImage: "url(/Images/leczyca.jpg)" }}
             />
-            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110 tracking-[5px]">
+            <span className="relative z-10 text-[6vw] md:text-[5vw] lg:text-[4vw] text-white transition-transform duration-300 ease-in-out group-hover:scale-110">
               Łęczyca
             </span>
           </div>

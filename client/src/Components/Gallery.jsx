@@ -53,7 +53,7 @@ const Gallery = () => {
   const fetchImages = () => {
     setIsLoaded(false);
     axios
-      .get(`${apiUrl}/images`)
+      .get(`${apiUrl}/gallery`)
       .then((res) => {
         const data = res.data;
         if (Array.isArray(data) && data.length > 0) {

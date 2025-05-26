@@ -3,11 +3,31 @@ import ShopContext from "../Context/ShopContext.jsx";
 import "../App.css";
 
 const Card = (props) => {
-  const [howMany, setHowMany] = useState(1);
-  const [isAvailable, setIsAvailable] = useState(true);
+  const parseUnit = (pricePer) => {
+    const per = pricePer.replace("/", "");
+
+    if (per === "szt") return { unit: "szt", value: 1, displayUnit: "" };
+    if (per.includes("kg")) {
+      const val = parseFloat(per.replace("kg", "")) || 1;
+      return { unit: "kg", value: val, displayUnit: "kg" };
+    }
+    if (per.includes("g")) {
+      const val = parseFloat(per.replace("g", "")) || 250;
+      return { unit: "kg", value: val / 1000, displayUnit: "g" };
+    }
+
+    return { unit: "szt", value: 1, displayUnit: "" };
+  };
+
   const { name, price, image, pricePer, available } = props.data;
+  const { unit, value: unitValue, displayUnit } = parseUnit(pricePer);
+  const isWeightBased = unit === "kg";
+
+  const [howMany, setHowMany] = useState(unitValue);
+  const [isAvailable, setIsAvailable] = useState(true);
   const { addToCart } = useContext(ShopContext);
   const [add, setAdd] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const addAnimation = () => {
     setAdd(true);
@@ -17,12 +37,14 @@ const Card = (props) => {
   };
 
   const handleSubtraction = () => {
-    if (howMany - 1 < 1) setHowMany(1);
-    else setHowMany(howMany - 1);
+    const step = isWeightBased ? 0.1 : 1;
+    const min = isWeightBased ? 0.05 : 1; // np. min. 50g
+    setHowMany((prev) => Math.max(min, parseFloat((prev - step).toFixed(2))));
   };
 
   const handleAddition = () => {
-    setHowMany(howMany + 1);
+    const step = isWeightBased ? 0.1 : 1;
+    setHowMany((prev) => parseFloat((prev + step).toFixed(2)));
   };
 
   useEffect(() => {
@@ -33,11 +55,9 @@ const Card = (props) => {
     }
   }, [available]);
 
-  const [isLoaded, setIsLoaded] = useState(false);
-
   return (
     <div className="flex lg:flex-col w-[100%] lg:w-[30%] bg-(--background) rounded-3xl p-2">
-      <div className="w-[50%] md:w-[35%] h-full h-20% lg:w-[100%] aspect-square lg:aspect-auto l mr-auto">
+      <div className="w-[50%] md:w-[50%] h-full h-20% lg:w-[100%] aspect-square lg:aspect-auto mr-auto">
         <img
           src={image}
           alt={name}
@@ -50,7 +70,7 @@ const Card = (props) => {
           <img
             src={image}
             alt={name}
-            className="rounded-2xl w-full h-full object-cover ratio"
+            className="rounded-2xl w-full h-full object-cover lg:aspect-video"
             onLoad={() => {
               setIsLoaded(true);
             }}
@@ -70,11 +90,17 @@ const Card = (props) => {
         </div>
         {isAvailable ? (
           <div className="flex justify-between w-full h-[20%]">
-            <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[4vw] *:lg:text-[2vw] items-center">
+            <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[2.5vw] *:lg:text-[1.9vw] items-center">
               <button className="cursor-pointer" onClick={handleSubtraction}>
                 -
               </button>
-              <h4>{howMany}</h4>
+              <h4>
+                {isWeightBased
+                  ? displayUnit === "g"
+                    ? `${(howMany * 1000).toFixed(0)} g`
+                    : `${howMany.toFixed(2)} kg`
+                  : howMany}
+              </h4>
               <button className="cursor-pointer" onClick={handleAddition}>
                 +
               </button>
@@ -91,7 +117,7 @@ const Card = (props) => {
           </div>
         ) : (
           <h3 className="text-right text-[4vw] md:text-[3vw] lg:text-[2vw] text-(--white)">
-            Produkt nie dostępny
+            Produkt niedostępny
           </h3>
         )}
       </div>

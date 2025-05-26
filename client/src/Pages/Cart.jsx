@@ -5,10 +5,26 @@ import ShopContext from "../Context/ShopContext.jsx";
 import { Link } from "react-router";
 
 const Cart = () => {
+  const parseUnit = (pricePer) => {
+    const per = pricePer.replace("/", "");
+
+    if (per === "szt") return { unit: "szt", value: 1 };
+    if (per.includes("kg"))
+      return { unit: "kg", value: parseFloat(per.replace("kg", "")) || 1 };
+    if (per.includes("g"))
+      return { unit: "kg", value: parseFloat(per.replace("g", "")) / 1000 };
+
+    return { unit: "szt", value: 1 };
+  };
+
   const [showError, setShowError] = useState(false);
   const { cart, howManyInCart } = useContext(ShopContext);
   const total = cart
-    .reduce((acc, item) => acc + item.price * item.quantity, 0)
+    .reduce((acc, item) => {
+      const { value: unitValue } = parseUnit(item.pricePer);
+      const itemTotal = item.price * (item.quantity / unitValue);
+      return acc + itemTotal;
+    }, 0)
     .toFixed(2);
 
   useEffect(() => {

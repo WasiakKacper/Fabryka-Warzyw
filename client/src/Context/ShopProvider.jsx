@@ -107,20 +107,18 @@ export const ShopProvider = ({ children }) => {
     setCart(updatedCart);
   };
 
-  const increaseQuantity = (id) => {
+  const increaseQuantity = (id, newQty) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item._id === id ? { ...item, quantity: item.quantity + 1 } : item
+        item._id === id ? { ...item, quantity: newQty } : item
       )
     );
   };
 
-  const decreaseQuantity = (id) => {
+  const decreaseQuantity = (id, newQty) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item._id === id
-          ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
-          : item
+        item._id === id ? { ...item, quantity: newQty } : item
       )
     );
   };
@@ -136,11 +134,15 @@ export const ShopProvider = ({ children }) => {
     }
   }, []);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <ShopContext.Provider
       value={{
         isLogged,
         setIsLogged,
+        isLoaded,
+        setIsLoaded,
         handleLogin,
         handleLogOut,
         cart,

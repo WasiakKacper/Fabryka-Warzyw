@@ -2,6 +2,21 @@ import React, { useContext } from "react";
 import ShopContext from "../Context/ShopContext";
 
 const CartElement = (props) => {
+  const { pricePer } = props.data;
+  const { unit, step } = (() => {
+    const per = pricePer.replace("/", "");
+    if (per === "szt") return { unit: "szt", step: 1, value: 1 };
+    if (per.includes("kg")) {
+      const val = parseFloat(per.replace("kg", "")) || 1;
+      return { unit: "kg", step: 0.01, value: val };
+    }
+    if (per.includes("g")) {
+      const val = parseFloat(per.replace("g", "")) || 250;
+      return { unit: "kg", step: 0.01, value: val / 1000 };
+    }
+    return { unit: "szt", step: 1, value: 1 };
+  })();
+
   const { name, price, image, quantity } = props.data;
   const { removeFromCart, increaseQuantity, decreaseQuantity } =
     useContext(ShopContext);
@@ -24,25 +39,37 @@ const CartElement = (props) => {
         <h3 className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]">{price}zł</h3>
       </div>
       {/* BUTTONS */}
-      <div className="w-[40%]">
+      <div className="w-[60%]">
         <div className="flex h-full *:h-[30%] gap-2 items-end">
-          <div className="flex items-center justify-center gap-2 px-3 bg-(--accent) rounded-4xl text-(--white) text-[4vw] md:text-[3vw] lg:text-[2vw]">
+          <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[2.5vw] *:lg:text-[1.9vw] items-center">
             <button
               className="cursor-pointer"
-              onClick={() => decreaseQuantity(props.data._id)}
+              onClick={() => {
+                const newQty = Math.max(step, quantity - step);
+                decreaseQuantity(props.data._id, newQty);
+              }}
             >
               -
             </button>
-            <h4 className="w-[40px] text-center">{quantity}</h4>
+            <h4 className=" text-center">
+              {unit === "kg"
+                ? quantity >= 1
+                  ? quantity.toFixed(2) + " kg"
+                  : Math.round(quantity * 1000) + " g"
+                : quantity}
+            </h4>
             <button
               className="cursor-pointer"
-              onClick={() => increaseQuantity(props.data._id)}
+              onClick={() => {
+                const newQty = quantity + step;
+                increaseQuantity(props.data._id, newQty);
+              }}
             >
               +
             </button>
           </div>
           <button
-            className="bg-(--alternativeAccent) w-full rounded-4xl text-(--white) text-[4vw] md:text-[3vw] lg:text-[2vw] cursor-pointer"
+            className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--alternativeAccent) text-(--white) text-[2.5vw] lg:text-[1.5vw] rounded-4xl cursor-pointer"
             onClick={() => {
               removeFromCart(props.data._id);
             }}
