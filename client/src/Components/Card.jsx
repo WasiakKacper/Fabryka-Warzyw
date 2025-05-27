@@ -37,13 +37,13 @@ const Card = (props) => {
   };
 
   const handleSubtraction = () => {
-    const step = isWeightBased ? 0.1 : 1;
-    const min = isWeightBased ? 0.05 : 1; // np. min. 50g
+    const step = isWeightBased ? 0.01 : 1;
+    const min = isWeightBased ? 0.05 : 1;
     setHowMany((prev) => Math.max(min, parseFloat((prev - step).toFixed(2))));
   };
 
   const handleAddition = () => {
-    const step = isWeightBased ? 0.1 : 1;
+    const step = isWeightBased ? 0.01 : 1;
     setHowMany((prev) => parseFloat((prev + step).toFixed(2)));
   };
 
