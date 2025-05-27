@@ -21,6 +21,27 @@ const Contact = () => {
             kontakt@fabrykawarzyw.pl
           </p>
         </div>
+        <div>
+          <div className="flex justify-evenly w-[90%] *:text-[10vw] *:md:text-[8vw] *:lg:text-[4vw] *:cursor-pointer">
+            <a
+              className="icon-facebook-squared hover:-translate-y-4  hover:text-(--facebook) transition duration-300 p-2"
+              href="https://www.facebook.com/profile.php?id=100068391292702"
+              target="_blank"
+            ></a>
+            <a
+              className="icon-instagram text-white hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888]
+              hover:-translate-y-4 transition duration-300 p-2"
+              href="https://www.instagram.com/fabrykawarzyw/"
+              target="_blank"
+            ></a>
+          </div>
+          <p className="text-[4vw] md:text-[3vw] lg:text-[1.5vw]">
+            Odwiedź nasze profile w social mediach!
+          </p>
+          <p className="text-[3vw] md:text-[2vw] lg:text-[1vw]">
+            (Kliknij ikonę, aby przejść do profilu.)
+          </p>
+        </div>
       </section>
       <section className="h-[100%]">
         <div className="bg-(--background) w-[90%] h-[100%] lg:w-[60%] text-center p-5 pb-10 lg:pb-0 rounded-3xl mx-auto">
