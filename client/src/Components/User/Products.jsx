@@ -5,8 +5,10 @@ import axios from "axios";
 const Products = () => {
   const { setIsLoaded } = useContext(ShopContext);
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [edit, setEdit] = useState(false);
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
+    _id: null,
     name: "",
     price: "",
     category: "Vegetables",
@@ -52,7 +54,7 @@ const Products = () => {
 
   //Add product
   const handleSubmit = async () => {
-    if (imageFile && formData.name !== "" && formData.price !== "") {
+    if (formData.name !== "" && formData.price !== "") {
       try {
         setIsLoaded(true);
         let uploadedImage = "";
@@ -65,12 +67,27 @@ const Products = () => {
           ...formData,
           price: parseFloat(formData.price),
           available: true,
-          image: uploadedImage,
+          image:
+            uploadedImage ||
+            products.find((p) => p._id === formData._id)?.image,
         };
 
-        const res = await axios.post(`${apiUrl}/products`, productData);
-        setProducts((prevProducts) => [...prevProducts, res.data]);
+        if (edit && formData._id) {
+          // Edycja
+          await axios.put(`${apiUrl}/products/${formData._id}`, productData);
+          setProducts((prev) =>
+            prev.map((p) => (p._id === formData._id ? productData : p))
+          );
+          alert("Produkt zaktualizowany!");
+        } else {
+          // Dodawanie nowego
+          const res = await axios.post(`${apiUrl}/products`, productData);
+          setProducts((prevProducts) => [...prevProducts, res.data]);
+          alert("Produkt dodany!");
+        }
+
         setFormData({
+          _id: null,
           name: "",
           price: "",
           category: "Vegetables",
@@ -78,14 +95,12 @@ const Products = () => {
           store: "Łęczyca",
         });
         setImageFile(null);
+        setEdit(false);
         setIsLoaded(false);
-        alert("Produkt dodany!");
-
-        console.log(res.data);
       } catch (err) {
         console.error(err);
         setIsLoaded(false);
-        alert("Błąd przy dodawaniu produktu.");
+        alert("Błąd przy dodawaniu/edycji produktu.");
       }
     } else {
       alert("Pola nie mogą pozostać puste!");
@@ -138,8 +153,22 @@ const Products = () => {
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  //Edit
+  const handleEditClick = (product) => {
+    setFormData({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      pricePer: product.pricePer,
+      store: product.store,
+    });
+    setEdit(true);
+  };
+
   return (
     <section>
+      {edit ? <section></section> : <></>}
       <form
         className="flex flex-col lg:flex-row  w-[100%] *:w-[100%] gap-2 justify-center *:border-1 mb-10"
         onSubmit={(e) => {
@@ -216,7 +245,7 @@ const Products = () => {
           <option value="Łódź">Łódź</option>
         </select>
         <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
-          Dodaj produkt
+          {edit ? "Zapisz zmiany" : "Dodaj produkt"}
         </button>
       </form>
       {/* Search */}
@@ -227,7 +256,7 @@ const Products = () => {
         onChange={handleSearchChange}
         className="p-2 w-[100%] lg:w-[70%] rounded-4xl mb-3 border-1 outline-0"
       />
-      <ul className="h-[50vh] overflow-y-scroll">
+      <ul className="w-[100%] lg:w-[90%] h-[80vh] overflow-y-scroll mx-auto">
         {filteredProducts.map((product, index) => (
           <li
             key={index}
@@ -256,12 +285,20 @@ const Products = () => {
               </p>
               <p>Sklep - {product.store}</p>
             </div>
-            <button
-              className="w-[10%] text-[var(--alternativeAccent)] hover:text-[var(--hoverAlternativeAccent)] font-medium cursor-pointer"
-              onClick={() => handleDelete(product._id)}
-            >
-              Usuń
-            </button>
+            <div className="flex flex-col lg:flex-row justify-between gap-20 lg:gap-10">
+              <button
+                className="w-[50%] text-[var(--accent)] hover:text-[var(--hoverAccent)] font-medium cursor-pointer transition-all"
+                onClick={() => handleEditClick(product)}
+              >
+                Edytuj
+              </button>
+              <button
+                className="w-[50%] text-[var(--alternativeAccent)] hover:text-[var(--hoverAlternativeAccent)] font-medium cursor-pointer transition-all"
+                onClick={() => handleDelete(product._id)}
+              >
+                Usuń
+              </button>
+            </div>
           </li>
         ))}
       </ul>
