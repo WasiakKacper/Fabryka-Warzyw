@@ -67,7 +67,7 @@ const Home = () => {
         <></>
       )}
       <Gallery />
-      <div className="w-[90%] mx-auto text-white pt-15">
+      <div className="w-[90%] mx-auto text-white pt-5">
         <input
           type="text"
           placeholder="Szukaj produktu..."
