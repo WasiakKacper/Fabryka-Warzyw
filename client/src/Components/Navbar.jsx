@@ -88,7 +88,7 @@ const Navbar = (props) => {
             <hr className="block border-(--accent) border-2 lg:hidden" />
           </li>
           <li onClick={() => setShow(false)}>
-            <Link to="/gastronomy">HoReCe</Link>
+            <Link to="/gastronomy">HoReCa</Link>
             {name === "Gastronomy" && (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             )}

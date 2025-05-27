@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
 import ShopContext from "../Context/ShopContext";
@@ -20,7 +20,11 @@ const PickupStore = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { setCart } = useContext(ShopContext);
+  const { setCart, whichStore } = useContext(ShopContext);
+
+  useEffect(() => {
+    setStore(whichStore);
+  }, []);
 
   function isValidPhoneNumber(phone) {
     const polishPhoneRegex = /^(\+48)?\d{9}$/;
@@ -120,7 +124,7 @@ const PickupStore = () => {
               setPhoneNumber(e.target.value);
             }}
           />
-          <label
+          {/*           <label
             htmlFor="place"
             className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]"
           >
@@ -136,7 +140,7 @@ const PickupStore = () => {
           >
             <option value="Łęczyca">Łęczyca</option>
             <option value="Łódź">Łódź</option>
-          </select>
+          </select> */}
 
           <p className="text-[4vw] md:text-[3vw] lg:text-[2vw] py-20">
             Płatność tylko gotówka lub blik

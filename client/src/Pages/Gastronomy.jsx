@@ -16,6 +16,7 @@ const categories = [
 const Gastronomy = () => {
   const [isClicked, setIsClicked] = useState(0);
   const { isLogged } = useContext(ShopContext);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [whatCategory, setWhatCategory] = useState("VegetablesHoReCa");
 
@@ -34,9 +35,14 @@ const Gastronomy = () => {
       });
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) => product.category === whatCategory
-  );
+  //search
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = product.category === whatCategory;
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <article className="min-h-[100vh] h-[100%] text-(--white) mb-20">
@@ -54,7 +60,16 @@ const Gastronomy = () => {
       ) : (
         <></>
       )}
-      <nav className="w-full overflow-x-auto lg:overflow-hidden pt-45 mx-auto">
+      <div className="w-[90%] mx-auto text-white pt-45">
+        <input
+          type="text"
+          placeholder="Szukaj produktu..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-4 py-2 rounded-xl border-2 border-white outline-0"
+        />
+      </div>
+      <nav className="w-full overflow-x-auto lg:overflow-hidden pt-5 mx-auto">
         <ul className="flex justify-center mx-auto w-[100%] text-[4vw] md:text-[3vw] lg:text-[1.6vw] *:px-1">
           {categories.map((item, index) => (
             <React.Fragment key={item.en}>

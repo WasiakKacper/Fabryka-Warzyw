@@ -22,26 +22,19 @@ const Order = () => {
   }, []);
 
   const calculateItemPrice = (item) => {
-    // item.price - cena za pricePer jednostek
-    // item.pricePer - np "/1kg", "/250g", "/szt"
     const quantity = item.quantity;
     const price = item.price;
-    const pricePer = item.pricePer || "/1kg"; // załóżmy domyślnie 1kg
+    const pricePer = item.pricePer || "/1kg";
 
     if (pricePer.includes("kg")) {
-      // Cena za kilogram
-      return price * quantity; // quantity w kg, więc bez zmian
+      return price * quantity;
     } else if (pricePer.includes("g")) {
-      // Cena za X gramów
-      const grams = parseFloat(pricePer.replace(/[^\d]/g, "")); // np 250
-      // quantity w kg, więc przelicz na ilość jednostek bazowych
+      const grams = parseFloat(pricePer.replace(/[^\d]/g, ""));
       const quantityInGrams = quantity * 1000;
       return price * (quantityInGrams / grams);
     } else if (pricePer.includes("szt")) {
-      // cena za sztukę
       return price * quantity;
     }
-    // fallback
     return price * quantity;
   };
 

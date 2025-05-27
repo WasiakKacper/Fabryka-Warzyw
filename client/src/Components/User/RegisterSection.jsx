@@ -29,7 +29,7 @@ const RegisterSection = ({ setIsClicked }) => {
       if (password === passwordAgain) {
         if (password.length >= 8) {
           axios
-            .post(`${apiUrl}/register`, {
+            .post(`${apiUrl}/users/register`, {
               name,
               surname,
               email,

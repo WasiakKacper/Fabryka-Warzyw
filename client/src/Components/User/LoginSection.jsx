@@ -24,7 +24,7 @@ const LoginSection = () => {
         navigate("/admin");
       } else {
         axios
-          .post(`${apiUrl}/login`, { email, password })
+          .post(`${apiUrl}/users/login`, { email, password })
           /*       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
