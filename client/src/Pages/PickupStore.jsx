@@ -124,24 +124,6 @@ const PickupStore = () => {
               setPhoneNumber(e.target.value);
             }}
           />
-          {/*           <label
-            htmlFor="place"
-            className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]"
-          >
-            Wybierz sklep*
-          </label>
-          <select
-            name="place"
-            className="bg-(--background) px-4 p-1 border-0 outline-0 text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw] rounded-4xl"
-            value={store}
-            onChange={(e) => {
-              setStore(e.target.value);
-            }}
-          >
-            <option value="Łęczyca">Łęczyca</option>
-            <option value="Łódź">Łódź</option>
-          </select> */}
-
           <p className="text-[4vw] md:text-[3vw] lg:text-[2vw] py-20">
             Płatność tylko gotówka lub blik
           </p>

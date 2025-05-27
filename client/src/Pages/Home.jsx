@@ -73,7 +73,7 @@ const Home = () => {
           placeholder="Szukaj produktu..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 rounded-xl border-2 border-white outline-0"
+          className="w-full px-4 py-2 rounded-xl bg-(--background) otuline-white drop-shadow-2xl"
         />
       </div>
       <nav className="w-[90%] lg:w-full overflow-x-auto lg:overflow-hidden pt-5 mx-auto">
