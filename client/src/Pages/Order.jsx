@@ -81,7 +81,7 @@ const Order = () => {
   }, [finalTotal]);
 
   return (
-    <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto text-(--white)">
+    <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto text-(--white) mb-20">
       <section className="pt-45  mx-auto flex flex-col w-[90%]">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[3vw] font-medium mb-10">
           Zamówienie
@@ -185,7 +185,7 @@ const Order = () => {
               to={option === "store" ? "/pickupstore" : "/pickupdelivery"}
               className="mx-auto w-[60%] flex items-center justify-center"
             >
-              <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer">
+              <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400">
                 Dalej
               </button>
             </Link>

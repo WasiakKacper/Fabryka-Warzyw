@@ -46,7 +46,7 @@ const Home = () => {
   });
 
   return (
-    <article className="min-h-[100vh] h-[100%]">
+    <article className="min-h-[100vh] h-[100%] mb-20">
       {firstEnter ? (
         <motion.section
           className="fixed flex justify-center items-center w-[100vw] h-[100vh] bg-(--white) z-10000"

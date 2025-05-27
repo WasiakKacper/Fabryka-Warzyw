@@ -89,8 +89,8 @@ const Card = (props) => {
           </h3>
         </div>
         {isAvailable ? (
-          <div className="flex justify-between w-full h-[20%]">
-            <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[2.5vw] *:lg:text-[1.9vw] items-center">
+          <div className="flex justify-between w-full h-[20%] ">
+            <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[2.5vw] *:lg:text-[1.9vw] items-center hover:bg-(--hoverAccent) transition duration-400">
               <button className="cursor-pointer" onClick={handleSubtraction}>
                 -
               </button>
@@ -106,7 +106,7 @@ const Card = (props) => {
               </button>
             </div>
             <button
-              className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[2.8vw] lg:text-[1.5vw] rounded-4xl cursor-pointer"
+              className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[2.8vw] lg:text-[1.5vw] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition duration-400"
               onClick={() => {
                 addToCart(props.data, howMany);
                 addAnimation();

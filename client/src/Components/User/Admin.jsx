@@ -52,7 +52,7 @@ const Admin = () => {
           <div className="loader text-white"></div>
         </section>
       )}
-      <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5 text-(--white)">
+      <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5 text-(--white) mb-20">
         <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium text-center">
           Panel administracyjny
         </h1>

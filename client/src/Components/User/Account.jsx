@@ -42,7 +42,7 @@ const Account = () => {
   );
 
   return (
-    <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5 text-(--white)">
+    <article className="pt-45 lg:pt-35 min-h-[100vh] h-[100%] px-5 text-(--white) mb-20">
       <h1 className="w-[100%] text-[8vw] md:text-[6vw] lg:text-[4vw] font-medium">
         Witaj <span className="text-(--accent)">{username}</span>.
       </h1>
@@ -83,7 +83,7 @@ const Account = () => {
             handleOnClick();
             navigate("/login");
           }}
-          className="w-[50%] md:w-[40%] lg:w-[30%] py-2 px-4 bg-(--alternativeAccent) text-(--white) mx-auto rounded-3xl cursor-pointer hover:bg-(--hoverAlternativeAccent) transition-all text-[5vw] md:text-[4vw] lg:text-[2vw] mt-10"
+          className="w-[50%] md:w-[40%] lg:w-[30%] py-2 px-4 bg-(--alternativeAccent) text-(--white) mx-auto rounded-3xl cursor-pointer hover:bg-(--hoverAlternativeAccent) transition-all text-[5vw] md:text-[4vw] lg:text-[2vw] mt-10 "
         >
           Wyloguj się
         </button>

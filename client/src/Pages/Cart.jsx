@@ -32,7 +32,7 @@ const Cart = () => {
   }, [total]);
 
   return (
-    <article className="min-h-[100vh] h-[100%]">
+    <article className="min-h-[100vh] h-[100%] mb-20">
       {showError ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl text-(--white)">
           <section className="bg-(--background) w-[90%] lg:w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
@@ -79,7 +79,7 @@ const Cart = () => {
             }
           }}
         >
-          <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto py-2 rounded-4xl text-(--white) cursor-pointer">
+          <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto py-2 rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400">
             Zamów
           </button>
         </Link>

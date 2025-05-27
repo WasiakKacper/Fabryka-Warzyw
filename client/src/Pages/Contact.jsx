@@ -4,7 +4,7 @@ const Contact = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <article className="text-(--white)">
+    <article className="text-(--white) mb-20">
       <h1 className="pt-45 text-[10vw] md:text-[8vw] lg:text-[6vw] font-medium text-center">
         Kontakt
       </h1>

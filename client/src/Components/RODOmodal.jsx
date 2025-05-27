@@ -40,7 +40,7 @@ const RODOmodal = () => {
         <div className="flex justify-end">
           <button
             onClick={handleAccept}
-            className="bg-(--accent) text-white px-4 py-2 rounded-lg hover:bg-(--hoverAccent) transition cursor-pointer"
+            className="bg-(--accent) text-white px-4 py-2 rounded-lg hover:bg-(--hoverAccent) transition duration-400 cursor-pointer"
           >
             Akceptuję
           </button>

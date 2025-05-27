@@ -46,6 +46,87 @@ const Orders = () => {
     );
   };
 
+  //Delete order older then 30days
+  useEffect(() => {
+    const deleteOldOrders = async () => {
+      try {
+        const { data: orders } = await axios.get(`${apiUrl}/orders`);
+
+        const today = new Date();
+
+        for (const order of orders) {
+          const parts = order.date.split(".");
+          const orderDate = new Date(parts[2], parts[1] - 1, parts[0]);
+
+          const diffTime = today - orderDate; // różnica w ms
+          const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+          if (diffDays > 30) {
+            await axios.delete(`${apiUrl}/orders/${order._id}`);
+            console.log(`Usunięto zamówienie o ID: ${order._id}`);
+          }
+        }
+      } catch (error) {
+        console.error("Błąd podczas usuwania starych zamówień:", error);
+      }
+    };
+
+    deleteOldOrders();
+  }, []);
+
+  //SUMMARY
+  const parseDate = (dateStr) => {
+    const parts = dateStr.split(".");
+    const d = new Date(parts[2], parts[1] - 1, parts[0]);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const isSameDay = (date1, date2) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    d1.setHours(0, 0, 0, 0);
+    d2.setHours(0, 0, 0, 0);
+    return (
+      d1.getDate() === d2.getDate() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getFullYear() === d2.getFullYear()
+    );
+  };
+
+  const sumProductsByDate = (orders, targetDate) => {
+    const productSums = {};
+
+    orders.forEach((order) => {
+      const orderDate = parseDate(order.date);
+      if (isSameDay(orderDate, targetDate)) {
+        order.products.forEach((prod) => {
+          if (!productSums[prod.name]) {
+            productSums[prod.name] = { quantity: 0, unit: prod.unit };
+          }
+          productSums[prod.name].quantity += prod.quantity;
+        });
+      }
+    });
+
+    return productSums;
+  };
+
+  const currentStoreName = whatStore === 1 ? "Łódź" : "Łęczyca";
+
+  const soldToday = sumProductsByDate(
+    completedOrders.filter((order) => order.store === currentStoreName),
+    today
+  );
+  const soldYesterday = sumProductsByDate(
+    completedOrders.filter((order) => order.store === currentStoreName),
+    yesterday
+  );
+
   return (
     <section className="h-[50vh] overflow-y-scroll">
       <nav className="mb-5">
@@ -98,6 +179,33 @@ const Orders = () => {
           <p>Brak aktywnych zamówień</p>
         )}
       </ul>
+      <div className="flex justify-around mb-10">
+        <div>
+          <h2>Wczoraj</h2>
+          {Object.keys(soldYesterday).length === 0 ? (
+            <p>Brak sprzedaży</p>
+          ) : (
+            Object.entries(soldYesterday).map(([name, { quantity, unit }]) => (
+              <p key={name}>
+                {name}: {quantity} {unit}
+              </p>
+            ))
+          )}
+        </div>
+
+        <div>
+          <h2>Dziś</h2>
+          {Object.keys(soldToday).length === 0 ? (
+            <p>Brak sprzedaży</p>
+          ) : (
+            Object.entries(soldToday).map(([name, { quantity, unit }]) => (
+              <p key={name}>
+                {name}: {quantity.toFixed(2)} {unit}
+              </p>
+            ))
+          )}
+        </div>
+      </div>
     </section>
   );
 };

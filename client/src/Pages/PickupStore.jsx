@@ -90,7 +90,7 @@ const PickupStore = () => {
       ) : (
         <></>
       )}
-      <section className="w-[90%] lg:w-[60%] mx-auto pt-45">
+      <section className="w-[90%] lg:w-[60%] mx-auto pt-45 mb-20">
         <h1 className="text-center text-[8vw] md:text-[5vw] lg:text-[4vw] font-medium mb-10">
           Zamówienie
         </h1>
@@ -144,13 +144,13 @@ const PickupStore = () => {
           <div className="flex items-center justify-center gap-10 w-full mb-10">
             <Link
               to="/order"
-              className="flex items-center justify-center text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
+              className="flex items-center justify-center text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400"
             >
               Wróć
             </Link>
             <button
               type="submit"
-              className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
+              className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400"
             >
               Zamów
             </button>

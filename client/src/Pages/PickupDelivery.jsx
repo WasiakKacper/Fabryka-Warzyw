@@ -76,7 +76,7 @@ const PickupDelivery = () => {
   };
 
   return (
-    <main className="min-h-[100vh] h-[100%] lg:h-auto text-(--white)">
+    <main className="min-h-[100vh] h-[100%] lg:h-auto text-(--white) mb-20">
       {showError ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl text-(--white)">
           <section className="bg-(--background) w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
@@ -212,13 +212,13 @@ const PickupDelivery = () => {
           <div className="flex items-center justify-center gap-10 w-full mb-10">
             <Link
               to="/order"
-              className="flex items-center justify-center text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
+              className="flex items-center justify-center text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400"
             >
               Wróć
             </Link>
             <button
               type="submit"
-              className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer"
+              className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[50%] rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400"
             >
               Zamów
             </button>

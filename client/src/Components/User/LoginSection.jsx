@@ -106,7 +106,7 @@ const LoginSection = () => {
             setPassword(e.target.value);
           }}
         />
-        <button className="bg-(--accent) text-(--white) p-2 rounded-4xl w-[60%] mx-auto mt-4 text-[5vw] md:text-[4vw] lg:text-[2vw] cursor-pointer">
+        <button className="bg-(--accent) text-(--white) p-2 rounded-4xl w-[60%] mx-auto mt-4 text-[5vw] md:text-[4vw] lg:text-[2vw] cursor-pointer hover:bg-(--hoverAccent) transition duration-400">
           Zaloguj się
         </button>
       </form>

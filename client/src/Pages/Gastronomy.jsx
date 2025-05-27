@@ -39,14 +39,14 @@ const Gastronomy = () => {
   );
 
   return (
-    <article className="min-h-[100vh] h-[100%] text-(--white)">
+    <article className="min-h-[100vh] h-[100%] text-(--white) mb-20">
       {!isLogged ? (
         <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
           <section className="bg-(--background) w-[90%] lg:w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
               Treść tylko dla zalogowanych klientów!
             </h3>
-            <button className="mt-20 py-2 px-2 w-[40%] rounded-4xl mx-auto text-[3.6vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer">
+            <button className="mt-20 py-2 px-2 w-[40%] rounded-4xl mx-auto text-[3.6vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400">
               <Link to="/login">Zaloguj się</Link>
             </button>
           </section>

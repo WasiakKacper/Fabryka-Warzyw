@@ -95,7 +95,7 @@ const Gallery = () => {
 
   return (
     <div className="block justify-center w-[90%] mx-auto">
-      <div className="w-[90%] lg:w-full h-[100%] lg:h-[40vw] pt-45 overflow-hidden rounded-3xl mx-auto">
+      <div className="w-[90%] lg:w-full h-[100%] lg:h-[50vw] pt-45 overflow-hidden rounded-3xl mx-auto">
         {!isLoaded && (
           <div className="bg-[var(--background)] w-full h-full flex justify-center items-center rounded-3xl">
             <div className="loader"></div>
@@ -106,7 +106,7 @@ const Gallery = () => {
           style={{
             width: `${images.length * 100}%`,
             transform: `translateX(-${(100 / images.length) * current}%)`,
-            height: "100%",
+            height: `100%`,
             opacity: isLoaded ? 1 : 0,
             position: "relative",
           }}
@@ -117,7 +117,7 @@ const Gallery = () => {
               src={src.url}
               alt={`slide ${idx}`}
               onLoad={handleImageLoad}
-              className="flex-shrink-0 object-cover rounded-3xl"
+              className="flex-shrink-0 object-cover rounded-3xl aspect-video"
               style={{ width: `${100 / images.length}%`, height: "100%" }}
             />
           ))}

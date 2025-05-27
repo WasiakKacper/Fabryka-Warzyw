@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-center gap-10 py-5 mt-10 bg-(--darkBackgorund) text-(--white) text-[2vw] lg:text-[1.3vw]">
+    <footer className="flex justify-center gap-10 py-5 px-2  bg-(--darkBackgorund) text-(--white) text-[2vw] lg:text-[1.3vw]">
       <div>
         <h2 className="text-[5vw] md:text-[3vw] lg:text-[2vw]">Kontakt:</h2>
         <p>kontakt@fabrykawarzyw.pl</p>
