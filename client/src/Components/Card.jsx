@@ -55,6 +55,11 @@ const Card = (props) => {
     }
   }, [available]);
 
+  useEffect(() => {
+  setIsLoaded(false);
+}, [image]);
+
+
   return (
     <div className="flex lg:flex-col w-[100%] lg:w-[30%] bg-(--background) rounded-3xl p-2 drop-shadow-2xl">
       <div className="w-[50%] md:w-[50%] h-full h-20% lg:w-[100%] aspect-square lg:aspect-auto mr-auto">
