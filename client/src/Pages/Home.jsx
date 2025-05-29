@@ -74,14 +74,16 @@ const Home = () => {
   }, [hasMore, page]);
 
   //search
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory = product.category === whatCategory;
-    const matchesStore = whichStore ? product.store === whichStore : true;
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesStore && matchesSearch;
-  });
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesCategory = product.category === whatCategory;
+      const matchesStore = whichStore ? product.store === whichStore : true;
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesStore && matchesSearch;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <article className="min-h-[100vh] h-[100%] mb-20">
