@@ -70,6 +70,7 @@ const OrderCard = ({ order, onStatusUpdate }) => {
         ) : (
           <></>
         )}
+        <h2>Dzień dostawy: {order.deliveryDay}</h2>
         <h2>Produkty:</h2>
         <ul className="mb-3">
           {products.map((product, index) => (
