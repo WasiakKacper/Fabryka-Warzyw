@@ -3,20 +3,19 @@ import ShopContext from "../Context/ShopContext";
 
 const CartElement = (props) => {
   const { pricePer } = props.data;
-  const { unit, step } = (() => {
+  const { unit, value: step } = (() => {
     const per = pricePer.replace("/", "");
-    if (per === "szt") return { unit: "szt", step: 1, value: 1 };
+    if (per === "szt") return { unit: "szt", value: 1 };
     if (per.includes("kg")) {
       const val = parseFloat(per.replace("kg", "")) || 1;
-      return { unit: "kg", step: 0.01, value: val };
+      return { unit: "kg", value: val };
     }
     if (per.includes("g")) {
       const val = parseFloat(per.replace("g", "")) || 250;
-      return { unit: "kg", step: 0.01, value: val / 1000 };
+      return { unit: "kg", value: val / 1000 };
     }
-    return { unit: "szt", step: 1, value: 1 };
+    return { unit: "szt", value: 1 };
   })();
-
   const { name, price, image, quantity } = props.data;
   const { removeFromCart, increaseQuantity, decreaseQuantity } =
     useContext(ShopContext);
@@ -47,7 +46,10 @@ const CartElement = (props) => {
             <button
               className="cursor-pointer"
               onClick={() => {
-                const newQty = Math.max(step, quantity - step);
+                const newQty = Math.max(
+                  step,
+                  parseFloat((quantity - step).toFixed(2))
+                );
                 decreaseQuantity(props.data._id, newQty);
               }}
             >
@@ -63,7 +65,7 @@ const CartElement = (props) => {
             <button
               className="cursor-pointer"
               onClick={() => {
-                const newQty = quantity + step;
+                const newQty = parseFloat((quantity + step).toFixed(2));
                 increaseQuantity(props.data._id, newQty);
               }}
             >
