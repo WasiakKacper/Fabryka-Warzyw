@@ -32,6 +32,24 @@ const PickupDelivery = () => {
     return ["90", "91", "92", "93", "94"].includes(prefix);
   };
 
+  const getDeliveryDay = () => {
+    const date = new Date();
+    const day = date.getDay();
+    const hour = date.getHours();
+
+    if (
+      (day === 4 && hour >= 20) ||
+      day === 5 ||
+      day === 6 ||
+      day === 0 ||
+      (day === 1 && hour < 20)
+    ) {
+      return "wtorek";
+    } else {
+      return "piatek";
+    }
+  };
+
   function isValidPhoneNumber(phone) {
     const polishPhoneRegex = /^(\+48)?\d{9}$/;
     return polishPhoneRegex.test(phone);
@@ -46,6 +64,7 @@ const PickupDelivery = () => {
     } else {
       if (isValidPhoneNumber(phoneNumber)) {
         if (place === "Łódź" && checkPostalCode(postalCode)) {
+          const deliveryDay = getDeliveryDay();
           const orderData = {
             email: localStorage.getItem("email"),
             surname: localStorage.getItem("surname"),
@@ -56,6 +75,7 @@ const PickupDelivery = () => {
             apartmentNumber: apartmentNumber,
             phoneNumber: phoneNumber,
             store: "Łódź",
+            deliveryDay,
             products: JSON.parse(localStorage.getItem("cart")),
           };
 

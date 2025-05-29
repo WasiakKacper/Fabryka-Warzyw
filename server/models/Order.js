@@ -13,6 +13,7 @@ const orderSchema = new mongoose.Schema({
   homeNumber: String,
   apartmentNumber: String,
   store: String,
+  deliveryDay: String,
   products: [
     {
       name: String,

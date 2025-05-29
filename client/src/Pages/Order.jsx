@@ -4,6 +4,7 @@ import { Link } from "react-router";
 const Order = () => {
   const [isActive, setIsActive] = useState(false);
   const [option, setOption] = useState("store");
+  const [dzien, setDzien] = useState("");
 
   const [cart, setCart] = useState([]);
   const [baseTotal, setBaseTotal] = useState(0);
@@ -11,14 +12,35 @@ const Order = () => {
   const [terms, setTerms] = useState(false);
 
   useEffect(() => {
-    const date = new Date();
-    const day = date.getDay();
+    const now = new Date();
+    const day = now.getDay(); // 0 - niedziela, ..., 6 - sobota
+    const hour = now.getHours();
+    const minutes = now.getMinutes();
 
-    if (day === 2 || day === 5) {
-      setIsActive(true);
+    let canOrderFor = null;
+
+    if (
+      (day === 4 && hour >= 20) || // czwartek po 20
+      day === 5 || // piątek cały dzień
+      day === 6 || // sobota cały dzień
+      day === 0 || // niedziela cały dzień
+      (day === 1 && (hour < 20 || (hour === 20 && minutes === 0))) // poniedziałek do 20
+    ) {
+      canOrderFor = "wtorek";
+    } else if (
+      (day === 1 && hour >= 20) || // poniedziałek po 20
+      day === 2 || // wtorek cały dzień
+      day === 3 || // środa cały dzień
+      (day === 4 && (hour < 20 || (hour === 20 && minutes === 0))) // czwartek do 20
+    ) {
+      canOrderFor = "piatek";
     } else {
-      setIsActive(false);
+      canOrderFor = "wtorek";
     }
+
+    setIsActive(true);
+    setOption(canOrderFor);
+    setDzien(canOrderFor === "wtorek" ? "wtorek" : "piątek");
   }, []);
 
   const calculateItemPrice = (item) => {
@@ -88,7 +110,7 @@ const Order = () => {
               <li key={index}>
                 <p>{item.name}</p>
                 <p>
-                  {item.price}zł x{Number(item.quantity).toFixed(2)}
+                  {item.price.toFixed(2)}zł x{Number(item.quantity) + "kg"}
                 </p>
               </li>
             ))}
@@ -127,7 +149,14 @@ const Order = () => {
                     }}
                   />
                 )}
-                <p>(5zł, dla zamówień {<br />} powyżej 99zł darmowa.)</p>
+                <div>
+                  <p>(5zł, dla zamówień {<br />} powyżej 99zł darmowa.)</p>
+                  <br />
+                  <p>
+                    Najbliższa dostawa:{" "}
+                    <span className="font-bold">{dzien}.</span>
+                  </p>
+                </div>
               </div>
             </section>
             <hr className="my-2 border-(--alternativeBackgroud)" />
