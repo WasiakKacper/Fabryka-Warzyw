@@ -39,8 +39,8 @@ const Home = () => {
         const res = await axios.get(`${apiUrl}/products?page=${page}&limit=20`);
         const data = res.data;
 
-        setProducts((prev) => [...prev, ...res.data]);
-        setHasMore(page < data.totalPages); // Zakładam że zwracasz totalPages z backendu
+        setProducts((prev) => [...prev, ...data.products]);
+        setHasMore(page < data.totalPages);
       } catch (err) {
         console.log(err);
         alert("Błąd połączenia z bazą danych");
@@ -70,12 +70,12 @@ const Home = () => {
         observer.unobserve(loader.current);
       }
     };
-  }, [hasMore]);
+  }, [hasMore, page]);
 
   //search
   const filteredProducts = products.filter((product) => {
     const matchesCategory = product.category === whatCategory;
-    const matchesStore = product.store === whichStore;
+    const matchesStore = whichStore ? product.store === whichStore : true;
     const matchesSearch = product.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -139,8 +139,8 @@ const Home = () => {
       <section>
         <div className="flex flex-col justify-center items-center w-[full] mt-5 mx-auto">
           <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
-            {filteredProducts.map((product, index) => (
-              <Card key={index} data={product} />
+            {filteredProducts.map((product) => (
+              <Card key={product._id} data={product} />
             ))}
           </div>
           <div ref={loader} className="text-center mt-10 text-white">
