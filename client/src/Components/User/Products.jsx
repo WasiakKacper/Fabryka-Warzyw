@@ -7,6 +7,8 @@ const Products = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [edit, setEdit] = useState(false);
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [formData, setFormData] = useState({
     _id: null,
     name: "",
@@ -20,16 +22,24 @@ const Products = () => {
 
   //Getting products
   useEffect(() => {
-    axios
-      .get(`${apiUrl}/products`)
-      .then((products) => {
-        setProducts(products.data);
-      })
-      .catch((err) => {
-        console.log(err);
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/products?page=${currentPage}`);
+        const newProducts = res.data.products;
+
+        setProducts((prev) => [...prev, ...newProducts]);
+
+        if (newProducts.length === 0 || currentPage >= res.data.totalPages) {
+          setHasMore(false);
+        }
+      } catch (err) {
+        console.error(err);
         alert("Błąd połączenia z bazą danych");
-      });
-  }, []);
+      }
+    };
+
+    if (hasMore) fetchProducts();
+  }, [currentPage]);
 
   //Inserting form data to states
   const handleChange = (e) => {
@@ -166,6 +176,27 @@ const Products = () => {
     setEdit(true);
   };
 
+  //Observer
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+
+      if (bottom && hasMore) {
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasMore]);
+
+  useEffect(() => {
+    setProducts([]);
+    setCurrentPage(1);
+    setHasMore(true);
+  }, []);
+
   return (
     <section>
       {edit ? <section></section> : <></>}
@@ -229,6 +260,7 @@ const Products = () => {
           <option value="Juice">Soki</option>
           <option value="Spices">Przyprawy</option>
           <option value="Flour">Mąki</option>
+          <option value="Eggs">Jaja</option>
           <option value="VegetablesHoReCa">Warzywa HoReCa</option>
           <option value="FruitsHoReCa">Owoce HoReCa</option>
           <option value="Peeled vegetablesHoReCa">

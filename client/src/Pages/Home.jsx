@@ -19,6 +19,7 @@ const categories = [
   { pl: "Makarony", en: "Pasta" },
   { pl: "Soki", en: "Juice" },
   { pl: "Przyprawy", en: "Spices" },
+  { pl: "Jaja", en: "Eggs" },
 ];
 
 const Home = () => {
