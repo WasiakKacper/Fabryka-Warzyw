@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { motion } from "motion/react";
 import ShopContext from "../Context/ShopContext.jsx";
@@ -25,22 +25,52 @@ const Home = () => {
   const [isClicked, setIsClicked] = useState(0);
   const [whatCategory, setWhatCategory] = useState("Vegetables");
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const loader = useRef(null);
 
   const [products, setProducts] = useState([]);
   const { firstEnter, whichStore } = useContext(ShopContext);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios
-      .get(`${apiUrl}/products`)
-      .then((products) => {
-        setProducts(products.data);
-      })
-      .catch((err) => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/products?page=${page}&limit=20`);
+        const data = res.data;
+
+        setProducts((prev) => [...prev, ...res.data]);
+        setHasMore(page < data.totalPages); // Zakładam że zwracasz totalPages z backendu
+      } catch (err) {
         console.log(err);
         alert("Błąd połączenia z bazą danych");
-      });
-  }, []);
+      }
+    };
+
+    fetchProducts();
+  }, [page]);
+
+  //Observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+
+    return () => {
+      if (loader.current) {
+        observer.unobserve(loader.current);
+      }
+    };
+  }, [hasMore]);
 
   //search
   const filteredProducts = products.filter((product) => {
@@ -107,11 +137,14 @@ const Home = () => {
       </nav>
       <div className="w-[90%] mx-auto"></div>
       <section>
-        <div className="flex justify-center w-[full] mt-5 mx-auto">
+        <div className="flex flex-col justify-center items-center w-[full] mt-5 mx-auto">
           <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
             {filteredProducts.map((product, index) => (
               <Card key={index} data={product} />
             ))}
+          </div>
+          <div ref={loader} className="text-center mt-10 text-white">
+            {hasMore ? "Ładowanie..." : "Wszystkie produkty załadowane"}
           </div>
         </div>
       </section>

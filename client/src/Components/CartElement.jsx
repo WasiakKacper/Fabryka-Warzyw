@@ -36,7 +36,9 @@ const CartElement = (props) => {
         <h2 className="font-medium text-[4vw] md:text-[3vw] lg:text-[2vw]">
           {name}
         </h2>
-        <h3 className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]">{price}zł</h3>
+        <h3 className="text-[3vw] md:text-[2vw] lg:text-[1.5vw]">
+          {price.toFixed(2)}zł
+        </h3>
       </div>
       {/* BUTTONS */}
       <div className="w-[60%]">
