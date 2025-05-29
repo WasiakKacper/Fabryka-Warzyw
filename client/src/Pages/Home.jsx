@@ -77,7 +77,9 @@ const Home = () => {
   const filteredProducts = products
     .filter((product) => {
       const matchesCategory = product.category === whatCategory;
-      const matchesStore = whichStore ? product.store === whichStore : true;
+      const matchesStore = whichStore
+        ? product.store === whichStore || product.store === "Oba"
+        : true;
       const matchesSearch = product.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase());

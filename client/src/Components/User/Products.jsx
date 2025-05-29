@@ -275,6 +275,7 @@ const Products = () => {
         >
           <option value="Łęczyca">Łęczyca</option>
           <option value="Łódź">Łódź</option>
+          <option value="Oba">Oba</option>
         </select>
         <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
           {edit ? "Zapisz zmiany" : "Dodaj produkt"}
