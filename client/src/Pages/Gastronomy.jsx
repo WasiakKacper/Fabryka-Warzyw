@@ -23,7 +23,6 @@ const Gastronomy = () => {
   const [products, setProducts] = useState([]);
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const [products, setProducts] = useState([]);
 const [currentPage, setCurrentPage] = useState(1);
 const [totalPages, setTotalPages] = useState(1);
 
