@@ -23,17 +23,19 @@ const Gastronomy = () => {
   const [products, setProducts] = useState([]);
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    axios
-      .get(`${apiUrl}/products`)
-      .then((res) => {
-        setProducts(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Błąd połączenia z bazą danych");
-      });
-  }, []);
+  const [products, setProducts] = useState([]);
+const [currentPage, setCurrentPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
+
+useEffect(() => {
+  axios
+    .get(`${apiUrl}/products?page=${currentPage}&limit=20`)
+    .then((res) => {
+      setProducts(res.data.products);
+      setTotalPages(res.data.totalPages);
+    });
+}, [currentPage]);
+
 
   //search
   const filteredProducts = products.filter((product) => {
