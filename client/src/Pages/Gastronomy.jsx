@@ -26,8 +26,8 @@ const Gastronomy = () => {
   useEffect(() => {
     axios
       .get(`${apiUrl}/products`)
-      .then((products) => {
-        setProducts(products.data);
+      .then((res) => {
+        setProducts(res.data.products);
       })
       .catch((err) => {
         console.log(err);
