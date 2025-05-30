@@ -23,18 +23,16 @@ const Gastronomy = () => {
   const [products, setProducts] = useState([]);
   const apiUrl = import.meta.env.VITE_API_URL;
 
-const [currentPage, setCurrentPage] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
-
-useEffect(() => {
-  axios
-    .get(`${apiUrl}/products?page=${currentPage}&limit=20`)
-    .then((res) => {
-      setProducts(res.data.products);
-      setTotalPages(res.data.totalPages);
-    });
-}, [currentPage]);
-
+  useEffect(() => {
+    axios
+      .get(`${apiUrl}/products`)
+      .then((res) => {
+        setProducts(res.data.products);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   //search
   const filteredProducts = products.filter((product) => {
@@ -44,7 +42,6 @@ useEffect(() => {
       .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
   return (
     <article className="min-h-[100vh] h-[100%] text-(--white) mb-20">
       {!isLogged ? (

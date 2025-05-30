@@ -15,6 +15,7 @@ import PickupDelivery from "./Pages/PickupDelivery.jsx";
 import Account from "./Components/User/Account.jsx";
 import Admin from "./Components/User/Admin.jsx";
 import Terms from "./Pages/Terms.jsx";
+import ScrollBtn from "./Components/ScrollBtn.jsx";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import "./App.css";
@@ -41,6 +42,7 @@ function App() {
           <Route path="/pickupstore" element={<PickupStore />} />
           <Route path="/pickupdelivery" element={<PickupDelivery />} />
         </Routes>
+        <ScrollBtn />
         <Footer />
       </Router>
     </main>
