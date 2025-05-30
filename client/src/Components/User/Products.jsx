@@ -20,6 +20,73 @@ const Products = () => {
   const [imageFile, setImageFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [categoriesStandard, setCategoriesStandard] = useState([]);
+  const [categoriesHoReCa, setCategoriesHoReCa] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
+  const [newCategoryType, setNewCategoryType] = useState("standard");
+
+  const defaultCategoriesStandard = [
+    { pl: "Warzywa", en: "Vegetables" },
+    { pl: "Owoce", en: "Fruits" },
+    { pl: "Miody", en: "Honey" },
+    { pl: "Konfitury", en: "Jam" },
+    { pl: "Mąki", en: "Flour" },
+    { pl: "Suszone owoce", en: "Dried fruits" },
+    { pl: "Makarony", en: "Pasta" },
+    { pl: "Soki", en: "Juice" },
+    { pl: "Przyprawy", en: "Spices" },
+    { pl: "Jaja", en: "Eggs" },
+  ];
+
+  const defaultCategoriesHoReCa = [
+    { pl: "Warzywa", en: "VegetablesHoReCa" },
+    { pl: "Owoce", en: "FruitsHoReCa" },
+    { pl: "Warzywa obierane", en: "Peeled vegetablesHoReCa" },
+  ];
+
+  // Fetch both types
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const resStandard = await axios.get(
+          `${apiUrl}/categories?type=standard`
+        );
+        const resHoReCa = await axios.get(`${apiUrl}/categories?type=horeca`);
+
+        setCategoriesStandard(resStandard.data.map((c) => c.name));
+        setCategoriesHoReCa(resHoReCa.data.map((c) => c.name));
+      } catch (err) {
+        console.error("Błąd pobierania kategorii", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Add category
+  const addCategory = async () => {
+    if (!newCategory.trim()) return alert("Podaj nazwę kategorii");
+    const allCategories = [...categoriesStandard, ...categoriesHoReCa];
+    if (allCategories.includes(newCategory))
+      return alert("Kategoria już istnieje");
+
+    try {
+      const res = await axios.post(`${apiUrl}/categories`, {
+        name: newCategory,
+        type: newCategoryType,
+      });
+
+      if (res.data.type === "horeca") {
+        setCategoriesHoReCa((prev) => [...prev, res.data.name]);
+      } else {
+        setCategoriesStandard((prev) => [...prev, res.data.name]);
+      }
+      setFormData((prev) => ({ ...prev, category: res.data.name }));
+      setNewCategory("");
+    } catch (err) {
+      alert(err.response?.data?.message || "Błąd serwera");
+    }
+  };
+
   //Getting products
   useEffect(() => {
     const fetchProducts = async () => {
@@ -251,22 +318,67 @@ const Products = () => {
           onChange={handleChange}
           className="p-2 w-[12%] rounded-4xl *:text-black"
         >
-          <option value="Vegetables">Warzywa</option>
-          <option value="Fruits">Owoce</option>
-          <option value="Honey">Miód</option>
-          <option value="Jam">Konfitury</option>
-          <option value="Dried fruits">Suszone owoce</option>
-          <option value="Pasta">Makarony</option>
-          <option value="Juice">Soki</option>
-          <option value="Spices">Przyprawy</option>
-          <option value="Flour">Mąki</option>
-          <option value="Eggs">Jaja</option>
-          <option value="VegetablesHoReCa">Warzywa HoReCa</option>
-          <option value="FruitsHoReCa">Owoce HoReCa</option>
-          <option value="Peeled vegetablesHoReCa">
-            Warzywa obierane HoReCa
-          </option>
+          <optgroup label="Standardowe (domyślne)">
+            {defaultCategoriesStandard.map(({ pl, en }) => (
+              <option key={en} value={en}>
+                {pl}
+              </option>
+            ))}
+          </optgroup>
+
+          {categoriesStandard.length > 0 && (
+            <optgroup label="Standardowe (z backendu)">
+              {categoriesStandard.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </optgroup>
+          )}
+
+          <optgroup label="HoReCa (domyślne)">
+            {defaultCategoriesHoReCa.map(({ pl, en }) => (
+              <option key={en} value={en}>
+                {pl}
+              </option>
+            ))}
+          </optgroup>
+
+          {categoriesHoReCa.length > 0 && (
+            <optgroup label="HoReCa (z backendu)">
+              {categoriesHoReCa.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </optgroup>
+          )}
         </select>
+
+        <div className="flex gap-2 items-center mt-2">
+          <input
+            type="text"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="Nowa kategoria"
+            className="p-2 rounded-4xl border-1"
+          />
+          <select
+            value={newCategoryType}
+            onChange={(e) => setNewCategoryType(e.target.value)}
+            className="p-2 rounded-4xl border-1"
+          >
+            <option value="standard">Standardowa</option>
+            <option value="horeca">HoReCa</option>
+          </select>
+          <button
+            type="button"
+            onClick={addCategory}
+            className="p-2 bg-[var(--accent)] text-white rounded-4xl"
+          >
+            Dodaj kategorię
+          </button>
+        </div>
         <select
           name="store"
           value={formData.store}
