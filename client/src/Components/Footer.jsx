@@ -29,7 +29,7 @@ const Footer = () => {
           Odwiedź nasze profile w social mediach!
         </p>
         <div className="flex justify-center gap-10 mt-5">
-          <div className="w-[90%] *:text-[10vw] *:md:text-[5vw] *:lg:text-[1.5vw] *:cursor-pointer">
+          <div className="w-[90%] *:text-[4vw] *:md:text-[5vw] *:lg:text-[1.5vw] *:cursor-pointer">
             <a
               className="hover:-translate-y-1  hover:text-(--facebook) transition duration-300 p-2"
               href="https://www.facebook.com/profile.php?id=100068391292702"

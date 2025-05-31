@@ -17,6 +17,7 @@ const usersRouter = require("./routes/users.js");
 const productsRouter = require("./routes/products.js");
 const galleryRouter = require("./routes/gallery.js");
 const ordersRouter = require("./routes/orders.js");
+const categoriesRouter = require("./routes/categories");
 
 require("dotenv").config();
 const app = express();
@@ -38,6 +39,7 @@ app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use("/gallery", galleryRouter);
 app.use("/orders", ordersRouter);
+app.use("/categories", categoriesRouter);
 
 //Pinging
 app.get("/ping", (req, res) => {

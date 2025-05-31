@@ -19,17 +19,38 @@ const upload = multer({ storage });
 
 // Endpoint for getting all products
 router.get("/", async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
 
   try {
+    if (!page || !limit) {
+      // Bez paginacji: zwróć wszystkie produkty
+      const products = await ProductModel.find().sort({ name: 1 });
+      return res.json({ products });
+    }
+
     const total = await ProductModel.countDocuments();
     const products = await ProductModel.find()
+      .sort({ name: 1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
+    const transformedProducts = products.map((product) => {
+      if (product.image && typeof product.image === "string") {
+        const newImageUrl = product.image.replace(
+          "/upload/",
+          "/upload/f_auto/"
+        );
+        return {
+          ...product._doc,
+          image: newImageUrl,
+        };
+      }
+      return product;
+    });
+
     res.json({
-      products,
+      products: transformedProducts,
       totalPages: Math.ceil(total / limit),
       currentPage: page,
     });
