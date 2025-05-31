@@ -91,13 +91,23 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${apiUrl}/products?page=${currentPage}`);
+        const res = await axios.get(
+          `${apiUrl}/products?page=${currentPage}&search=${encodeURIComponent(
+            searchQuery
+          )}`
+        );
         const newProducts = res.data.products;
 
-        setProducts((prev) => [...prev, ...newProducts]);
+        if (currentPage === 1) {
+          setProducts(newProducts); // nadpisz, bo nowa fraza
+        } else {
+          setProducts((prev) => [...prev, ...newProducts]);
+        }
 
         if (newProducts.length === 0 || currentPage >= res.data.totalPages) {
           setHasMore(false);
+        } else {
+          setHasMore(true);
         }
       } catch (err) {
         console.error(err);
@@ -106,7 +116,13 @@ const Products = () => {
     };
 
     if (hasMore) fetchProducts();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
+
+  useEffect(() => {
+    setProducts([]);
+    setCurrentPage(1);
+    setHasMore(true);
+  }, [searchQuery]);
 
   //Inserting form data to states
   const handleChange = (e) => {
@@ -327,7 +343,7 @@ const Products = () => {
           </optgroup>
 
           {categoriesStandard.length > 0 && (
-            <optgroup label="Standardowe (z backendu)">
+            <optgroup label="Standardowe (dodane)">
               {categoriesStandard.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
@@ -345,7 +361,7 @@ const Products = () => {
           </optgroup>
 
           {categoriesHoReCa.length > 0 && (
-            <optgroup label="HoReCa (z backendu)">
+            <optgroup label="HoReCa (dodane)">
               {categoriesHoReCa.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
@@ -355,7 +371,7 @@ const Products = () => {
           )}
         </select>
 
-        <div className="flex gap-2 items-center mt-2">
+        <div className="flex gap-1 items-center border-0 outline-0 rounded-3xl">
           <input
             type="text"
             value={newCategory}
@@ -366,7 +382,7 @@ const Products = () => {
           <select
             value={newCategoryType}
             onChange={(e) => setNewCategoryType(e.target.value)}
-            className="p-2 rounded-4xl border-1"
+            className="p-2 rounded-4xl border-1 *:text-black"
           >
             <option value="standard">Standardowa</option>
             <option value="horeca">HoReCa</option>
@@ -374,7 +390,7 @@ const Products = () => {
           <button
             type="button"
             onClick={addCategory}
-            className="p-2 bg-[var(--accent)] text-white rounded-4xl"
+            className="p-2 bg-[var(--accent)] text-white rounded-4xl cursor-pointer hover:bg-(--hoverAccent)"
           >
             Dodaj kategorię
           </button>
@@ -402,9 +418,9 @@ const Products = () => {
         className="p-2 w-[100%] lg:w-[70%] rounded-4xl mb-3 border-1 outline-0"
       />
       <ul className="w-[100%] lg:w-[90%] h-[80vh] overflow-y-scroll mx-auto">
-        {filteredProducts.map((product, index) => (
+        {filteredProducts.map((product) => (
           <li
-            key={index}
+            key={product._id}
             className="flex justify-between gap-3 text-[4vw] md:text-[3vw] lg:text-[2vw] bg-[var(--background)] rounded-2xl py-3 px-5 mb-5 items-center"
           >
             <img

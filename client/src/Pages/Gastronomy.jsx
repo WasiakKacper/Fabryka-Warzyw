@@ -7,12 +7,6 @@ import Card from "../Components/Card.jsx";
 import { Link } from "react-router";
 import "../App.css";
 
-const categories = [
-  { pl: "Warzywa", en: "VegetablesHoReCa" },
-  { pl: "Owoce", en: "FruitsHoReCa" },
-  { pl: "Warzywa obierane", en: "Peeled vegetablesHoReCa" },
-];
-
 const Gastronomy = () => {
   const [isClicked, setIsClicked] = useState(0);
   const { isLogged } = useContext(ShopContext);
@@ -22,6 +16,38 @@ const Gastronomy = () => {
 
   const [products, setProducts] = useState([]);
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  const initialCategories = [
+    { pl: "Warzywa", en: "VegetablesHoReCa" },
+    { pl: "Owoce", en: "FruitsHoReCa" },
+    { pl: "Warzywa obierane", en: "Peeled vegetablesHoReCa" },
+  ];
+
+  const [categories, setCategories] = useState(initialCategories);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/categories?type=standard`);
+        const fetchedCategories = res.data.categories || [];
+
+        const mapped = fetchedCategories.map((cat) => ({
+          pl: cat.name,
+          en: cat.name,
+        }));
+
+        setCategories((prev) => {
+          const newCats = mapped.filter(
+            (cat) => !prev.some((p) => p.en === cat.en)
+          );
+          return [...prev, ...newCats];
+        });
+      } catch (err) {
+        console.error("Błąd pobierania kategorii", err);
+      }
+    };
+    fetchCategories();
+  }, [apiUrl]);
 
   useEffect(() => {
     axios
@@ -45,7 +71,7 @@ const Gastronomy = () => {
   return (
     <article className="min-h-[100vh] h-[100%] text-(--white) mb-20">
       {!isLogged ? (
-        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl">
+        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl z-10000">
           <section className="bg-(--background) w-[90%] lg:w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
               Treść tylko dla zalogowanych klientów!

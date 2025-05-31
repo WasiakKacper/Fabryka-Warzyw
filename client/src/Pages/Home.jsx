@@ -5,34 +5,62 @@ import ShopContext from "../Context/ShopContext.jsx";
 
 import Card from "../Components/Card.jsx";
 import Gallery from "../Components/Gallery.jsx";
+
 /* import Vegetables from "../Components/Products/Vegetables.jsx";
   import Fruits from "../Components/Products/Fruits.jsx"; */
 /* import FilterBtn from "../Components/FilterBtn.jsx"; */
 
-const categories = [
-  { pl: "Warzywa", en: "Vegetables" },
-  { pl: "Owoce", en: "Fruits" },
-  { pl: "Miody", en: "Honey" },
-  { pl: "Konfitury", en: "Jam" },
-  { pl: "Mąki", en: "Flour" },
-  { pl: "Suszone owoce", en: "Dried fruits" },
-  { pl: "Makarony", en: "Pasta" },
-  { pl: "Soki", en: "Juice" },
-  { pl: "Przyprawy", en: "Spices" },
-  { pl: "Jaja", en: "Eggs" },
-];
-
 const Home = () => {
+  const { firstEnter, whichStore } = useContext(ShopContext);
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const [isClicked, setIsClicked] = useState(0);
   const [whatCategory, setWhatCategory] = useState("Vegetables");
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const loader = useRef(null);
-
   const [products, setProducts] = useState([]);
-  const { firstEnter, whichStore } = useContext(ShopContext);
-  const apiUrl = import.meta.env.VITE_API_URL;
+
+  const initialCategories = [
+    { pl: "Warzywa", en: "Vegetables" },
+    { pl: "Owoce", en: "Fruits" },
+    { pl: "Miody", en: "Honey" },
+    { pl: "Konfitury", en: "Jam" },
+    { pl: "Mąki", en: "Flour" },
+    { pl: "Suszone owoce", en: "Dried fruits" },
+    { pl: "Makarony", en: "Pasta" },
+    { pl: "Soki", en: "Juice" },
+    { pl: "Przyprawy", en: "Spices" },
+    { pl: "Jaja", en: "Eggs" },
+  ];
+
+  const [categories, setCategories] = useState(initialCategories);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/categories?type=standard`);
+        const fetchedCategories = res.data || [];
+
+        // Zamień `name` z backendu na { pl, en }
+        const mapped = fetchedCategories.map((cat) => ({
+          pl: cat.name,
+          en: cat.name,
+        }));
+
+        setCategories((prev) => {
+          const newCats = mapped.filter(
+            (cat) => !prev.some((p) => p.en === cat.en)
+          );
+          return [...prev, ...newCats];
+        });
+      } catch (err) {
+        console.error("Błąd pobierania kategorii", err);
+      }
+    };
+    fetchCategories();
+  }, [apiUrl]);
 
   useEffect(() => {
     const fetchProducts = async () => {
