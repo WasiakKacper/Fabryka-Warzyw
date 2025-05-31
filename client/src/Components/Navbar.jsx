@@ -133,7 +133,7 @@ const Navbar = (props) => {
 
         {show && isMobile && (
           <div
-            className="lg:hidden absolute top-[100%] right-0 w-[100%] h-[100vh] bg-transparent backdrop-blur-2xl"
+            className="lg:hidden absolute top-[100%] right-0 w-[100vw] h-[100vh] bg-transparent backdrop-blur-2xl"
             onClick={() => setShow(false)}
           ></div>
         )}

@@ -71,7 +71,7 @@ const Gastronomy = () => {
   return (
     <article className="min-h-[100vh] h-[100%] text-(--white) mb-20">
       {!isLogged ? (
-        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl z-10000">
+        <div className="fixed top-0 left-0 w-[100vw] h-[100vh] backdrop-blur-xl z-100">
           <section className="bg-(--background) w-[90%] lg:w-[60%] h-[60%] mt-45 mx-auto flex flex-col justify-center rounded-3xl">
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
               Treść tylko dla zalogowanych klientów!
