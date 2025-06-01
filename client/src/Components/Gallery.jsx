@@ -94,8 +94,8 @@ const Gallery = () => {
   }, [images]);
 
   return (
-    <div className="block justify-center w-[95%] lg:w-[80%] lg:scale-90 mx-auto">
-      <div className="w-[100%] lg:w-full h-[100%] lg:h-[45vw] pt-35 md:pt-45 lg:pt-35 overflow-hidden rounded-3xl mx-auto">
+    <div className="block justify-center w-[95%] lg:w-[80%] lg:scale-90 mx-auto pt-45">
+      <div className="w-full aspect-video overflow-hidden rounded-3xl mx-auto relative">
         {!isLoaded && (
           <div className="bg-[var(--background)] w-full h-full flex justify-center items-center rounded-3xl">
             <div className="loader"></div>
