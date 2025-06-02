@@ -19,6 +19,7 @@ const Products = () => {
   });
   const [imageFile, setImageFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
 
   const [categoriesStandard, setCategoriesStandard] = useState([]);
   const [categoriesHoReCa, setCategoriesHoReCa] = useState([]);
@@ -43,6 +44,17 @@ const Products = () => {
     { pl: "Owoce", en: "FruitsHoReCa" },
     { pl: "Warzywa obierane", en: "Peeled vegetablesHoReCa" },
   ];
+
+  //Debounce
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 400);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   // Fetch both types
   useEffect(() => {
@@ -93,36 +105,32 @@ const Products = () => {
       try {
         const res = await axios.get(
           `${apiUrl}/products?page=${currentPage}&search=${encodeURIComponent(
-            searchQuery
+            debouncedQuery
           )}`
         );
+
         const newProducts = res.data.products;
 
         if (currentPage === 1) {
-          setProducts(newProducts); // nadpisz, bo nowa fraza
+          setProducts(newProducts);
         } else {
           setProducts((prev) => [...prev, ...newProducts]);
         }
 
-        if (newProducts.length === 0 || currentPage >= res.data.totalPages) {
-          setHasMore(false);
-        } else {
-          setHasMore(true);
-        }
+        setHasMore(newProducts.length > 0 && currentPage < res.data.totalPages);
       } catch (err) {
         console.error(err);
         alert("Błąd połączenia z bazą danych");
       }
     };
 
-    if (hasMore) fetchProducts();
-  }, [currentPage, searchQuery]);
+    fetchProducts();
+  }, [currentPage, debouncedQuery]);
 
   useEffect(() => {
     setProducts([]);
     setCurrentPage(1);
-    setHasMore(true);
-  }, [searchQuery]);
+  }, [debouncedQuery]);
 
   //Inserting form data to states
   const handleChange = (e) => {
@@ -261,6 +269,8 @@ const Products = () => {
 
   //Observer
   useEffect(() => {
+    if (debouncedQuery.length > 0) return; // nie nasłuchuj scrolla przy aktywnym wyszukiwaniu
+
     const handleScroll = () => {
       const bottom =
         window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
@@ -272,13 +282,7 @@ const Products = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-
-  useEffect(() => {
-    setProducts([]);
-    setCurrentPage(1);
-    setHasMore(true);
-  }, []);
+  }, [hasMore, debouncedQuery]);
 
   return (
     <section>
