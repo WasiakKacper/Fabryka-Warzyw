@@ -28,7 +28,10 @@ const PickupDelivery = () => {
   const [orderComplete, setOrderComplete] = useState(false);
 
   const checkPostalCode = (code) => {
-    const prefix = code.slice(0, 2);
+    const cleaned = code.replace(/\s|-/g, "");
+    if (!/^\d{5}$/.test(cleaned)) return false;
+
+    const prefix = cleaned.slice(0, 2);
     return ["90", "91", "92", "93", "94"].includes(prefix);
   };
 
@@ -63,7 +66,11 @@ const PickupDelivery = () => {
       return;
     } else {
       if (isValidPhoneNumber(phoneNumber)) {
-        if (place === "Łódź" && checkPostalCode(postalCode)) {
+        const normalizedPlace = place.trim().toLowerCase();
+        if (
+          ["łódź", "lodz"].includes(normalizedPlace) &&
+          checkPostalCode(postalCode)
+        ) {
           const deliveryDay = getDeliveryDay();
           const orderData = {
             email: localStorage.getItem("email"),
