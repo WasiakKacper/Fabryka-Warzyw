@@ -69,14 +69,15 @@ const Terms = () => {
         6. Odstąpienie od umowy
       </h3>
       <p className=" w-[80%] mt-2 mx-auto text-[4vw] md:text-[3vw] lg:text-[1.5vw]">
-        1. Zgodnie z art. 38 ustawy o prawach konsumenta, 
-        prawo odstąpienia od umowy nie przysługuje w przypadku zakupu produktów szybko
-        psujących się lub mających krótki termin przydatności
-        do spożycia (np. świeże warzywa i owoce).
-
-        2. W przypadku innych produktów, 
-        Klient będący konsumentem ma prawo do odstąpienia od umowy
-        bez podania przyczyny w terminie 14 dni od otrzymania towaru.
+        1. Zgodnie z art. 38 ustawy o prawach konsumenta, prawo odstąpienia od
+        umowy nie przysługuje w przypadku zakupu produktów szybko psujących się
+        lub mających krótki termin przydatności do spożycia (np. świeże warzywa
+        i owoce).
+        <br />
+        <br />
+        2. W przypadku innych produktów, Klient będący konsumentem ma prawo do
+        odstąpienia od umowy bez podania przyczyny w terminie 14 dni od
+        otrzymania towaru.
       </p>
       <h3 className="text-[5vw] md:text-[4vw] lg:text-[3vw] text-center">
         7. Reklamacje
