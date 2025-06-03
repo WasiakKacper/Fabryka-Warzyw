@@ -25,6 +25,7 @@ const CartElement = (props) => {
       {/* IMG */}
       <div className="w-[20%]">
         <img
+          loading="lazy"
           src={image}
           alt={name}
           className="min-w-[50px] min-h-[50px] max-w-[200px] object-cover aspect-square w-[100%] rounded-2xl"

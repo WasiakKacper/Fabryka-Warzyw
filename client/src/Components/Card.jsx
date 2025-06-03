@@ -73,21 +73,23 @@ const Card = (props) => {
       ref={ref}
       className="flex lg:flex-col w-[100%] lg:w-[30%] bg-(--background) rounded-3xl p-2 drop-shadow-2xl"
     >
-      <div className="w-[50%] md:w-[50%] lg:w-[100%] aspect-square lg:aspect-auto mr-auto">
-        {!isLoaded && !imgError && <div className="loader mx-auto"></div>}
+      <div className="w-[50%] md:w-[50%] lg:w-[100%] aspect-square lg:aspect-auto mr-auto relative">
+        {!isLoaded && !imgError && (
+          <div className="loader mx-auto absolute inset-0.5 text-white"></div>
+        )}
 
         {inView && !imgError ? (
           <img
             src={image}
             alt={name}
-            className={`rounded-2xl w-full h-full object-cover lg:aspect-video ${
-              isLoaded ? "block" : "hidden"
-            }`}
             onLoad={() => setIsLoaded(true)}
             onError={() => {
               setIsLoaded(true);
               setImgError(true);
             }}
+            className={`rounded-2xl w-full h-full object-cover lg:aspect-video transition-opacity duration-500 ease-in-out ${
+              isLoaded ? "opacity-100 blur-0" : "opacity-0 blur-md"
+            }`}
           />
         ) : (
           imgError && (

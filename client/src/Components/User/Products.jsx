@@ -428,6 +428,7 @@ const Products = () => {
             className="flex justify-between gap-3 text-[4vw] md:text-[3vw] lg:text-[2vw] bg-[var(--background)] rounded-2xl py-3 px-5 mb-5 items-center"
           >
             <img
+              loading="lazy"
               src={product.image}
               alt="Zdjęcie produktu"
               className="w-[30%] md:w-[20%] lg:w-[10%] aspect-square object-cover rounded-lg"
