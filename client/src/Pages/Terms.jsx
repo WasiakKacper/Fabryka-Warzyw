@@ -69,13 +69,14 @@ const Terms = () => {
         6. Odstąpienie od umowy
       </h3>
       <p className=" w-[80%] mt-2 mx-auto text-[4vw] md:text-[3vw] lg:text-[1.5vw]">
-        Konsument ma prawo odstąpić od umowy bez podania przyczyny w terminie 14
-        dni od otrzymania produktu. Aby skorzystać z prawa odstąpienia, należy
-        poinformować sprzedawcę o swojej decyzji drogą elektroniczną na adres
-        kontakt@fabrykawarzyw.pl lub telefonicznie. Konsument ma obowiązek
-        zwrócić produkt w stanie nienaruszonym w terminie 14 dni od złożenia
-        oświadczenia o odstąpieniu. Zwrot pieniędzy następuje nie później niż 14
-        dni od otrzymania zwróconego produktu.
+        1. Zgodnie z art. 38 ustawy o prawach konsumenta, 
+        prawo odstąpienia od umowy nie przysługuje w przypadku zakupu produktów szybko
+        psujących się lub mających krótki termin przydatności
+        do spożycia (np. świeże warzywa i owoce).
+
+        2. W przypadku innych produktów, 
+        Klient będący konsumentem ma prawo do odstąpienia od umowy
+        bez podania przyczyny w terminie 14 dni od otrzymania towaru.
       </p>
       <h3 className="text-[5vw] md:text-[4vw] lg:text-[3vw] text-center">
         7. Reklamacje
