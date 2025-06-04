@@ -133,7 +133,10 @@ const Card = (props) => {
               {isAvailable ? (
                 <div className="flex justify-between w-full h-[20%]">
                   <div className="flex justify-between w-[40%] bg-[var(--accent)] text-white px-2 rounded-4xl *:text-[2.5vw] *:md:text-[2vw] *:lg:text-[1.6vw] items-center hover:bg-[var(--hoverAccent)] transition duration-400">
-                    <button className="cursor-pointer" onClick={handleSubtraction}>
+                    <button
+                      className="cursor-pointer"
+                      onClick={handleSubtraction}
+                    >
                       -
                     </button>
                     <h4>

@@ -290,139 +290,153 @@ const Products = () => {
     <section>
       {edit ? <section></section> : <></>}
       <form
-        className="flex flex-col lg:flex-row  w-[100%] *:w-[100%] gap-2 justify-center *:border-1 mb-10"
+        className="flex flex-col gap-6 mb-10 max-w-4xl mx-auto"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
         }}
       >
+        {/* Zdjęcie produktu */}
         <input
           type="file"
           onChange={handleImageChange}
-          className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition"
+          className="bg-[var(--accent)] text-[var(--white)] p-2 rounded-4xl cursor-pointer hover:bg-[var(--hoverAccent)] transition w-full"
         />
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Nazwa produktu"
-          className="p-2 w-[20%] rounded-4xl"
-        />
-        <textarea
-  name="description"
-  value={formData.description}
-  onChange={handleChange}
-  placeholder="Opis produktu"
-  className="p-2 w-[100%] lg:w-[30%] rounded-4xl"
-/>
 
-        <input
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          placeholder="Cena produktu (bez zł)"
-          className="p-2 w-[10%] rounded-4xl"
-        />
-        <select
-          name="pricePer"
-          value={formData.pricePer}
-          onChange={handleChange}
-          className="p-2 w-[8%] rounded-4xl *:text-black relative *:absolute *:top-1 max-h-[200px]"
-        >
-          <option value="/szt">za sztuke</option>
-          <option value="/250g">za 250g</option>
-          <option value="/500g">za 500g</option>
-          <option value="/750g">za 750g</option>
-          <option value="/1kg">za 1kg</option>
-          <option value="/1.25kg">za 1.25kg</option>
-          <option value="/1.5kg">za 1.5kg</option>
-          <option value="/2kg">za 2kg</option>
-          <option value="/2.5kg">za 2.5kg</option>
-          <option value="/5kg">za 5kg</option>
-        </select>
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="p-2 w-[12%] rounded-4xl *:text-black"
-        >
-          <optgroup label="Standardowe (domyślne)">
-            {defaultCategoriesStandard.map(({ pl, en }) => (
-              <option key={en} value={en}>
-                {pl}
-              </option>
-            ))}
-          </optgroup>
-
-          {categoriesStandard.length > 0 && (
-            <optgroup label="Standardowe (dodane)">
-              {categoriesStandard.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </optgroup>
-          )}
-
-          <optgroup label="HoReCa (domyślne)">
-            {defaultCategoriesHoReCa.map(({ pl, en }) => (
-              <option key={en} value={en}>
-                {pl}
-              </option>
-            ))}
-          </optgroup>
-
-          {categoriesHoReCa.length > 0 && (
-            <optgroup label="HoReCa (dodane)">
-              {categoriesHoReCa.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </optgroup>
-          )}
-        </select>
-
-        <div className="flex gap-1 items-center border-0 outline-0 rounded-3xl">
+        {/* Dane produktu */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            placeholder="Nowa kategoria"
-            className="p-2 rounded-4xl border-1"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Nazwa produktu"
+            className="p-2 rounded-4xl border"
+          />
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Cena produktu (bez zł)"
+            className="p-2 rounded-4xl border"
           />
           <select
-            value={newCategoryType}
-            onChange={(e) => setNewCategoryType(e.target.value)}
-            className="p-2 rounded-4xl border-1 *:text-black"
+            name="pricePer"
+            value={formData.pricePer}
+            onChange={handleChange}
+            className="p-2 rounded-4xl border *:text-black"
           >
-            <option value="standard">Standardowa</option>
-            <option value="horeca">HoReCa</option>
+            <option value="/szt">za sztukę</option>
+            <option value="/250g">za 250g</option>
+            <option value="/500g">za 500g</option>
+            <option value="/750g">za 750g</option>
+            <option value="/1kg">za 1kg</option>
+            <option value="/1.25kg">za 1.25kg</option>
+            <option value="/1.5kg">za 1.5kg</option>
+            <option value="/2kg">za 2kg</option>
+            <option value="/2.5kg">za 2.5kg</option>
+            <option value="/5kg">za 5kg</option>
           </select>
-          <button
-            type="button"
-            onClick={addCategory}
-            className="p-2 bg-[var(--accent)] text-white rounded-4xl cursor-pointer hover:bg-(--hoverAccent)"
+          <select
+            name="store"
+            value={formData.store}
+            onChange={handleChange}
+            className="p-2 rounded-4xl border *:text-black"
           >
-            Dodaj kategorię
-          </button>
+            <option value="Łęczyca">Łęczyca</option>
+            <option value="Łódź">Łódź</option>
+            <option value="Oba">Oba</option>
+          </select>
         </div>
-        <select
-          name="store"
-          value={formData.store}
+
+        {/* Kategoria produktu */}
+        <div className="flex flex-col gap-2">
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="p-2 rounded-4xl border *:text-black"
+          >
+            <optgroup label="Standardowe (domyślne)">
+              {defaultCategoriesStandard.map(({ pl, en }) => (
+                <option key={en} value={en}>
+                  {pl}
+                </option>
+              ))}
+            </optgroup>
+            {categoriesStandard.length > 0 && (
+              <optgroup label="Standardowe (dodane)">
+                {categoriesStandard.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+            <optgroup label="HoReCa (domyślne)">
+              {defaultCategoriesHoReCa.map(({ pl, en }) => (
+                <option key={en} value={en}>
+                  {pl}
+                </option>
+              ))}
+            </optgroup>
+            {categoriesHoReCa.length > 0 && (
+              <optgroup label="HoReCa (dodane)">
+                {categoriesHoReCa.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+          </select>
+
+          {/* Dodawanie nowej kategorii */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <input
+              type="text"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              placeholder="Nowa kategoria"
+              className="p-2 rounded-4xl border"
+            />
+            <select
+              value={newCategoryType}
+              onChange={(e) => setNewCategoryType(e.target.value)}
+              className="p-2 rounded-4xl border *:text-black"
+            >
+              <option value="standard">Standardowa</option>
+              <option value="horeca">HoReCa</option>
+            </select>
+            <button
+              type="button"
+              onClick={addCategory}
+              className="p-2 bg-[var(--accent)] text-white rounded-4xl hover:bg-[var(--hoverAccent)]"
+            >
+              Dodaj kategorię
+            </button>
+          </div>
+        </div>
+
+        {/* Opis produktu */}
+        <textarea
+          name="description"
+          value={formData.description}
           onChange={handleChange}
-          className="p-2 w-[10%] rounded-4xl *:text-black"
+          placeholder="Opis produktu"
+          className="p-2 rounded-4xl border outline-none w-full min-h-[120px]"
+        />
+
+        {/* Przycisk */}
+        <button
+          type="submit"
+          className="bg-[var(--accent)] text-white p-3 rounded-4xl hover:bg-[var(--hoverAccent)] w-full md:w-1/2 mx-auto transition"
         >
-          <option value="Łęczyca">Łęczyca</option>
-          <option value="Łódź">Łódź</option>
-          <option value="Oba">Oba</option>
-        </select>
-        <button className="bg-(--accent) text-(--white) p-2 w-[10%] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition">
           {edit ? "Zapisz zmiany" : "Dodaj produkt"}
         </button>
       </form>
+
       {/* Search */}
       <input
         type="text"
