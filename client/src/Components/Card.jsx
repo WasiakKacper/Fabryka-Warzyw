@@ -67,7 +67,7 @@ const Card = (props) => {
   return (
     <div
       ref={ref}
-      className="relative w-[30%] h-full"
+      className="relative w-full lg:w-[30%] h-full"
       style={{ perspective: "1200px" }}
     >
       <div
