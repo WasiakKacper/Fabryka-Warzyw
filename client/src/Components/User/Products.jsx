@@ -16,6 +16,7 @@ const Products = () => {
     category: "Vegetables",
     pricePer: "/szt",
     store: "Łęczyca",
+    description: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -263,6 +264,7 @@ const Products = () => {
       category: product.category,
       pricePer: product.pricePer,
       store: product.store,
+      description: product.description || "",
     });
     setEdit(true);
   };
@@ -307,6 +309,14 @@ const Products = () => {
           placeholder="Nazwa produktu"
           className="p-2 w-[20%] rounded-4xl"
         />
+        <textarea
+  name="description"
+  value={formData.description}
+  onChange={handleChange}
+  placeholder="Opis produktu"
+  className="p-2 w-[100%] lg:w-[30%] rounded-4xl"
+/>
+
         <input
           type="number"
           name="price"
@@ -437,6 +447,8 @@ const Products = () => {
               <h4 className="font-medium">
                 {product.name} {product.price}zł{product.pricePer}
               </h4>
+              <p>Opis: {product.description}</p>
+
               <p>Kategoria - {product.category}</p>
               <p className="flex items-center">
                 Dostępny:
