@@ -65,18 +65,18 @@ const Card = (props) => {
   };
 
   return (
-    <div className="perspective w-full h-full">
+    <div className="perspective w-full aspect-[3/4] md:aspect-[4/5]">
       <div
-        className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
+        className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d rounded-3xl overflow-hidden ${
           flipped ? "rotate-y-180" : ""
         }`}
       >
         {/* FRONT */}
         <div
-          className="absolute w-full h-full backface-hidden bg-(--background) rounded-3xl p-2 drop-shadow-2xl flex lg:flex-col"
+          className="absolute w-full h-full backface-hidden bg-(--background) p-4 drop-shadow-2xl flex flex-col justify-between"
           ref={ref}
         >
-          <div className="w-[50%] md:w-[50%] lg:w-[100%] aspect-square lg:aspect-auto mr-auto relative">
+          <div className="w-full aspect-square relative mb-4">
             {!isLoaded && !imgError && (
               <div className="loader mx-auto absolute inset-0.5 text-white"></div>
             )}
@@ -89,7 +89,7 @@ const Card = (props) => {
                   setIsLoaded(true);
                   setImgError(true);
                 }}
-                className={`rounded-2xl w-full h-full object-cover lg:aspect-video transition-opacity duration-500 ease-in-out ${
+                className={`rounded-2xl w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
                   isLoaded ? "opacity-100 blur-0" : "opacity-0 blur-md"
                 }`}
               />
@@ -108,22 +108,18 @@ const Card = (props) => {
             </button>
           </div>
 
-          <div className="flex flex-col justify-between w-[55%] lg:w-full p-2 text-(--white)">
-            <div>
-              <h1 className="text-[4vw] md:text-[4w] lg:text-[2vw] lg:h-[10vh] font-medium w-full mb-5">
-                {name}
-              </h1>
-              <h3 className="text-[3vw] md:text-[2.5vw] lg:text-[1.6vw] mb-10">
-                {price.toFixed(2)}zł{pricePer}
-              </h3>
-            </div>
+          <div className="text-(--white)">
+            <h1 className="text-[5vw] md:text-[3.5vw] lg:text-[2vw] font-medium mb-2">
+              {name}
+            </h1>
+            <h3 className="text-[4vw] md:text-[3vw] lg:text-[1.6vw] mb-4">
+              {price.toFixed(2)}zł{pricePer}
+            </h3>
 
             {isAvailable ? (
-              <div className="flex justify-between w-full h-[20%]">
-                <div className="flex justify-between w-[40%] bg-(--accent) text-(--white) px-2 rounded-4xl *:text-[2.5vw] *:md:text-[2vw] *:lg:text-[1.6vw] items-center hover:bg-(--hoverAccent) transition duration-400">
-                  <button className="cursor-pointer" onClick={handleSubtraction}>
-                    -
-                  </button>
+              <div className="flex justify-between items-center gap-2">
+                <div className="flex justify-between items-center w-1/2 bg-(--accent) text-(--white) px-2 py-1 rounded-full *:text-[4vw] md:*:text-[2.5vw] lg:*:text-[1.4vw]">
+                  <button onClick={handleSubtraction}>-</button>
                   <h4>
                     {isWeightBased
                       ? displayUnit === "g"
@@ -131,13 +127,11 @@ const Card = (props) => {
                         : `${howMany.toFixed(2)} kg`
                       : howMany}
                   </h4>
-                  <button className="cursor-pointer" onClick={handleAddition}>
-                    +
-                  </button>
+                  <button onClick={handleAddition}>+</button>
                 </div>
 
                 <button
-                  className="flex items-center justify-center w-[55%] h-auto p-3 bg-(--accent) text-(--white) text-[2.8vw] lg:text-[1.5vw] rounded-4xl cursor-pointer hover:bg-(--hoverAccent) transition duration-400"
+                  className="w-1/2 py-2 bg-(--accent) text-(--white) text-[4vw] md:text-[2.5vw] lg:text-[1.4vw] rounded-full hover:bg-(--hoverAccent) transition duration-300"
                   onClick={() => {
                     addToCart(props.data, howMany);
                     addAnimation();
@@ -147,7 +141,7 @@ const Card = (props) => {
                 </button>
               </div>
             ) : (
-              <h3 className="text-right text-[4vw] md:text-[3vw] lg:text-[2vw] text-(--white)">
+              <h3 className="text-[4vw] md:text-[3vw] lg:text-[1.8vw] mt-2">
                 Produkt niedostępny
               </h3>
             )}
@@ -155,9 +149,9 @@ const Card = (props) => {
         </div>
 
         {/* BACK */}
-        <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-(--background) rounded-3xl p-4 flex flex-col items-center justify-center text-white">
-          <h2 className="text-xl mb-4">Opis produktu</h2>
-          <p className="text-sm text-center">
+        <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-(--background) p-6 flex flex-col items-center justify-center text-white text-center">
+          <h2 className="text-lg md:text-xl mb-4">Opis produktu</h2>
+          <p className="text-sm md:text-base">
             {description || "Brak opisu dla tego produktu."}
           </p>
           <button
