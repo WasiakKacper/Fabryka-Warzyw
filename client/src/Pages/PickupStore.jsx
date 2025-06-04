@@ -40,6 +40,17 @@ const PickupStore = () => {
     }
 
     if (isValidPhoneNumber(phoneNumber)) {
+      const invoiceData = {
+        companyName: localStorage.getItem("companyname"),
+        companyAddress: localStorage.getItem("companyaddress"),
+        vatId: localStorage.getItem("vatid"),
+      };
+
+      const hasInvoice =
+        invoiceData.companyName ||
+        invoiceData.companyAddress ||
+        invoiceData.vatId;
+
       const orderData = {
         email: localStorage.getItem("email"),
         surname: localStorage.getItem("surname"),
@@ -48,11 +59,15 @@ const PickupStore = () => {
         phoneNumber: phoneNumber,
         store: store,
         products: JSON.parse(localStorage.getItem("cart")),
+        ...(hasInvoice && { invoice: invoiceData }),
       };
 
       await submitOrder(orderData);
       localStorage.setItem("cart", "[]");
       localStorage.setItem("total", "00.00");
+      localStorage.removeItem("companyname");
+      localStorage.removeItem("companyaddress");
+      localStorage.removeItem("vatid");
       setCart(JSON.parse(localStorage.getItem("cart")));
       setOrderComplete(true);
     } else {

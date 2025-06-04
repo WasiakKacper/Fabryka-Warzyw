@@ -80,6 +80,23 @@ const OrderCard = ({ order, onStatusUpdate }) => {
           ))}
         </ul>
       </div>
+      <h2>Produkty:</h2>
+      <ul className="mb-3">
+        {products.map((product, index) => (
+          <li key={index}>
+            {product.name} x{product.quantity} - {product.price}zł
+          </li>
+        ))}
+      </ul>
+
+      {order.invoice?.companyName && (
+        <div className="mt-4 p-3 rounded-lg bg-white/10">
+          <h2 className="font-semibold mb-1">Dane do faktury:</h2>
+          <p>Nazwa firmy: {order.invoice.companyName}</p>
+          <p>Adres firmy: {order.invoice.companyAddress}</p>
+          <p>NIP: {order.invoice.vatId}</p>
+        </div>
+      )}
       {orderStatus !== "completed" && adminToken === "true" ? (
         <button
           onClick={() => handleMarkAsCompleted(order._id)}

@@ -72,6 +72,18 @@ const PickupDelivery = () => {
           checkPostalCode(postalCode)
         ) {
           const deliveryDay = getDeliveryDay();
+
+          const invoiceData = {
+            companyName: localStorage.getItem("companyname"),
+            companyAddress: localStorage.getItem("companyaddress"),
+            vatId: localStorage.getItem("vatid"),
+          };
+
+          const hasInvoice =
+            invoiceData.companyName ||
+            invoiceData.companyAddress ||
+            invoiceData.vatId;
+
           const orderData = {
             email: localStorage.getItem("email"),
             surname: localStorage.getItem("surname"),
@@ -84,6 +96,7 @@ const PickupDelivery = () => {
             store: "Łódź",
             deliveryDay,
             products: JSON.parse(localStorage.getItem("cart")),
+            ...(hasInvoice && { invoice: invoiceData }),
           };
 
           await submitOrder(orderData);

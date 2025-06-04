@@ -10,6 +10,10 @@ const Order = () => {
   const [baseTotal, setBaseTotal] = useState(0);
   const [finalTotal, setFinalTotal] = useState(0);
   const [terms, setTerms] = useState(false);
+  const [isInvoice, setIsInvoice] = useState(false);
+  const [companyName, setCompanyName] = useState("");
+  const [vatId, setVatId] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
 
   useEffect(() => {
     const now = new Date();
@@ -94,6 +98,32 @@ const Order = () => {
   useEffect(() => {
     localStorage.setItem("total", JSON.stringify(finalTotal));
   }, [finalTotal]);
+
+  //Get vat data
+  useEffect(() => {
+    const name = localStorage.getItem("companyname");
+    const address = localStorage.getItem("companyaddress");
+    const nip = localStorage.getItem("vatid");
+
+    if (name) setCompanyName(name);
+    if (address) setCompanyAddress(address);
+    if (nip) setVatId(nip);
+  }, []);
+
+  const handleSave = () => {
+    if (isInvoice) {
+      if (companyAddress !== "" || (companyName !== "" && vatId !== "")) {
+        localStorage.setItem("companyname", companyName);
+        localStorage.setItem("vatid", vatId);
+        localStorage.setItem("companyaddress", companyAddress);
+      } else {
+        alert("Podaj wszystkie dane do faktury!");
+        localStorage.setItem("companyname", "");
+        localStorage.setItem("vatid", "");
+        localStorage.setItem("companyaddress", "");
+      }
+    }
+  };
 
   return (
     <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto text-(--white) mb-20">
@@ -180,6 +210,50 @@ const Order = () => {
                 />
               </div>
             </section>
+            <hr className="my-2 border-(--alternativeBackgroud)" />
+            <section className="flex flex-col justify-between w-[100%]">
+              <div className="flex pt-10 w-[100%] justify-between">
+                <div>
+                  <h3 className="flex text-[3.6vw] md:text-[2.6vw] lg:text-[1.6vw] mb-2">
+                    Zamawiam na fakturę
+                  </h3>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="collection"
+                    className="scale-200 mt-2 cursor-pointer"
+                    onChange={() => {
+                      setIsInvoice(!isInvoice);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col lg:flex-row pt-5 w-[100%] *:w-[100%] gap-2 justify-center *:border-1 *:rounded-2xl *:p-2 mb-10">
+                {isInvoice && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Nazwa firmy"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="NIP"
+                      value={vatId}
+                      onChange={(e) => setVatId(e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Adres firmy"
+                      value={companyAddress}
+                      onChange={(e) => setCompanyAddress(e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+            </section>
             <div className="flex items-start space-x-2 mt-10">
               <input
                 type="checkbox"
@@ -204,7 +278,23 @@ const Order = () => {
           </div>
           {terms ? (
             <Link
-              to={option === "store" ? "/pickupstore" : "/pickupdelivery"}
+              to={
+                !isInvoice || (companyName && vatId && companyAddress)
+                  ? option === "store"
+                    ? "/pickupstore"
+                    : "/pickupdelivery"
+                  : "#"
+              }
+              onClick={(e) => {
+                if (isInvoice) {
+                  if (!companyName || !vatId || !companyAddress) {
+                    e.preventDefault();
+                    alert("Podaj wszystkie dane do faktury!");
+                    return;
+                  }
+                }
+                handleSave();
+              }}
               className="mx-auto w-[60%] flex items-center justify-center"
             >
               <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--accent) w-[100%] mx-auto rounded-4xl text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400">
