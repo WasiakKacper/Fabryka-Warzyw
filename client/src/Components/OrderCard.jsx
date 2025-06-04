@@ -80,14 +80,6 @@ const OrderCard = ({ order, onStatusUpdate }) => {
           ))}
         </ul>
       </div>
-      <h2>Produkty:</h2>
-      <ul className="mb-3">
-        {products.map((product, index) => (
-          <li key={index}>
-            {product.name} x{product.quantity} - {product.price}zł
-          </li>
-        ))}
-      </ul>
 
       {order.invoice?.companyName && (
         <div className="mt-4 p-3 rounded-lg bg-white/10">
