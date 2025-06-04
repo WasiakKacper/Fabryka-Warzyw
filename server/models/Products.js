@@ -9,6 +9,10 @@ const ProductSchema = new mongoose.Schema({
   category: String,
   pricePer: String,
   store: String,
+  description: {
+    type: String,
+    default: "",
+  }
 });
 
 const ProductModel = mongoose.model("products", ProductSchema);
