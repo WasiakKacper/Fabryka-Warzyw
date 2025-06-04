@@ -66,12 +66,12 @@ const Card = (props) => {
 
   return (
     <div
-      className="relative w-full h-full"
-      style={{ perspective: "1500px" }}
       ref={ref}
+      className="relative w-full h-full"
+      style={{ perspective: "1200px" }}
     >
       <div
-        className={`transition-transform duration-700 w-full h-full relative`}
+        className="relative w-full h-full transition-transform duration-700"
         style={{
           transformStyle: "preserve-3d",
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -79,10 +79,12 @@ const Card = (props) => {
       >
         {/* FRONT */}
         <div
-          className="absolute w-full h-full backface-hidden"
+          className="w-full h-full backface-hidden"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
+            position: "relative",
+            zIndex: 2,
           }}
         >
           <div className="bg-[var(--background)] rounded-3xl p-2 drop-shadow-2xl flex lg:flex-col overflow-hidden w-full h-full">
@@ -167,7 +169,7 @@ const Card = (props) => {
 
         {/* BACK */}
         <div
-          className="absolute w-full h-full bg-[var(--background)] text-white rounded-3xl p-4 flex flex-col justify-center items-center"
+          className="absolute inset-0 w-full h-full bg-[var(--background)] text-white rounded-3xl p-4 flex flex-col justify-center items-center"
           style={{
             transform: "rotateY(180deg)",
             backfaceVisibility: "hidden",
