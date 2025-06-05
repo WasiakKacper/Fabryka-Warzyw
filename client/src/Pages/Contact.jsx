@@ -46,29 +46,8 @@ const Contact = () => {
       <section className="h-[100%]">
         <div className="bg-(--background) w-[90%] h-[100%] lg:w-[60%] text-center p-5 pb-10 lg:pb-0 rounded-3xl mx-auto">
           <i className="icon-location text-[8vw] md:text-[7vw] lg:text-[4vw]"></i>
-          {!isLoaded && <p className="text-gray-600">Ładowanie map...</p>}
-          <div className="flex flex-col lg:flex-row gap-5 justify-between items-center">
-            <div className="w-[100%] lg:w-[50%] h-[300px]">
-              <iframe
-                width="400"
-                height="200"
-                frameBorder="0"
-                scrolling="no"
-                marginHeight="0"
-                marginWidth="0"
-                className="mx-auto w-[100%] rounded-2xl"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2468.1433559414627!2d19.386627476487547!3d51.78526607187777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471bb55037a2bff3%3A0xeec34acabfbc33db!2zQ2VkcnkgNCwgOTEtMTI5IMWBw7Nkxbo!5e0!3m2!1spl!2spl!4v1747493634219!5m2!1spl!2spl"
-                loading="lazy"
-                onLoad={() => setIsLoaded(true)}
-              >
-                <a href="https://www.gps.ie/collections/personal-trackers/">
-                  real-time gps tracker,
-                </a>
-              </iframe>
-              <p className="text-[6vw] md:text-[5vw] lg:text-[2vw]">
-                Cedry 4, 91-129 Łódź
-              </p>
-            </div>
+          {!isLoaded && <p className="text-gray-600">Ładowanie mapy...</p>}
+          <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
             <div className="w-[100%] lg:w-[50%] h-[300px]">
               <iframe
                 width="400"
