@@ -11,8 +11,7 @@ const Footer = () => {
           <p>669-933-235</p>
         </div>
         <div>
-          <h2 className="text-[5vw] md:text-[3vw] lg:text-[2vw]">Sklepy:</h2>
-          <p>Cedry 4, 91-129 Łódź</p>
+          <h2 className="text-[5vw] md:text-[3vw] lg:text-[2vw]">Sklep:</h2>
           <p>Belwederska 42, 99-100 Łęczyca</p>
         </div>
         <div>

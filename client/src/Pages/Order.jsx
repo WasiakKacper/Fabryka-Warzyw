@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router";
+import ShopContext from "../Context/ShopContext";
 
 const Order = () => {
   const [isActive, setIsActive] = useState(false);
   const [option, setOption] = useState("store");
   const [dzien, setDzien] = useState("");
+
+  const { whichStore } = useContext(ShopContext);
 
   const [cart, setCart] = useState([]);
   const [baseTotal, setBaseTotal] = useState(0);
@@ -125,6 +128,12 @@ const Order = () => {
     }
   };
 
+  useEffect(() => {
+    if (whichStore === "Łódź") {
+      setIsActive(false);
+    }
+  }, [whichStore]);
+
   return (
     <main className="w-[90%] lg:w-[60%] h-[100%] mx-auto text-(--white) mb-20">
       <section className="pt-45  mx-auto flex flex-col w-[90%]">
@@ -162,11 +171,11 @@ const Order = () => {
                   Dostawa
                 </h3>
                 <p className="flex text-[3vw] md:text-[2vw] lg:text-[1vw]  w-[50%]">
-                  (Dostępna tylko wtorek i piątek na terenie Łodzi)
+                  (Dowozy tylko we wtorek i piątek na terenie Łodzi)
                 </p>
               </div>
               <div className="flex flex-col items-end">
-                {!isActive ? (
+                {whichStore === "Łęczyca" ? (
                   <p className="mb-4">niedostępna</p>
                 ) : (
                   <input
@@ -196,18 +205,22 @@ const Order = () => {
                   Odbiór w sklepie
                 </h3>
                 <p className="flex text-[3vw] md:text-[2vw] lg:text-[1vw]  w-[50%]">
-                  (Cedry 4, 91-129 Łódź | Belwederska 42, 99-100 Łęczyca)
+                  (Belwederska 42, 99-100 Łęczyca)
                 </p>
               </div>
               <div>
-                <input
-                  type="checkbox"
-                  name="collection"
-                  className="scale-200 mt-2 cursor-pointer"
-                  onChange={() => {
-                    setOption("store");
-                  }}
-                />
+                {whichStore === "Łódź" ? (
+                  <p className="mb-4">niedostępna</p>
+                ) : (
+                  <input
+                    type="checkbox"
+                    name="collection"
+                    className="scale-200 mt-2 cursor-pointer"
+                    onChange={() => {
+                      setOption("store");
+                    }}
+                  />
+                )}
               </div>
             </section>
             <hr className="my-2 border-(--alternativeBackgroud)" />
