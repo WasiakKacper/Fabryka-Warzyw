@@ -114,9 +114,9 @@ const Card = (props) => {
               )}
               <button
                 onClick={() => setFlipped(true)}
-                className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1 text-sm hover:bg-black/80"
+                className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1 text-sm hover:bg-black/80 cursor-pointer"
               >
-                ℹ️
+                <i className="icon-info-circled-alt text-[4vw] md:text-[3vw] lg:text-[1.5vw]"></i>
               </button>
             </div>
 

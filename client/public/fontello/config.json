@@ -47,6 +47,12 @@
       "css": "up-big",
       "code": 59394,
       "src": "fontawesome"
+    },
+    {
+      "uid": "15ba51cbb4d05e6fb88f03a31a7c711c",
+      "css": "info-circled-alt",
+      "code": 61574,
+      "src": "mfglabs"
     }
   ]
 }
