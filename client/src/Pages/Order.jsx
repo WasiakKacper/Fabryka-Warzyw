@@ -4,7 +4,7 @@ import ShopContext from "../Context/ShopContext";
 
 const Order = () => {
   const [isActive, setIsActive] = useState(false);
-  const [option, setOption] = useState("store");
+  const [option, setOption] = useState("");
   const [dzien, setDzien] = useState("");
 
   const { whichStore } = useContext(ShopContext);
@@ -46,7 +46,6 @@ const Order = () => {
     }
 
     setIsActive(true);
-    setOption(canOrderFor);
     setDzien(canOrderFor === "wtorek" ? "wtorek" : "piątek");
   }, []);
 
@@ -289,7 +288,7 @@ const Order = () => {
               </label>
             </div>
           </div>
-          {terms ? (
+          {terms && option ? (
             <Link
               to={
                 !isInvoice || (companyName && vatId && companyAddress)
@@ -299,6 +298,11 @@ const Order = () => {
                   : "#"
               }
               onClick={(e) => {
+                if (!option) {
+                  e.preventDefault();
+                  alert("Wybierz sposób dostawy!");
+                  return;
+                }
                 if (isInvoice) {
                   if (!companyName || !vatId || !companyAddress) {
                     e.preventDefault();
@@ -315,7 +319,13 @@ const Order = () => {
               </button>
             </Link>
           ) : (
-            <button className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--background) mx-auto w-[60%] flex justify-center rounded-4xl text-(--white)">
+            <button
+              className="text-[5vw] md:text-[4vw] lg:text-[3vw] bg-(--background) mx-auto w-[60%] flex justify-center rounded-4xl text-(--white)"
+              onClick={() => {
+                if (!terms) alert("Zaakceptuj regulamin!");
+                else if (!option) alert("Wybierz sposób dostawy!");
+              }}
+            >
               Dalej
             </button>
           )}
