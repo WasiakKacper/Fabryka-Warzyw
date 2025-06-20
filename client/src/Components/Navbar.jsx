@@ -31,7 +31,6 @@ const Navbar = (props) => {
 
   const { isLogged, howManyInCart, isAdmin } = useContext(ShopContext);
 
-  // breakpoint lg (1024px) - dopasuj jeśli masz inny w Tailwind
   const isMobile = windowWidth < 1024;
 
   return (
@@ -47,14 +46,35 @@ const Navbar = (props) => {
           className="block w-[30%] lg:w-[10%] mb-2"
         />
         {/* For mobile devices */}
-        <button
-          className="lg:hidden *:hover:bg-(--darkBackgorund) *:hover:transition"
-          onClick={() => {
-            setShow(!show);
-          }}
-        >
-          <i className="icon-menu p-[2%] text-(--white) text-[5vw]"></i>
-        </button>
+        <div className="flex lg:hidden w-[25%] justify-between">
+          <Link
+            to="/cart"
+            className="icon-basket p-[2%] text-[5vw] relative text-white inline-flex items-center"
+          >
+            <span
+              className="
+              absolute top-3 -right-[15%]
+              lg:static
+              bg-(--accent) text-white text-xs font-bold rounded-full
+              min-w-[1.5vw] min-h-[1.5vw] w-[5vw] h-[5vw]
+              md:w-[3vw] md:h-[3vw]
+              lg:w-[1vw] lg:h-[1vw]
+              flex items-center justify-center
+            "
+            >
+              <p>{howManyInCart}</p>
+            </span>
+          </Link>
+
+          <button
+            className="lg:hidden *:hover:bg-(--darkBackgorund) *:hover:transition"
+            onClick={() => {
+              setShow(!show);
+            }}
+          >
+            <i className="icon-menu p-[2%] text-(--white) text-[5vw]"></i>
+          </button>
+        </div>
 
         {/* Navigation menu */}
         <ul
@@ -95,6 +115,15 @@ const Navbar = (props) => {
             <hr className="border-(--accent) border-2 lg:hidden" />
           </li>
           <li onClick={() => setShow(false)}>
+            <Link to={!isLogged ? "/login" : isAdmin ? "/admin" : "/account"}>
+              {!isLogged ? "Logowanie" : isAdmin ? "Panel" : "Konto"}
+            </Link>
+            {name === "Login" && (
+              <hr className="hidden lg:block border-2 rounded-2xl" />
+            )}
+            <hr className="border-(--accent) border-2 lg:hidden" />
+          </li>
+          <li className="hidden lg:block" onClick={() => setShow(false)}>
             <Link to="/cart" className="relative inline-flex items-center px-2">
               Koszyk
               <span className="absolute -top-2 -right-3 bg-(--accent) text-white text-xs font-bold rounded-full min-w-[1.5vw] min-h-[1.5vw] w-[1vw] h-[1vw] hidden lg:flex items-center justify-center">
@@ -102,15 +131,6 @@ const Navbar = (props) => {
               </span>
             </Link>
             {name === "Cart" && (
-              <hr className="hidden lg:block border-2 rounded-2xl" />
-            )}
-            <hr className="border-(--accent) border-2 lg:hidden" />
-          </li>
-          <li onClick={() => setShow(false)}>
-            <Link to={!isLogged ? "/login" : isAdmin ? "/admin" : "/account"}>
-              {!isLogged ? "Logowanie" : isAdmin ? "Panel" : "Konto"}
-            </Link>
-            {name === "Login" && (
               <hr className="hidden lg:block border-2 rounded-2xl" />
             )}
             <hr className="border-(--accent) border-2 lg:hidden" />
