@@ -76,9 +76,12 @@ const Gastronomy = () => {
             <h3 className="text-[4vw] md:text-[3vw] lg:text-[2vw] font-medium text-center">
               Treść tylko dla zalogowanych klientów!
             </h3>
-            <button className="mt-20 py-2 px-2 w-[40%] rounded-4xl mx-auto text-[3.6vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400">
-              <Link to="/login">Zaloguj się</Link>
-            </button>
+            <Link
+              to="/login"
+              className="mt-20 py-2 px-2 w-[40%] rounded-4xl mx-auto text-[3.6vw] md:text-[3vw] lg:text-[2vw] bg-(--accent) text-(--white) cursor-pointer hover:bg-(--hoverAccent) transition duration-400 text-center"
+            >
+              Zaloguj się
+            </Link>
           </section>
         </div>
       ) : (
