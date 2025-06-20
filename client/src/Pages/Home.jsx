@@ -117,18 +117,6 @@ const Home = () => {
 
   return (
     <article className="min-h-[100vh] h-[100%] mb-20">
-      {firstEnter ? (
-        <motion.section
-          className="fixed flex justify-center items-center w-[100vw] h-[100vh] bg-(--white) z-10000"
-          initial={{ translateY: 0 }}
-          animate={{ translateY: -1000 }}
-          transition={{ duration: 0.7, delay: 0.7 }}
-        >
-          <img src="/Images/loading.png" alt="Fabryka warzyw" />
-        </motion.section>
-      ) : (
-        <></>
-      )}
       <Gallery />
       <div className="w-[90%] mx-auto text-white pt-5">
         <input
@@ -171,7 +159,7 @@ const Home = () => {
       <div className="w-[90%] mx-auto"></div>
       <section>
         <div className="flex flex-col justify-center items-center w-[full] mt-5 mx-auto">
-          <div className="flex flex-col lg:flex-row flex-wrap w-[90%] gap-[4vw]">
+          <div className="flex flex-col lg:flex-row flex-wrap w-[90%] justify-center gap-[4vw]">
             {filteredProducts.map((product) => (
               <Card key={product._id} data={product} />
             ))}

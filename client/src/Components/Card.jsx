@@ -67,7 +67,7 @@ const Card = (props) => {
   return (
     <div
       ref={ref}
-      className="relative w-full lg:w-[30%] h-full"
+      className="relative w-full lg:w-[25%] h-full"
       style={{ perspective: "1200px" }}
     >
       <div
@@ -122,7 +122,7 @@ const Card = (props) => {
 
             <div className="flex flex-col justify-between w-[55%] lg:w-full p-2 text-white">
               <div className="flex flex-col justify-between mb-10">
-                <h1 className="text-[4vw] lg:text-[2vw] font-medium w-full">
+                <h1 className="text-[4vw] lg:text-[1.5vw] font-medium w-full">
                   {name}
                 </h1>
                 <h3 className="text-[3vw] md:text-[2.5vw] lg:text-[1.6vw]">
