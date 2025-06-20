@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
-import { motion } from "motion/react";
 import ShopContext from "../Context/ShopContext.jsx";
 
 import Card from "../Components/Card.jsx";
