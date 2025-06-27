@@ -148,14 +148,18 @@ const Order = () => {
               <li key={index}>
                 <p>{item.name}</p>
                 <p>
-                  {item.price.toFixed(2)}zł x{Number(item.quantity) + "kg"}
+                  {item.price.toFixed(2)}zł x{" "}
+                  {item.pricePer.includes("/szt")
+                    ? Number(item.quantity)
+                    : Number(item.quantity)}{" "}
+                  {item.pricePer.includes("/szt") ? "szt" : "kg"}
                 </p>
               </li>
             ))}
           </ul>
           <div>
             <h3 className="flex text-[5vw] md:text-[4vw] lg:text-[2vw] font-medium mb-5 w-full justify-end">
-              Suma: {finalTotal}zł
+              Suma: {finalTotal.toFixed(2)}zł
             </h3>
           </div>
         </section>
