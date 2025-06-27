@@ -128,7 +128,7 @@ const Orders = () => {
   );
 
   return (
-    <section className="h-[50vh] overflow-y-scroll">
+    <section className="h-[90vh] overflow-y-scroll">
       <nav className="mb-5">
         <ul className="flex gap-2 w-full justify-center pr-3 *:cursor-pointer *:text-[4vw] md:*:text-[3vh] lg:*:text-[2vw]">
           <li onClick={() => setWhatStore(1)}>

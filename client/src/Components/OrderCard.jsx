@@ -75,7 +75,8 @@ const OrderCard = ({ order, onStatusUpdate }) => {
         <ul className="mb-3">
           {products.map((product, index) => (
             <li key={index}>
-              {product.name} x{product.quantity} - {product.price}zł
+              {product.name} x{product.quantity}({product.pricePer}) -{" "}
+              {product.price}zł
             </li>
           ))}
         </ul>
